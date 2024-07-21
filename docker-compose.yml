@@ -1,0 +1,17 @@
+version: '3.3'
+
+services:
+  mariadb:
+    image: mariadb:5.5
+    container_name: mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_USER=TitoCaleb
+      - MYSQL_PASSWORD=Legendary
+      - MYSQL_DATABASE=afgtecomDBDev
+    ports:
+      - 3306:3306
+    volumes:
+      - data_mariadb:/var/lib/mysql
+volumes:
+  data_mariadb:

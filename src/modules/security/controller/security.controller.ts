@@ -1,6 +1,7 @@
-import { Controller, Post, Req } from '@nestjs/common';
-import { Request } from 'express';
+import { Controller, Post, Req, Res } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { SecurityService } from '../service/security.service';
+import { ApiReponseError } from 'src/errors/handleErrors';
 
 @Controller('security')
 export class SecurityController {
@@ -13,8 +14,15 @@ export class SecurityController {
   }
 
   @Post('generate_token')
-  async generateToken(@Req() req: Request) {
-    const res = await this.securityService.createToken(req.body);
-    return res;
+  async generateToken(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    try {
+      const response = await this.securityService.createToken(req.body);
+      return response.getApiData();
+    } catch (e: any) {
+      return ApiReponseError(e, res);
+    }
   }
 }

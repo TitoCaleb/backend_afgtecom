@@ -1,42 +1,36 @@
 import { Device } from 'src/domain/Device';
 import { Client } from 'src/domain/Client';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Token } from 'src/domain/Token';
 
 export class SecurityRepositoryImpl {
-  private clients = [
-    {
-      clientId: 'clientId',
-      clientSecret: 'clientSecret',
-    },
-  ];
+  constructor(
+    @InjectRepository(Device) private deviceRepository: Repository<Device>,
+    @InjectRepository(Client) private clientRepository: Repository<Client>,
+    @InjectRepository(Token) private tokenRepository: Repository<Token>,
+  ) {}
 
-  private device = [
-    {
-      id: 'deviceId',
-      deviceName: 'device',
-    },
-  ];
-
-  constructor() {}
-  findClientByCredentials(request: Client): Promise<Client> {
-    const response = this.clients.map((client) => {
-      if (
-        client.clientId === request.clientId &&
-        client.clientSecret === request.clientSecret
-      ) {
-        return new Client(client);
-      }
+  async findClientByCredentials(request: Client): Promise<Client> {
+    const response = await this.clientRepository.findOneBy({
+      clientId: request.clientId,
+      clientSecret: request.clientSecret,
     });
 
-    return Promise.resolve(response[0]);
+    return response;
   }
 
-  findDeviceByCredentials(request: Device): Promise<Device> {
-    const response = this.device.map((dev) => {
-      if (dev.id === request.id && dev.deviceName === request.deviceName) {
-        return new Device(dev);
-      }
+  async findDeviceByCredentials(request: Device): Promise<Device> {
+    const response = await this.deviceRepository.findOneBy({
+      deviceName: request.deviceName,
+      deviceUuid: request.deviceUuid,
     });
 
-    return Promise.resolve(response[0]);
+    return response;
+  }
+
+  async createToken(request: Token): Promise<Token> {
+    const response = await this.tokenRepository.save(request);
+    return response;
   }
 }
