@@ -1,3 +1,8 @@
+type Query = {
+  limit?: number;
+  offset?: number;
+};
+
 interface ResponseData<T> {
   data: T[];
   pagination: {

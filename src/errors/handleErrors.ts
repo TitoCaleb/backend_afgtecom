@@ -5,6 +5,14 @@ import { customLog } from 'src/config/logResponse';
 export const ApiReponseError = (e: any, res: Response): ApiResponseError => {
   customLog(e.message, 'error');
   switch (e.name) {
+    case 'HttpException': {
+      res.status(e.status);
+      return {
+        errorName: e.name,
+        status: e.status,
+        message: e.message,
+      };
+    }
     case 'ValidationError': {
       res.status(HttpStatus.BAD_REQUEST);
       return {
@@ -25,7 +33,7 @@ export const ApiReponseError = (e: any, res: Response): ApiResponseError => {
       res.status(HttpStatus.INTERNAL_SERVER_ERROR);
       return {
         errorName: e.name,
-        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        status: e.status || HttpStatus.INTERNAL_SERVER_ERROR,
         message: e.message,
       };
     }

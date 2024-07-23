@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryColumn } from 'typeorm';
+import { User } from './User';
 
 @Entity({ name: 'Token' })
 export class Token {
@@ -23,8 +24,12 @@ export class Token {
   @Column({ type: 'varchar', length: 100, name: 'device_name' })
   deviceName: string;
 
-  @Column({ type: 'varchar', length: 100, name: 'user_id' })
+  @Column({ type: 'varchar', length: 100, name: 'user_id', nullable: true })
+  @OneToOne(() => User, (user) => user.id)
   userId: string;
+
+  @Column({ type: 'boolean', name: 'status' })
+  status: boolean;
 
   constructor(data: Partial<Token>) {
     if (data) {

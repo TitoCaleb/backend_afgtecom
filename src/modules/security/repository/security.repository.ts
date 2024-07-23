@@ -3,6 +3,8 @@ import { Client } from 'src/domain/Client';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Token } from 'src/domain/Token';
+import { UnauthorizedException } from '@nestjs/common';
+import { User } from 'src/domain/User';
 
 export class SecurityRepositoryImpl {
   constructor(
@@ -32,5 +34,29 @@ export class SecurityRepositoryImpl {
   async createToken(request: Token): Promise<Token> {
     const response = await this.tokenRepository.save(request);
     return response;
+  }
+
+  async findToken(request: Token): Promise<Token> {
+    const response = await this.tokenRepository.findOneBy({
+      token: request.token,
+    });
+
+    if (!response) {
+      throw new UnauthorizedException('Invalid token');
+    }
+
+    return response;
+  }
+
+  async asignUserToToken(request: Token, user: User): Promise<Token> {
+    request.userId = user.id;
+    request.status = true;
+    const response = await this.tokenRepository.save(request);
+    return response;
+  }
+
+  async removeUserFromToken(request: Token): Promise<void> {
+    request.userId = '';
+    await this.tokenRepository.save(request);
   }
 }

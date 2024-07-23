@@ -1,7 +1,8 @@
-import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToOne, PrimaryColumn } from 'typeorm';
 import { DocumentType } from './DocumentType';
 import { CivilStatus } from './CivilStatus';
 import { Rol } from './Rol';
+import { Token } from './Token';
 
 export enum UserStatus {
   ACTIVE = 'ACTIVE',
@@ -11,6 +12,7 @@ export enum UserStatus {
 @Entity({ name: 'User' })
 export class User {
   @PrimaryColumn()
+  @OneToOne(() => Token, (token) => token.userId)
   id: string;
 
   @Column({ type: 'varchar', length: 100, name: 'name' })

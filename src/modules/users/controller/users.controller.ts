@@ -1,19 +1,39 @@
-import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { ApiReponseError } from 'src/errors/handleErrors';
 import { UsersService } from '../service/users.service';
 import { createUserSchema } from './schema/userSchema';
 import { User } from 'src/domain/User';
+import { TokenGuard } from '../../security/guards';
 
+@UseGuards(TokenGuard)
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Get()
-  async findAll(@Res({ passthrough: true }) res: Response) {
+  async findAll(
+    @Res({ passthrough: true }) res: Response,
+    @Query() { limit = 10, offset = 0 }: Query,
+  ) {
     try {
       const response = await this.usersService.findAll();
-      return response;
+      return {
+        data: response.map((user) => user.getApiData()),
+        pagination: {
+          limit,
+          offset,
+        },
+      };
     } catch (e: any) {
       return ApiReponseError(e, res);
     }

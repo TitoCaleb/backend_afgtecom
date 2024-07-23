@@ -1,15 +1,15 @@
-import { NotFoundException } from '@nestjs/common';
+import { HttpException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 import { User } from 'src/domain/User';
-import { Repository } from 'typeorm';
 
 export class UsersRepositoryImpl {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
-  async findAll(): Promise<User[]> {
-    const response = await this.userRepository.find();
+  async findAll(options?: FindManyOptions<User>): Promise<User[]> {
+    const response = await this.userRepository.find(options);
     return response;
   }
 
@@ -25,8 +25,28 @@ export class UsersRepositoryImpl {
     return response;
   }
 
+  async findByEmail(request: User): Promise<User> {
+    const response = await this.userRepository.findOneBy({
+      email: request.email,
+    });
+
+    if (!response) {
+      throw new HttpException('Bad credentials', 401, {
+        description: 'Invalid credentials',
+      });
+    }
+
+    return response;
+  }
+
   async create(request: User) {
     const response = await this.userRepository.save(request);
+    return response;
+  }
+
+  async update(request: User, userDb: User) {
+    this.userRepository.merge(userDb, request);
+    const response = await this.userRepository.save(userDb);
     return response;
   }
 }
