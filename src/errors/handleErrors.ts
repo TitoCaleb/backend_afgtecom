@@ -2,7 +2,7 @@ import { HttpStatus } from '@nestjs/common';
 import { Response } from 'express';
 import { customLog } from 'src/config/logResponse';
 
-export const ApiReponseError = (e: any, res: Response): ApiResponseError => {
+export const ApiResponseError = (e: any, res: Response): ApiResponseError => {
   customLog(e.message, 'error');
   switch (e.name) {
     case 'HttpException': {

@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { SecurityService } from '../service/security.service';
-import { ApiReponseError } from 'src/errors/handleErrors';
+import { ApiResponseError } from 'src/errors/handleErrors';
 import { User } from 'src/domain/User';
 import { loginSchema } from './schema/securitySchema';
 import { AuthGuard } from '../guards/auth.guard';
@@ -33,7 +33,7 @@ export class SecurityController {
       );
       return response.getApiData();
     } catch (e: any) {
-      return ApiReponseError(e, res);
+      return ApiResponseError(e, res);
     }
   }
 
@@ -45,7 +45,7 @@ export class SecurityController {
       await this.securityService.logout(request);
       return;
     } catch (e: any) {
-      return ApiReponseError(e, res);
+      return ApiResponseError(e, res);
     }
   }
 
@@ -58,7 +58,7 @@ export class SecurityController {
       const response = await this.securityService.createToken(req.body);
       return response.getApiData();
     } catch (e: any) {
-      return ApiReponseError(e, res);
+      return ApiResponseError(e, res);
     }
   }
 }

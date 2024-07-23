@@ -2,16 +2,18 @@ import {
   Body,
   Controller,
   Get,
+  HttpStatus,
   Param,
   Post,
+  Put,
   Query,
   Res,
   UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { ApiReponseError } from 'src/errors/handleErrors';
+import { ApiResponseError } from 'src/errors/handleErrors';
 import { UsersService } from '../service/users.service';
-import { createUserSchema } from './schema/userSchema';
+import { createUserSchema, updateUserSchema } from './schema/userSchema';
 import { User } from 'src/domain/User';
 import { TokenGuard } from '../../security/guards';
 
@@ -35,7 +37,8 @@ export class UsersController {
         },
       };
     } catch (e: any) {
-      return ApiReponseError(e, res);
+      res.status(HttpStatus.NOT_FOUND);
+      return ApiResponseError(e, res);
     }
   }
 
@@ -52,7 +55,8 @@ export class UsersController {
       );
       return response.getApiData();
     } catch (e: any) {
-      return ApiReponseError(e, res);
+      res.status(HttpStatus.NOT_FOUND);
+      return ApiResponseError(e, res);
     }
   }
 
@@ -65,9 +69,29 @@ export class UsersController {
           ...request,
         }),
       );
+      res.status(HttpStatus.CREATED);
       return response.getApiData();
     } catch (e: any) {
-      return ApiReponseError(e, res);
+      return ApiResponseError(e, res);
+    }
+  }
+
+  @Put(':userId')
+  async update(
+    @Res({ passthrough: true }) res: Response,
+    @Param('userId') userId: string,
+    @Body() user: User,
+  ) {
+    try {
+      const request = await updateUserSchema.validate({
+        id: userId,
+        ...user,
+      });
+      const response = await this.usersService.update(new User(request));
+      res.status(HttpStatus.OK);
+      return response.getApiData();
+    } catch (e: any) {
+      return ApiResponseError(e, res);
     }
   }
 }

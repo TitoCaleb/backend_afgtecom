@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { UsersRepositoryImpl } from '../repository/users.repository';
 import { BaseRepositoryImpl } from 'src/modules/base/repository/base.repository';
 import { User } from 'src/domain/User';
@@ -37,5 +37,24 @@ export class UsersService {
     user.password = encryptPassword;
 
     return await this.usersRepository.create(user);
+  }
+
+  async update(request: User) {
+    const userDb = await this.usersRepository.findById(request);
+
+    if (request.civilStatusId) {
+      await this.baseRepository.findCivilStatusById(request.civilStatusId);
+    }
+    if (request.documentTypeId) {
+      await this.baseRepository.findDocumentTypeById(request.documentTypeId);
+    }
+    if (request.rolId) {
+      await this.baseRepository.findRolById(request.rolId);
+    }
+    if (request.password) {
+      throw new HttpException('Password cannot be updated', 400);
+    }
+
+    return await this.usersRepository.update(request, userDb);
   }
 }
