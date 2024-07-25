@@ -37,4 +37,4 @@ export const updateUserSchema = object({
   email: string().email().optional(),
   password: string().optional(),
   status: boolean().optional(),
-});
+}).strict();

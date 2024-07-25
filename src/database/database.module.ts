@@ -12,7 +12,7 @@ import config from 'src/config/config';
         const { host, port, database, password, username } =
           configService.database;
         return {
-          type: 'mariadb',
+          type: 'mysql',
           host,
           port,
           username,
