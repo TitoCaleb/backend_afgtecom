@@ -49,4 +49,9 @@ export class UsersRepositoryImpl {
     const response = await this.userRepository.save(userDb);
     return response;
   }
+
+  async delete(request: User) {
+    await this.userRepository.delete(request.id);
+    return request;
+  }
 }

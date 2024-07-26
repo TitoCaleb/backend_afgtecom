@@ -57,4 +57,9 @@ export class UsersService {
 
     return await this.usersRepository.update(request, userDb);
   }
+
+  async delete(request: User) {
+    const userDb = await this.usersRepository.findById(request);
+    return await this.usersRepository.delete(userDb);
+  }
 }

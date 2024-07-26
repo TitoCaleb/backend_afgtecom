@@ -26,7 +26,7 @@ export class SecurityController {
     @Res({ passthrough: true }) res: Response,
   ) {
     try {
-      const request = await loginSchema.validate(data);
+      const request = await loginSchema.parseAsync(data);
       const response = await this.securityService.login(
         new User(request),
         (req as any).token,

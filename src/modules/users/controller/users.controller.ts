@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpStatus,
   Param,
@@ -63,7 +64,7 @@ export class UsersController {
   @Post()
   async create(@Body() user: User, @Res({ passthrough: true }) res: Response) {
     try {
-      const request = await createUserSchema.validate(user);
+      const request = await createUserSchema.parseAsync(user);
       const response = await this.usersService.create(
         new User({
           ...request,
@@ -83,11 +84,25 @@ export class UsersController {
     @Body() user: User,
   ) {
     try {
-      const request = await updateUserSchema.validate({
+      const request = await updateUserSchema.parseAsync({
         id: userId,
         ...user,
       });
       const response = await this.usersService.update(new User(request));
+      res.status(HttpStatus.OK);
+      return response.getApiData();
+    } catch (e: any) {
+      return ApiResponseError(e, res);
+    }
+  }
+
+  @Delete(':userId')
+  async delete(
+    @Res({ passthrough: true }) res: Response,
+    @Param('userId') userId: string,
+  ): Promise<ResponseController<User>> {
+    try {
+      const response = await this.usersService.delete(new User({ id: userId }));
       res.status(HttpStatus.OK);
       return response.getApiData();
     } catch (e: any) {

@@ -29,6 +29,14 @@ export const ApiResponseError = (e: any, res: Response): ApiResponseError => {
         message: e.message,
       };
     }
+    case 'ZodError': {
+      res.status(HttpStatus.BAD_REQUEST);
+      return {
+        errorName: e.name,
+        status: 400,
+        message: e.issues,
+      };
+    }
     default: {
       res.status(HttpStatus.INTERNAL_SERVER_ERROR);
       return {

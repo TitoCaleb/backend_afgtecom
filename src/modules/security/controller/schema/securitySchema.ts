@@ -1,6 +1,8 @@
-import { object, string } from 'yup';
+import { z } from 'zod';
 
-export const loginSchema = object({
-  email: string().email().required(),
-  password: string().required(),
-}).strict();
+export const loginSchema = z
+  .object({
+    email: z.string().email(),
+    password: z.string(),
+  })
+  .strict();
