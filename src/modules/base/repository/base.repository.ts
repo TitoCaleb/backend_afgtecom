@@ -15,6 +15,16 @@ export class BaseRepositoryImpl {
     private readonly rolRepository: Repository<Rol>,
   ) {}
 
+  async findAllDocumentType() {
+    return await this.documentTypeRepository.find();
+  }
+  async findAllCivilStatus() {
+    return await this.civilStatusRepository.find();
+  }
+  async findAllRol() {
+    return await this.rolRepository.find();
+  }
+
   async findDocumentTypeById(id: string) {
     const response = await this.documentTypeRepository.findOneBy({ id });
 
