@@ -1,7 +1,6 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { BrandsRepositoryImpl } from '../repository/brands.repository';
 import { Brand, BrandStatus } from 'src/domain/Brand';
-import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class BrandsService {
@@ -18,7 +17,6 @@ export class BrandsService {
   async create(brand: Brand) {
     const newBrand = new Brand({
       ...brand,
-      id: uuid(),
       name: brand.name.toLocaleUpperCase(),
     });
     return await this.brandsRepository.create(newBrand);

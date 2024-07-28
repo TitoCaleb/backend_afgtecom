@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Line } from './Line';
 
 export enum BrandStatus {
   ACTIVE = 'ACTIVE',
@@ -7,7 +8,7 @@ export enum BrandStatus {
 
 @Entity({ name: 'Brand' })
 export class Brand {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ type: 'varchar', length: 255, name: 'name', unique: true })
@@ -21,6 +22,9 @@ export class Brand {
 
   @Column({ type: 'boolean', name: 'status' })
   status: boolean;
+
+  @OneToMany(() => Line, (line) => line.brandId)
+  lines: Line[];
 
   constructor(data?: Partial<Brand>) {
     if (data) {

@@ -1,6 +1,5 @@
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
-import * as uuid from 'uuid';
 import { Client } from 'src/domain/Client';
 import { Device } from 'src/domain/Device';
 import { SecurityRepositoryImpl } from '../repository/security.repository';
@@ -86,7 +85,6 @@ export class SecurityService {
         deviceUuid: device.deviceUuid,
         deviceId: device.id,
         token: this.generateToken(),
-        id: uuid.v4(),
       }),
     );
 

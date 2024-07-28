@@ -1,4 +1,10 @@
-import { Column, Entity, ManyToOne, OneToOne, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { DocumentType } from './DocumentType';
 import { CivilStatus } from './CivilStatus';
 import { Rol } from './Rol';
@@ -17,7 +23,7 @@ export interface UserModifyPassword {
 
 @Entity({ name: 'User' })
 export class User {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn('uuid')
   @OneToOne(() => Token, (token) => token.userId)
   id: string;
 

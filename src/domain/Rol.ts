@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './User';
 
 export enum RolName {
@@ -9,7 +9,7 @@ export enum RolName {
 
 @Entity({ name: 'Rol' })
 export class Rol {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn('uuid')
   @OneToMany(() => User, (user) => user.rolId)
   id: string;
 

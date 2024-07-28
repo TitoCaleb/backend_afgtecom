@@ -2,7 +2,6 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { UsersRepositoryImpl } from '../repository/users.repository';
 import { BaseRepositoryImpl } from 'src/modules/base/repository/base.repository';
 import { User, UserModifyPassword, UserStatus } from 'src/domain/User';
-import { v4 as uuid } from 'uuid';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -40,13 +39,9 @@ export class UsersService {
     await this.baseRepository.findRolById(request.rolId);
     const encryptPassword = await this.encryptPassword(request.password);
 
-    const user = new User({
-      id: uuid(),
-      ...request,
-    });
-    user.password = encryptPassword;
+    request.password = encryptPassword;
 
-    return await this.usersRepository.create(user);
+    return await this.usersRepository.create(request);
   }
 
   async update(request: User) {

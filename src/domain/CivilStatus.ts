@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './User';
 
 export enum CivilStatusEnum {
@@ -10,11 +10,11 @@ export enum CivilStatusEnum {
 
 @Entity({ name: 'CivilStatus' })
 export class CivilStatus {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn('uuid')
   @OneToMany(() => User, (user) => user.civilStatusId)
   id: string;
 
-  @Column({ type: 'varchar', length: 100, name: 'name' })
+  @Column({ type: 'varchar', length: 100, name: 'name', unique: true })
   name: CivilStatusEnum;
 
   constructor(data: Partial<CivilStatus>) {

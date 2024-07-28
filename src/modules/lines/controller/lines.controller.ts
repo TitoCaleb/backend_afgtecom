@@ -12,16 +12,16 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { TokenGuard } from 'src/modules/security/guards';
-import { BrandsService } from '../service/brands.service';
+import { LinesService } from '../service/lines.service';
 import { Response } from 'express';
 import { ApiResponseError } from 'src/errors/handleErrors';
-import { Brand } from 'src/domain/Brand';
-import { createBrandSchema, updateBrandSchema } from './schema/brandSchema';
+import { Line } from 'src/domain/Line';
+import { createLineSchema, updateBrandSchema } from './schema/lineSchema';
 
 @UseGuards(TokenGuard)
-@Controller('brands')
-export class BrandsController {
-  constructor(private brandsService: BrandsService) {}
+@Controller('lines')
+export class LinesController {
+  constructor(private linesService: LinesService) {}
 
   @Get()
   async findAll(
@@ -29,9 +29,9 @@ export class BrandsController {
     @Query() { limit = 10, offset = 0 }: Query,
   ) {
     try {
-      const response = await this.brandsService.findAll();
+      const response = await this.linesService.findAll();
       return {
-        data: response.map((brand) => brand.getApiData()),
+        data: response.map((line) => line.getApiData()),
         pagination: {
           limit,
           offset,
@@ -43,16 +43,14 @@ export class BrandsController {
     }
   }
 
-  @Get(':brandId')
+  @Get(':lineId')
   async findById(
     @Res({ passthrough: true }) res: Response,
-    @Param('brandId') brandId: string,
+    @Param('lineId') lineId: string,
   ) {
     try {
-      const response = await this.brandsService.findById(
-        new Brand({
-          id: brandId,
-        }),
+      const response = await this.linesService.findById(
+        new Line({ id: lineId }),
       );
       return response.getApiData();
     } catch (e: any) {
@@ -62,10 +60,10 @@ export class BrandsController {
   }
 
   @Post()
-  async create(@Body() user: Brand, @Res({ passthrough: true }) res: Response) {
+  async create(@Body() user: Line, @Res({ passthrough: true }) res: Response) {
     try {
-      const request = await createBrandSchema.parseAsync(user);
-      const response = await this.brandsService.create(new Brand(request));
+      const request = await createLineSchema.parseAsync(user);
+      const response = await this.linesService.create(new Line(request));
       res.status(HttpStatus.CREATED);
       return response.getApiData();
     } catch (e: any) {
@@ -73,35 +71,31 @@ export class BrandsController {
     }
   }
 
-  @Put(':brandId')
+  @Put(':lineId')
   async update(
     @Res({ passthrough: true }) res: Response,
-    @Param('brandId') brandId: string,
-    @Body() brand: Brand,
+    @Param('lineId') lineId: string,
+    @Body() line: Line,
   ) {
     try {
       const request = await updateBrandSchema.parseAsync({
-        id: brandId,
-        ...brand,
+        id: lineId,
+        ...line,
       });
-      const response = await this.brandsService.update(new Brand(request));
+      const response = await this.linesService.update(new Line(request));
       return response.getApiData();
     } catch (e: any) {
       return ApiResponseError(e, res);
     }
   }
 
-  @Delete(':brandId')
+  @Delete(':lineId')
   async delete(
     @Res({ passthrough: true }) res: Response,
-    @Param('brandId') brandId: string,
+    @Param('lineId') lineId: string,
   ) {
     try {
-      const response = await this.brandsService.delete(
-        new Brand({
-          id: brandId,
-        }),
-      );
+      const response = await this.linesService.delete(new Line({ id: lineId }));
       return response.getApiData();
     } catch (e: any) {
       return ApiResponseError(e, res);
