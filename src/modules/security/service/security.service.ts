@@ -93,25 +93,65 @@ export class SecurityService {
     return token;
   }
 
-  async login(user: User, token: Token): Promise<User> {
+  async login(user: User, newToken: Token): Promise<User> {
     const userDb = await this.validateUser(user);
+
     if (!userDb) {
       throw new HttpException('Bad credentials', 401, {
         description: 'Invalid credentials',
       });
     }
 
-    if (token.status) {
-      throw new HttpException('Token expired', 401);
+    const lastToken = await this.securityRepository.findToken(
+      new Token({ id: userDb.tokenId }),
+    );
+
+    if (newToken.status) {
+      throw new UnauthorizedException('Unauthorized');
     }
 
-    await this.securityRepository.asignUserToToken(token, userDb);
+    // Update last token, remove userId and set status to false
+    if (lastToken.userId) {
+      await this.securityRepository.updateToken({
+        tokenDb: lastToken,
+        updateToken: new Token({
+          ...lastToken,
+          userId: '',
+          status: false,
+        }),
+      });
+    }
+
+    // Update new token, with the userId
+    await this.securityRepository.updateToken({
+      tokenDb: newToken,
+      updateToken: new Token({
+        ...newToken,
+        userId: userDb.id,
+        status: true,
+      }),
+    });
+
+    // Update user with the new token
+    await this.userRepository.update(
+      new User({
+        ...userDb,
+        tokenId: newToken.id,
+      }),
+      userDb,
+    );
 
     return userDb;
   }
 
   async logout(token: Token) {
-    await this.securityRepository.removeUserFromToken(token);
+    await this.securityRepository.updateToken({
+      tokenDb: token,
+      updateToken: new Token({
+        ...token,
+        userId: '',
+      }),
+    });
   }
 
   async findToken(request: Token) {

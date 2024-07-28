@@ -9,6 +9,12 @@ export enum UserStatus {
   INACTIVE = 'INACTIVE',
 }
 
+export interface UserModifyPassword {
+  id?: string;
+  oldPassword?: string;
+  newPassword?: string;
+}
+
 @Entity({ name: 'User' })
 export class User {
   @PrimaryColumn()
@@ -59,6 +65,10 @@ export class User {
 
   @Column({ type: 'boolean', name: 'status' })
   status: boolean;
+
+  @Column({ type: 'varchar', length: 100, name: 'token_id', nullable: true })
+  @OneToOne(() => Token, (token) => token.id)
+  tokenId: string;
 
   constructor(data: Partial<User>) {
     if (data) {

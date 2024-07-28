@@ -14,7 +14,11 @@ import {
 import { Response } from 'express';
 import { ApiResponseError } from 'src/errors/handleErrors';
 import { UsersService } from '../service/users.service';
-import { createUserSchema, updateUserSchema } from './schema/userSchema';
+import {
+  createUserSchema,
+  updateUserPasswordSchema,
+  updateUserSchema,
+} from './schema/userSchema';
 import { User } from 'src/domain/User';
 import { TokenGuard } from '../../security/guards';
 
@@ -91,6 +95,25 @@ export class UsersController {
       const response = await this.usersService.update(new User(request));
       res.status(HttpStatus.OK);
       return response.getApiData();
+    } catch (e: any) {
+      return ApiResponseError(e, res);
+    }
+  }
+
+  @Put(':userId/password')
+  async updatePassword(
+    @Res({ passthrough: true }) res: Response,
+    @Param('userId') userId: string,
+    @Body() user: User,
+  ) {
+    try {
+      const request = await updateUserPasswordSchema.parseAsync({
+        id: userId,
+        ...user,
+      });
+      await this.usersService.updatePassword(request);
+      res.status(HttpStatus.OK);
+      return;
     } catch (e: any) {
       return ApiResponseError(e, res);
     }

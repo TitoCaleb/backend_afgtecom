@@ -4,7 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Token } from 'src/domain/Token';
 import { UnauthorizedException } from '@nestjs/common';
-import { User } from 'src/domain/User';
 
 export class SecurityRepositoryImpl {
   constructor(
@@ -48,15 +47,15 @@ export class SecurityRepositoryImpl {
     return response;
   }
 
-  async asignUserToToken(request: Token, user: User): Promise<Token> {
-    request.userId = user.id;
-    request.status = true;
-    const response = await this.tokenRepository.save(request);
+  async updateToken({
+    updateToken,
+    tokenDb,
+  }: {
+    updateToken: Token;
+    tokenDb: Token;
+  }): Promise<Token> {
+    this.tokenRepository.merge(tokenDb, updateToken);
+    const response = await this.tokenRepository.save(tokenDb);
     return response;
-  }
-
-  async removeUserFromToken(request: Token): Promise<void> {
-    request.userId = '';
-    await this.tokenRepository.save(request);
   }
 }

@@ -39,6 +39,18 @@ export class UsersRepositoryImpl {
     return response;
   }
 
+  async findByToken(request: User): Promise<User> {
+    const response = await this.userRepository.findOneBy({
+      tokenId: request.tokenId,
+    });
+
+    if (!response) {
+      throw new NotFoundException('User not found');
+    }
+
+    return response;
+  }
+
   async create(request: User) {
     const response = await this.userRepository.save(request);
     return response;

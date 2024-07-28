@@ -40,3 +40,12 @@ export const updateUserSchema = z
     status: z.boolean().optional(),
   })
   .strict();
+
+export const updateUserPasswordSchema = z
+  .object({
+    id: z.string(),
+    oldPassword: z.string(),
+    newPassword: z.string(),
+  })
+  .required()
+  .strict();

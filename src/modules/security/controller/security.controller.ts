@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpStatus,
   Post,
   Req,
   Res,
@@ -31,6 +32,7 @@ export class SecurityController {
         new User(request),
         (req as any).token,
       );
+      res.status(HttpStatus.OK);
       return response.getApiData();
     } catch (e: any) {
       return ApiResponseError(e, res);

@@ -1,7 +1,7 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { UsersRepositoryImpl } from '../repository/users.repository';
 import { BaseRepositoryImpl } from 'src/modules/base/repository/base.repository';
-import { User } from 'src/domain/User';
+import { User, UserModifyPassword, UserStatus } from 'src/domain/User';
 import { v4 as uuid } from 'uuid';
 import * as bcrypt from 'bcrypt';
 
@@ -14,6 +14,16 @@ export class UsersService {
 
   private async encryptPassword(password: string) {
     return await bcrypt.hash(password, 10);
+  }
+
+  private async matchPassword(request: string, password: string) {
+    const isMatch = await bcrypt.compare(password, request);
+    if (!isMatch) {
+      throw new HttpException('Bad credentials', 401, {
+        description: 'Invalid credentials',
+      });
+    }
+    return isMatch;
   }
 
   async findAll() {
@@ -58,8 +68,27 @@ export class UsersService {
     return await this.usersRepository.update(request, userDb);
   }
 
+  async updatePassword(request: UserModifyPassword) {
+    const userDb = await this.usersRepository.findById(
+      new User({ id: request.id }),
+    );
+
+    await this.matchPassword(userDb.password, request.oldPassword);
+
+    const encryptPassword = await this.encryptPassword(request.newPassword);
+    const user = new User(userDb);
+    user.password = encryptPassword;
+
+    return await this.usersRepository.update(user, userDb);
+  }
+
   async delete(request: User) {
     const userDb = await this.usersRepository.findById(request);
+
+    if (userDb.getStatus() === UserStatus.ACTIVE) {
+      throw new HttpException('User cannot be deleted', 400);
+    }
+
     return await this.usersRepository.delete(userDb);
   }
 }

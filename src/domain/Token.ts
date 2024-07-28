@@ -4,6 +4,7 @@ import { User } from './User';
 @Entity({ name: 'Token' })
 export class Token {
   @PrimaryColumn()
+  @OneToOne(() => User, (user) => user.tokenId)
   id: string;
 
   @Column({ type: 'varchar', length: 100, name: 'token' })

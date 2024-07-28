@@ -18,6 +18,11 @@ export class TokenGuard implements CanActivate {
         token: value,
       }),
     );
+
+    if (!token.status || !token.userId) {
+      throw new UnauthorizedException('Unauthorized');
+    }
+
     return token;
   }
 
@@ -31,10 +36,6 @@ export class TokenGuard implements CanActivate {
     }
 
     const token = await this.getToken(authToken);
-
-    if (!token.status || !token.userId) {
-      throw new UnauthorizedException('Unauthorized');
-    }
 
     request.token = token;
     return true;

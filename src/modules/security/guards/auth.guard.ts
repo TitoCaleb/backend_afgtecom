@@ -12,13 +12,28 @@ import { Token } from 'src/domain/Token';
 export class AuthGuard implements CanActivate {
   constructor(private tokenRepository: SecurityRepositoryImpl) {}
 
-  private async getToken(value: string) {
-    const token = await this.tokenRepository.findToken(
+  private getDate(timestamp?: Date | number) {
+    if (!timestamp) return new Date();
+
+    return new Date(timestamp);
+  }
+
+  private async getToken(requestToken: string): Promise<{ newToken: Token }> {
+    const newToken = await this.tokenRepository.findToken(
       new Token({
-        token: value,
+        token: requestToken,
       }),
     );
-    return token;
+
+    if (newToken.expiredAt < this.getDate()) {
+      await this.tokenRepository.updateToken({
+        tokenDb: newToken,
+        updateToken: new Token({ ...newToken, userId: '' }),
+      });
+      throw new UnauthorizedException('Token expired');
+    }
+
+    return { newToken };
   }
 
   async canActivate(context: ExecutionContext) {
@@ -31,10 +46,10 @@ export class AuthGuard implements CanActivate {
     }
 
     if (authToken) {
-      const token = await this.getToken(authToken);
+      const { newToken } = await this.getToken(authToken);
 
-      if (token) {
-        request.token = token;
+      if (newToken) {
+        request.token = newToken;
         return true;
       } else {
         throw new UnauthorizedException('Unauthorized');
