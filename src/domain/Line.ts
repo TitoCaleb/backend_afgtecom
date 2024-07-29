@@ -1,22 +1,29 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Brand } from './Brand';
 
 @Entity({ name: 'Line' })
+@Index(['brand', 'name'], { unique: true })
 export class Line {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'varchar', length: 255, name: 'name', unique: true })
+  @Column({ type: 'varchar', length: 255, name: 'name' })
   name: string;
 
   @Column({ type: 'timestamp', name: 'created_at' })
-  createAt: Date;
+  createdAt: Date;
 
   @Column({ type: 'timestamp', name: 'update_at' })
-  updateAt: Date;
+  updatedAt: Date;
 
   @ManyToOne(() => Brand, (brand) => brand.lines)
-  brandId: string;
+  brand: Brand;
 
   constructor(data?: Partial<Line>) {
     if (data) {
@@ -28,8 +35,7 @@ export class Line {
     return {
       id: this.id,
       name: this.name,
-      createAt: this.createAt,
-      updateAt: this.updateAt,
+      brand: this.brand?.id,
     };
   }
 }

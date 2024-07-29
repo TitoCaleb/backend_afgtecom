@@ -17,6 +17,7 @@ import { Response } from 'express';
 import { ApiResponseError } from 'src/errors/handleErrors';
 import { Line } from 'src/domain/Line';
 import { createLineSchema, updateBrandSchema } from './schema/lineSchema';
+import { Brand } from 'src/domain/Brand';
 
 @UseGuards(TokenGuard)
 @Controller('lines')
@@ -55,6 +56,21 @@ export class LinesController {
       return response.getApiData();
     } catch (e: any) {
       res.status(HttpStatus.NOT_FOUND);
+      return ApiResponseError(e, res);
+    }
+  }
+
+  @Get(':brandId/brand')
+  async findByBrandId(
+    @Res({ passthrough: true }) res: Response,
+    @Param('brandId') brandId: string,
+  ) {
+    try {
+      const response = await this.linesService.findByBrandId(
+        new Brand({ id: brandId }),
+      );
+      return response.map((line) => line.getApiData());
+    } catch (e: any) {
       return ApiResponseError(e, res);
     }
   }

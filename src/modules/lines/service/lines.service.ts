@@ -1,17 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { LinesRepositoryImpl } from '../repository/lines.repository';
 import { Line } from 'src/domain/Line';
+import { Brand } from 'src/domain/Brand';
 
 @Injectable()
 export class LinesService {
   constructor(private lineRepository: LinesRepositoryImpl) {}
 
   async findAll() {
-    return await this.lineRepository.findAll();
+    return await this.lineRepository.findAll({
+      relations: ['brand'],
+    });
   }
 
   async findById(line: Line) {
     return await this.lineRepository.findById(line);
+  }
+
+  async findByBrandId(brand: Brand) {
+    return await this.lineRepository.findByBrandId(brand);
   }
 
   async create(line: Line) {
@@ -24,7 +31,8 @@ export class LinesService {
 
   async update(line: Line) {
     const lineDb = await this.lineRepository.findById(line);
-    line.updateAt = new Date();
+    if (line.name) line.name = line.name.toLocaleUpperCase();
+    line.updatedAt = new Date();
     return await this.lineRepository.update(line, lineDb);
   }
 

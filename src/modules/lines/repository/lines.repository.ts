@@ -1,5 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Brand } from 'src/domain/Brand';
 import { Line } from 'src/domain/Line';
 import { FindManyOptions, Repository } from 'typeorm';
 
@@ -25,6 +26,14 @@ export class LinesRepositoryImpl {
     return response;
   }
 
+  async findByBrandId(brand: Brand): Promise<Line[]> {
+    const response = await this.lineRepository.findBy({
+      brand,
+    });
+
+    return response;
+  }
+
   async create(request: Line) {
     const response = await this.lineRepository.save(request);
     return response;
@@ -32,7 +41,13 @@ export class LinesRepositoryImpl {
 
   async update(request: Line, lineDb: Line) {
     this.lineRepository.merge(lineDb, request);
-    const response = await this.lineRepository.save(lineDb);
+    await this.lineRepository.save(lineDb);
+
+    const response = await this.lineRepository.findOne({
+      where: { id: lineDb.id },
+      relations: ['brand'],
+    });
+
     return response;
   }
 

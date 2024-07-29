@@ -15,15 +15,15 @@ export class Brand {
   name: string;
 
   @Column({ type: 'timestamp', name: 'created_at' })
-  createAt: Date;
+  createdAt: Date;
 
   @Column({ type: 'timestamp', name: 'update_at' })
-  updateAt: Date;
+  updatedAt: Date;
 
   @Column({ type: 'boolean', name: 'status' })
   status: boolean;
 
-  @OneToMany(() => Line, (line) => line.brandId)
+  @OneToMany(() => Line, (line) => line.brand)
   lines: Line[];
 
   constructor(data?: Partial<Brand>) {
@@ -36,8 +36,6 @@ export class Brand {
     return {
       id: this.id,
       name: this.name,
-      createAt: this.createAt,
-      updateAt: this.updateAt,
       status: this.getStatus(),
     };
   }
