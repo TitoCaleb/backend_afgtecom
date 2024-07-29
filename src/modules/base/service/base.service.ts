@@ -8,10 +8,24 @@ export class BaseService {
   async findAllDocumentType() {
     return await this.baseRepository.findAllDocumentType();
   }
+
   async findAllCivilStatus() {
     return await this.baseRepository.findAllCivilStatus();
   }
+
   async findAllRol() {
     return await this.baseRepository.findAllRol();
+  }
+
+  async findAllDepartment() {
+    return await this.baseRepository.findAllDepartment();
+  }
+
+  async findProvinceByDepartmentId(departmentId: string) {
+    return await this.baseRepository.findProvinceByDepartmentId(departmentId);
+  }
+
+  async findDistrictByProvinceId(provinceId: string) {
+    return await this.baseRepository.findDistrictByProvinceId(provinceId);
   }
 }

@@ -12,6 +12,9 @@ import { SecurityRepositoryImpl } from '../security/repository/security.reposito
 import { Device } from 'src/domain/Device';
 import { Client } from 'src/domain/Client';
 import { Token } from 'src/domain/Token';
+import { Department } from 'src/domain/Ubigeo/Department';
+import { Province } from 'src/domain/Ubigeo/Province';
+import { District } from 'src/domain/Ubigeo/District';
 
 @Module({
   imports: [
@@ -23,6 +26,9 @@ import { Token } from 'src/domain/Token';
       Device,
       Client,
       Token,
+      Department,
+      Province,
+      District,
     ]),
   ],
   providers: [

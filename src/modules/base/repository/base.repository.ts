@@ -1,9 +1,12 @@
-import { NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { CivilStatus } from 'src/domain/CivilStatus';
+import { Department } from 'src/domain/Ubigeo/Department';
+import { District } from 'src/domain/Ubigeo/District';
 import { DocumentType } from 'src/domain/DocumentType';
-import { Rol } from 'src/domain/Rol';
+import { InjectRepository } from '@nestjs/typeorm';
+import { NotFoundException } from '@nestjs/common';
+import { Province } from 'src/domain/Ubigeo/Province';
 import { Repository } from 'typeorm';
+import { Rol } from 'src/domain/Rol';
 
 export class BaseRepositoryImpl {
   constructor(
@@ -13,6 +16,12 @@ export class BaseRepositoryImpl {
     private readonly civilStatusRepository: Repository<CivilStatus>,
     @InjectRepository(Rol)
     private readonly rolRepository: Repository<Rol>,
+    @InjectRepository(Department)
+    private readonly departmentRepository: Repository<Department>,
+    @InjectRepository(Province)
+    private readonly provinceRepository: Repository<Province>,
+    @InjectRepository(District)
+    private readonly districtRepository: Repository<District>,
   ) {}
 
   async findAllDocumentType() {
@@ -23,6 +32,22 @@ export class BaseRepositoryImpl {
   }
   async findAllRol() {
     return await this.rolRepository.find();
+  }
+
+  async findAllDepartment() {
+    return await this.departmentRepository.find();
+  }
+
+  async findProvinceByDepartmentId(departmentId: string) {
+    return await this.provinceRepository.findBy({
+      department: { id: departmentId },
+    });
+  }
+
+  async findDistrictByProvinceId(provinceId: string) {
+    return await this.districtRepository.findBy({
+      province: { id: provinceId },
+    });
   }
 
   async findDocumentTypeById(id: string) {
