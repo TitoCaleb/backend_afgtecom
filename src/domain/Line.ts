@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { Brand } from './Brand';
 
-@Entity({ name: 'Line' })
+@Entity({ name: 'line' })
 @Index(['brand', 'name'], { unique: true })
 export class Line {
   @PrimaryGeneratedColumn('uuid')

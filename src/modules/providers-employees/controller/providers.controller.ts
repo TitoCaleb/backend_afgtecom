@@ -9,19 +9,19 @@ import {
   Put,
   Query,
   Res,
-  UseGuards,
 } from '@nestjs/common';
-import { TokenGuard } from 'src/modules/security/guards';
-import { BrandsService } from '../service/brands.service';
+import { ProvidersService } from '../service/providers.service';
 import { Response } from 'express';
 import { ApiResponseError } from 'src/errors/handleErrors';
-import { Brand } from 'src/domain/Brand';
-import { createBrandSchema, updateBrandSchema } from './schema/brandSchema';
+import { Provider } from 'src/domain/Provider';
+import {
+  createProviderSchema,
+  updateProviderSchema,
+} from './schema/providersSchema';
 
-@UseGuards(TokenGuard)
-@Controller('brands')
-export class BrandsController {
-  constructor(private brandsService: BrandsService) {}
+@Controller('providers')
+export class ProvidersController {
+  constructor(private providerService: ProvidersService) {}
 
   @Get()
   async findAll(
@@ -29,9 +29,9 @@ export class BrandsController {
     @Query() { limit = 10, offset = 0 }: Query,
   ) {
     try {
-      const response = await this.brandsService.findAll();
+      const response = await this.providerService.findAll();
       return {
-        data: response.map((brand) => brand.getApiData()),
+        data: response.map((provider) => provider.getApiData()),
         pagination: {
           limit,
           offset,
@@ -43,15 +43,15 @@ export class BrandsController {
     }
   }
 
-  @Get(':brandId')
+  @Get(':providerId')
   async findById(
     @Res({ passthrough: true }) res: Response,
-    @Param('brandId') brandId: string,
+    @Param('providerId') providerId: string,
   ) {
     try {
-      const response = await this.brandsService.findById(
-        new Brand({
-          id: brandId,
+      const response = await this.providerService.findById(
+        new Provider({
+          id: providerId,
         }),
       );
       return response.getApiData();
@@ -63,48 +63,49 @@ export class BrandsController {
 
   @Post()
   async create(
-    @Body() brand: Brand,
+    @Body() provider: Provider,
     @Res({ passthrough: true }) res: Response,
   ) {
     try {
-      const request = await createBrandSchema.parseAsync(brand);
-      const response = await this.brandsService.create(new Brand(request));
+      const request = await createProviderSchema.parseAsync(provider);
+      const response = await this.providerService.create(new Provider(request));
       res.status(HttpStatus.CREATED);
       return response.getApiData();
     } catch (e: any) {
+      res.status(HttpStatus.NOT_FOUND);
       return ApiResponseError(e, res);
     }
   }
 
-  @Put(':brandId')
+  @Put(':providerId')
   async update(
     @Res({ passthrough: true }) res: Response,
-    @Param('brandId') brandId: string,
-    @Body() brand: Brand,
+    @Param('providerId') providerId: string,
+    @Body() provider: Provider,
   ) {
     try {
-      const request = await updateBrandSchema.parseAsync({
-        id: brandId,
-        ...brand,
+      const request = await updateProviderSchema.parseAsync({
+        id: providerId,
+        ...provider,
       });
-      const response = await this.brandsService.update(new Brand(request));
+      const response = await this.providerService.update(new Provider(request));
+      res.status(HttpStatus.OK);
       return response.getApiData();
     } catch (e: any) {
       return ApiResponseError(e, res);
     }
   }
 
-  @Delete(':brandId')
+  @Delete(':providerId')
   async delete(
     @Res({ passthrough: true }) res: Response,
-    @Param('brandId') brandId: string,
+    @Param('providerId') providerId: string,
   ) {
     try {
-      const response = await this.brandsService.delete(
-        new Brand({
-          id: brandId,
-        }),
+      const response = await this.providerService.delete(
+        new Provider({ id: providerId }),
       );
+      res.status(HttpStatus.OK);
       return response.getApiData();
     } catch (e: any) {
       return ApiResponseError(e, res);

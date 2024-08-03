@@ -6,7 +6,7 @@ export enum BrandStatus {
   INACTIVE = 'INACTIVE',
 }
 
-@Entity({ name: 'Brand' })
+@Entity({ name: 'brand' })
 export class Brand {
   @PrimaryGeneratedColumn('uuid')
   id: string;

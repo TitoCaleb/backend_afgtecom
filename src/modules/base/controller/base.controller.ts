@@ -3,6 +3,8 @@ import { BaseService } from '../service/base.service';
 import { Response } from 'express';
 import { ApiResponseError } from 'src/errors/handleErrors';
 import { TokenGuard } from '../../security/guards';
+import { Department } from 'src/domain/Ubigeo/Department';
+import { Province } from 'src/domain/Ubigeo/Province';
 
 @UseGuards(TokenGuard)
 @Controller('base')
@@ -61,8 +63,9 @@ export class BaseController {
     @Param('departmentId') departmentId: string,
   ) {
     try {
-      const response =
-        await this.baseService.findProvinceByDepartmentId(departmentId);
+      const response = await this.baseService.findProvinceByDepartmentId(
+        new Department({ id: departmentId }),
+      );
       return {
         data: response,
       };
@@ -77,8 +80,9 @@ export class BaseController {
     @Param('provinceId') provinceId: string,
   ) {
     try {
-      const response =
-        await this.baseService.findDistrictByProvinceId(provinceId);
+      const response = await this.baseService.findDistrictByProvinceId(
+        new Province({ id: provinceId }),
+      );
       return {
         data: response,
       };

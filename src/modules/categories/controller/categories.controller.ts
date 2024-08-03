@@ -7,35 +7,30 @@ import {
   Param,
   Post,
   Put,
-  Query,
   Res,
   UseGuards,
 } from '@nestjs/common';
 import { TokenGuard } from 'src/modules/security/guards';
-import { BrandsService } from '../service/brands.service';
+import { CategoriesService } from '../service/categories.service';
 import { Response } from 'express';
 import { ApiResponseError } from 'src/errors/handleErrors';
-import { Brand } from 'src/domain/Brand';
-import { createBrandSchema, updateBrandSchema } from './schema/brandSchema';
+import { Category } from 'src/domain/Category';
+import {
+  createCategorySchema,
+  updateCategorySchema,
+} from './schema/categorySchema';
 
 @UseGuards(TokenGuard)
-@Controller('brands')
-export class BrandsController {
-  constructor(private brandsService: BrandsService) {}
+@Controller('categories')
+export class CategoriesController {
+  constructor(private cateogryService: CategoriesService) {}
 
   @Get()
-  async findAll(
-    @Res({ passthrough: true }) res: Response,
-    @Query() { limit = 10, offset = 0 }: Query,
-  ) {
+  async findAll(@Res({ passthrough: true }) res: Response) {
     try {
-      const response = await this.brandsService.findAll();
+      const response = await this.cateogryService.findAll();
       return {
-        data: response.map((brand) => brand.getApiData()),
-        pagination: {
-          limit,
-          offset,
-        },
+        data: response.map((category) => category.getApiData()),
       };
     } catch (e: any) {
       res.status(HttpStatus.NOT_FOUND);
@@ -43,15 +38,15 @@ export class BrandsController {
     }
   }
 
-  @Get(':brandId')
+  @Get(':categoryId')
   async findById(
     @Res({ passthrough: true }) res: Response,
-    @Param('brandId') brandId: string,
+    @Param('categoryId') categoryId: string,
   ) {
     try {
-      const response = await this.brandsService.findById(
-        new Brand({
-          id: brandId,
+      const response = await this.cateogryService.findById(
+        new Category({
+          id: categoryId,
         }),
       );
       return response.getApiData();
@@ -63,12 +58,12 @@ export class BrandsController {
 
   @Post()
   async create(
-    @Body() brand: Brand,
+    @Body() category: Category,
     @Res({ passthrough: true }) res: Response,
   ) {
     try {
-      const request = await createBrandSchema.parseAsync(brand);
-      const response = await this.brandsService.create(new Brand(request));
+      const request = await createCategorySchema.parseAsync(category);
+      const response = await this.cateogryService.create(new Category(request));
       res.status(HttpStatus.CREATED);
       return response.getApiData();
     } catch (e: any) {
@@ -76,33 +71,33 @@ export class BrandsController {
     }
   }
 
-  @Put(':brandId')
+  @Put(':categoryId')
   async update(
     @Res({ passthrough: true }) res: Response,
-    @Param('brandId') brandId: string,
-    @Body() brand: Brand,
+    @Param('categoryId') categoryId: string,
+    @Body() category: Category,
   ) {
     try {
-      const request = await updateBrandSchema.parseAsync({
-        id: brandId,
-        ...brand,
+      const request = await updateCategorySchema.parseAsync({
+        id: categoryId,
+        ...category,
       });
-      const response = await this.brandsService.update(new Brand(request));
+      const response = await this.cateogryService.update(new Category(request));
       return response.getApiData();
     } catch (e: any) {
       return ApiResponseError(e, res);
     }
   }
 
-  @Delete(':brandId')
+  @Delete(':categoryId')
   async delete(
     @Res({ passthrough: true }) res: Response,
-    @Param('brandId') brandId: string,
+    @Param('categoryId') categoryId: string,
   ) {
     try {
-      const response = await this.brandsService.delete(
-        new Brand({
-          id: brandId,
+      const response = await this.cateogryService.delete(
+        new Category({
+          id: categoryId,
         }),
       );
       return response.getApiData();

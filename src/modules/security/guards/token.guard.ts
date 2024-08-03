@@ -12,6 +12,12 @@ import { Token } from 'src/domain/Token';
 export class TokenGuard implements CanActivate {
   constructor(private tokenRepository: SecurityRepositoryImpl) {}
 
+  private getDate(timestamp?: Date | number) {
+    if (!timestamp) return new Date();
+
+    return new Date(timestamp);
+  }
+
   private async getToken(value: string) {
     const token = await this.tokenRepository.findToken(
       new Token({
@@ -21,6 +27,14 @@ export class TokenGuard implements CanActivate {
 
     if (!token.status || !token.userId) {
       throw new UnauthorizedException('Unauthorized');
+    }
+
+    if (token.expiredAt < this.getDate()) {
+      await this.tokenRepository.updateToken({
+        tokenDb: token,
+        updateToken: new Token({ ...token, userId: '' }),
+      });
+      throw new UnauthorizedException('Token expired');
     }
 
     return token;

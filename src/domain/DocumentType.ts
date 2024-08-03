@@ -1,7 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './User';
 
-@Entity({ name: 'DocumentType' })
+@Entity({ name: 'document_type' })
 export class DocumentType {
   @PrimaryGeneratedColumn('uuid')
   @OneToMany(() => User, (user) => user.documentTypeId)

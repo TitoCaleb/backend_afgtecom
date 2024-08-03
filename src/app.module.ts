@@ -8,6 +8,11 @@ import { BaseModule } from './modules/base/base.module';
 import { UsersModule } from './modules/users/users.module';
 import { BrandsModule } from './modules/brands/brands.module';
 import { LinesModule } from './modules/lines/lines.module';
+import { ProvidersModule } from './modules/providers-employees/providers.module';
+import { BusinessSectorModule } from './modules/business-sector/business-sector.module';
+import { BanksModule } from './modules/banks/banks.module';
+import { CategoriesModule } from './modules/categories/categories.module';
+
 import enviroments from './config/enviroments';
 
 @Module({
@@ -23,6 +28,10 @@ import enviroments from './config/enviroments';
     UsersModule,
     BrandsModule,
     LinesModule,
+    ProvidersModule,
+    BusinessSectorModule,
+    BanksModule,
+    CategoriesModule,
   ],
 })
 export class AppModule {}

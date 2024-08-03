@@ -7,7 +7,7 @@ export enum RolName {
   OWNER = 'OWNER',
 }
 
-@Entity({ name: 'Rol' })
+@Entity({ name: 'rol' })
 export class Rol {
   @PrimaryGeneratedColumn('uuid')
   @OneToMany(() => User, (user) => user.rolId)

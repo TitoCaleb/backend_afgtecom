@@ -22,16 +22,11 @@ export class LinesService {
   }
 
   async create(line: Line) {
-    const newLine = new Line({
-      ...line,
-      name: line.name.toLocaleUpperCase(),
-    });
-    return await this.lineRepository.create(newLine);
+    return await this.lineRepository.create(line);
   }
 
   async update(line: Line) {
     const lineDb = await this.lineRepository.findById(line);
-    if (line.name) line.name = line.name.toLocaleUpperCase();
     line.updatedAt = new Date();
     return await this.lineRepository.update(line, lineDb);
   }

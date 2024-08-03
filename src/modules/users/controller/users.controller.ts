@@ -69,11 +69,7 @@ export class UsersController {
   async create(@Body() user: User, @Res({ passthrough: true }) res: Response) {
     try {
       const request = await createUserSchema.parseAsync(user);
-      const response = await this.usersService.create(
-        new User({
-          ...request,
-        }),
-      );
+      const response = await this.usersService.create(new User(request));
       res.status(HttpStatus.CREATED);
       return response.getApiData();
     } catch (e: any) {

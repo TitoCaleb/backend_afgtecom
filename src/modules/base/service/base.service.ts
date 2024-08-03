@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BaseRepositoryImpl } from '../repository/base.repository';
+import { Department } from 'src/domain/Ubigeo/Department';
+import { Province } from 'src/domain/Ubigeo/Province';
 
 @Injectable()
 export class BaseService {
@@ -21,11 +23,11 @@ export class BaseService {
     return await this.baseRepository.findAllDepartment();
   }
 
-  async findProvinceByDepartmentId(departmentId: string) {
-    return await this.baseRepository.findProvinceByDepartmentId(departmentId);
+  async findProvinceByDepartmentId(department: Department) {
+    return await this.baseRepository.findProvinceByDepartmentId(department);
   }
 
-  async findDistrictByProvinceId(provinceId: string) {
-    return await this.baseRepository.findDistrictByProvinceId(provinceId);
+  async findDistrictByProvinceId(province: Province) {
+    return await this.baseRepository.findDistrictByProvinceId(province);
   }
 }

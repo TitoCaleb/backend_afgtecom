@@ -21,7 +21,7 @@ export interface UserModifyPassword {
   newPassword?: string;
 }
 
-@Entity({ name: 'User' })
+@Entity({ name: 'user' })
 export class User {
   @PrimaryGeneratedColumn('uuid')
   @OneToOne(() => Token, (token) => token.userId)

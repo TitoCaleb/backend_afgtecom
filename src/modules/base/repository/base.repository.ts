@@ -38,15 +38,15 @@ export class BaseRepositoryImpl {
     return await this.departmentRepository.find();
   }
 
-  async findProvinceByDepartmentId(departmentId: string) {
+  async findProvinceByDepartmentId(department: Department) {
     return await this.provinceRepository.findBy({
-      department: { id: departmentId },
+      department: { id: department.id },
     });
   }
 
-  async findDistrictByProvinceId(provinceId: string) {
+  async findDistrictByProvinceId(province: Province) {
     return await this.districtRepository.findBy({
-      province: { id: provinceId },
+      province: { id: province.id },
     });
   }
 

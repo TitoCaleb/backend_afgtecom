@@ -15,11 +15,7 @@ export class BrandsService {
   }
 
   async create(brand: Brand) {
-    const newBrand = new Brand({
-      ...brand,
-      name: brand.name.toLocaleUpperCase(),
-    });
-    return await this.brandsRepository.create(newBrand);
+    return await this.brandsRepository.create(brand);
   }
 
   async update(brand: Brand) {

@@ -8,7 +8,7 @@ export enum CivilStatusEnum {
   WIDOW = 'WIDOW',
 }
 
-@Entity({ name: 'CivilStatus' })
+@Entity({ name: 'civil_status' })
 export class CivilStatus {
   @PrimaryGeneratedColumn('uuid')
   @OneToMany(() => User, (user) => user.civilStatusId)
