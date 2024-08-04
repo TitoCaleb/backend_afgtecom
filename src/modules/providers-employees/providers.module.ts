@@ -10,6 +10,7 @@ import { EmployeesController } from './controller/employees.controller';
 import { EmployeeService } from './service/employees.service';
 import { Bank } from 'src/domain/Banks';
 import { BankAccount } from 'src/domain/BankAccount';
+import { BanksRepositoryImpl } from '../banks/repository/banks.repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Employee, Provider, Bank, BankAccount])],
@@ -19,6 +20,7 @@ import { BankAccount } from 'src/domain/BankAccount';
     EmployeeService,
     EmployeesRepositoryImpl,
     ProvidersRepositoryImpl,
+    BanksRepositoryImpl,
   ],
 })
 export class ProvidersModule {}

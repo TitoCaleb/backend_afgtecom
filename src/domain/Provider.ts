@@ -40,6 +40,7 @@ export class Provider {
   businessSector: BusinessSector[];
 
   @OneToMany(() => BankAccount, (bankAccount) => bankAccount.provider)
+  @JoinTable()
   bankAccounts: BankAccount[];
 
   constructor(data: Partial<Provider>) {
@@ -58,6 +59,7 @@ export class Provider {
       country: this.country,
       address: this.address,
       employees: this.employees,
+      bankAccounts: this.bankAccounts,
     };
   }
 }

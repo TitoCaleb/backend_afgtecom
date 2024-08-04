@@ -15,9 +15,11 @@ import { Response } from 'express';
 import { ApiResponseError } from 'src/errors/handleErrors';
 import { Provider } from 'src/domain/Provider';
 import {
+  createBankAccountSchema,
   createProviderSchema,
   updateProviderSchema,
 } from './schema/providersSchema';
+import { BankAccount } from 'src/domain/BankAccount';
 
 @Controller('providers')
 export class ProvidersController {
@@ -106,6 +108,27 @@ export class ProvidersController {
         new Provider({ id: providerId }),
       );
       res.status(HttpStatus.OK);
+      return response.getApiData();
+    } catch (e: any) {
+      return ApiResponseError(e, res);
+    }
+  }
+
+  @Post(':providerId/bank-accounts')
+  async createBankAccount(
+    @Res({ passthrough: true }) res: Response,
+    @Body() bankAccount: BankAccount,
+    @Param('providerId') providerId: string,
+  ) {
+    try {
+      const request = await createBankAccountSchema.parseAsync({
+        ...bankAccount,
+        provider: providerId,
+      });
+      const response = await this.providerService.createBankAccount(
+        new BankAccount(request),
+      );
+      res.status(HttpStatus.CREATED);
       return response.getApiData();
     } catch (e: any) {
       return ApiResponseError(e, res);

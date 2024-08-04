@@ -1,3 +1,5 @@
+import { Bank } from 'src/domain/Banks';
+import { Provider } from 'src/domain/Provider';
 import { z } from 'zod';
 
 export const createProviderSchema = z.object({
@@ -21,3 +23,16 @@ export const updateProviderSchema = z.object({
   country: z.string().min(3).max(100).optional(),
   address: z.string().min(3).max(100).optional(),
 });
+
+export const createBankAccountSchema = z
+  .object({
+    dolarAccountNumber: z.string().min(3).max(100).optional(),
+    solesAccountNumber: z.string().min(3).max(100).optional(),
+    provider: z.string().uuid(),
+    bank: z.string().uuid(),
+  })
+  .transform((data) => ({
+    ...data,
+    provider: new Provider({ id: data.provider }),
+    bank: new Bank({ id: data.bank }),
+  }));

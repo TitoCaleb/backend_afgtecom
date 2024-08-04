@@ -1,4 +1,10 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Bank } from './Banks';
 import { Provider } from './Provider';
 
@@ -14,6 +20,7 @@ export class BankAccount {
   solesAccountNumber: string;
 
   @ManyToOne(() => Bank, (bank) => bank.bankAccounts)
+  @JoinColumn()
   bank: Bank;
 
   @ManyToOne(() => Provider, (provider) => provider.bankAccounts)
