@@ -25,8 +25,12 @@ export class TokenGuard implements CanActivate {
       }),
     );
 
-    if (!token.status || !token.userId) {
+    if (!token.status && token.userId) {
       throw new UnauthorizedException('Unauthorized');
+    }
+
+    if (token.status && !token.userId) {
+      throw new UnauthorizedException('Token not found');
     }
 
     if (token.expiredAt < this.getDate()) {

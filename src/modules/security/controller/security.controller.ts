@@ -14,13 +14,14 @@ import { ApiResponseError } from 'src/errors/handleErrors';
 import { User } from 'src/domain/User';
 import { loginSchema } from './schema/securitySchema';
 import { AuthGuard } from '../guards/auth.guard';
+import { TokenGuard } from '../guards';
 
 @Controller('security')
 export class SecurityController {
   constructor(private securityService: SecurityService) {}
 
   @Post('login')
-  @UseGuards(AuthGuard)
+  @UseGuards(TokenGuard)
   async login(
     @Req() req: Request,
     @Body() data: User,
@@ -40,7 +41,7 @@ export class SecurityController {
   }
 
   @Get('logout')
-  @UseGuards(AuthGuard)
+  @UseGuards(TokenGuard)
   async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     try {
       const request = (req as any).token;
@@ -52,12 +53,14 @@ export class SecurityController {
   }
 
   @Post('generate_token')
+  @UseGuards(AuthGuard)
   async generateToken(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ) {
     try {
-      const response = await this.securityService.createToken(req.body);
+      const request = (req as any).token;
+      const response = await this.securityService.createToken(request);
       return response.getApiData();
     } catch (e: any) {
       return ApiResponseError(e, res);

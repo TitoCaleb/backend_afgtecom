@@ -63,15 +63,25 @@ export class SecurityService {
   }
 
   async createToken(request: Client & Device) {
-    const client =
-      await this.securityRepository.findClientByCredentials(request);
+    const { clientId, clientSecret, deviceName, deviceUuid } = request;
+
+    const client = await this.securityRepository.findClientByCredentials(
+      new Client({
+        clientId,
+        clientSecret,
+      }),
+    );
 
     if (!client) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const device =
-      await this.securityRepository.findDeviceByCredentials(request);
+    const device = await this.securityRepository.findDeviceByCredentials(
+      new Device({
+        deviceName,
+        deviceUuid,
+      }),
+    );
 
     if (!device) {
       throw new UnauthorizedException('Invalid credentials');

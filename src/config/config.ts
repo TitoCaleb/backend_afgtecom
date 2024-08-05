@@ -14,5 +14,9 @@ export default registerAs('config', () => {
       port: parseInt(process.env.MYSQL_PORT),
       host: process.env.MYSQL_HOST,
     },
+    jwt: {
+      secret: process.env.JWT_SECRET,
+      ENCRYPTION_KEY: process.env.ENCRYPTION_KEY,
+    },
   };
 });
