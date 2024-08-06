@@ -54,7 +54,7 @@ export class SecurityRepositoryImpl {
     updateToken: Token;
     tokenDb: Token;
   }): Promise<Token> {
-    this.tokenRepository.merge(tokenDb, updateToken);
+    Object.assign(tokenDb, updateToken);
     const response = await this.tokenRepository.save(tokenDb);
     return response;
   }
