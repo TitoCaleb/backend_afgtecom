@@ -13,15 +13,14 @@ import { SecurityService } from '../service/security.service';
 import { ApiResponseError } from 'src/errors/handleErrors';
 import { User } from 'src/domain/User';
 import { loginSchema } from './schema/securitySchema';
-import { AuthGuard } from '../guards/auth.guard';
-import { TokenGuard } from '../guards';
+import { LoginGuard, AuthGuard } from '../guards';
 
 @Controller('security')
 export class SecurityController {
   constructor(private securityService: SecurityService) {}
 
   @Post('login')
-  @UseGuards(TokenGuard)
+  @UseGuards(LoginGuard)
   async login(
     @Req() req: Request,
     @Body() data: User,
@@ -41,7 +40,7 @@ export class SecurityController {
   }
 
   @Get('logout')
-  @UseGuards(TokenGuard)
+  @UseGuards(LoginGuard)
   async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     try {
       const request = (req as any).token;
