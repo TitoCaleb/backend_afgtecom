@@ -50,8 +50,10 @@ export class BaseRepositoryImpl {
     });
   }
 
-  async findDocumentTypeById(id: string) {
-    const response = await this.documentTypeRepository.findOneBy({ id });
+  async findDocumentTypeById(request: DocumentType) {
+    const response = await this.documentTypeRepository.findOneBy({
+      id: request.id,
+    });
 
     if (!response) {
       throw new NotFoundException('DocumentType not found');
@@ -59,8 +61,10 @@ export class BaseRepositoryImpl {
     return response;
   }
 
-  async findCivilStatusById(id: string) {
-    const response = await this.civilStatusRepository.findOneBy({ id });
+  async findCivilStatusById(request: CivilStatus) {
+    const response = await this.civilStatusRepository.findOneBy({
+      id: request.id,
+    });
 
     if (!response) {
       throw new NotFoundException('Civil Status not found');
@@ -68,8 +72,8 @@ export class BaseRepositoryImpl {
     return response;
   }
 
-  async findRolById(id: string) {
-    const response = await this.rolRepository.findOneBy({ id });
+  async findRolById(request: Rol) {
+    const response = await this.rolRepository.findOneBy({ id: request.id });
 
     if (!response) {
       throw new NotFoundException('Rol not found');

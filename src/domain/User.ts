@@ -45,9 +45,8 @@ export class User {
   @Column({ type: 'varchar', length: 100, name: 'address' })
   address: string;
 
-  @Column({ type: 'varchar', length: 100, name: 'document_type_id' })
   @ManyToOne(() => DocumentType, (documentType) => documentType.id)
-  documentTypeId: string;
+  documentType: DocumentType;
 
   @Column({ type: 'varchar', length: 100, name: 'document_number' })
   documentNumber: string;
@@ -55,13 +54,11 @@ export class User {
   @Column({ type: 'date', name: 'birthdate' })
   birthdate: Date;
 
-  @Column({ type: 'varchar', length: 100, name: 'civil_status_id' })
   @ManyToOne(() => CivilStatus, (civilStatus) => civilStatus.id)
-  civilStatusId: string;
+  civilStatus: CivilStatus;
 
-  @Column({ type: 'varchar', length: 100, name: 'rol_id' })
   @ManyToOne(() => Rol, (rol) => rol.id)
-  rolId: string;
+  rol: Rol;
 
   @Column({ type: 'varchar', length: 100, name: 'email', unique: true })
   email: string;
@@ -91,11 +88,11 @@ export class User {
       motherLastName: this.motherLastName,
       phone: this.phone,
       address: this.address,
-      documentTypeId: this.documentTypeId,
+      documentType: this.documentType?.acronym,
       documentNumber: this.documentNumber,
       birthdate: this.birthdate,
-      civilStatusId: this.civilStatusId,
-      rolId: this.rolId,
+      civilStatus: this.civilStatus?.name,
+      rol: this.rol?.name,
       email: this.email,
       status: this.getStatus(),
     };

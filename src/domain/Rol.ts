@@ -10,9 +10,15 @@ export enum RolName {
 @Entity({ name: 'rol' })
 export class Rol {
   @PrimaryGeneratedColumn('uuid')
-  @OneToMany(() => User, (user) => user.rolId)
+  @OneToMany(() => User, (user) => user.rol)
   id: string;
 
   @Column({ type: 'varchar', length: 100, name: 'name' })
   name: RolName;
+
+  constructor(data: Partial<Rol>) {
+    if (data) {
+      Object.assign(this, data);
+    }
+  }
 }

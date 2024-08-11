@@ -26,7 +26,11 @@ export class UsersService {
   }
 
   async findAll() {
-    return await this.usersRepository.findAll();
+    const response = await this.usersRepository.findAll({
+      relations: ['documentType', 'civilStatus', 'rol'],
+    });
+
+    return response;
   }
 
   async findById(user: User) {
@@ -34,9 +38,9 @@ export class UsersService {
   }
 
   async create(request: User) {
-    await this.baseRepository.findDocumentTypeById(request.documentTypeId);
-    await this.baseRepository.findCivilStatusById(request.civilStatusId);
-    await this.baseRepository.findRolById(request.rolId);
+    await this.baseRepository.findDocumentTypeById(request.documentType);
+    await this.baseRepository.findCivilStatusById(request.civilStatus);
+    await this.baseRepository.findRolById(request.rol);
     const encryptPassword = await this.encryptPassword(request.password);
 
     request.password = encryptPassword;
@@ -45,22 +49,26 @@ export class UsersService {
   }
 
   async update(request: User) {
-    const userDb = await this.usersRepository.findById(request);
+    const userDb = await this.usersRepository.findById(request, {
+      relations: ['documentType', 'civilStatus', 'rol'],
+    });
 
-    if (request.civilStatusId) {
-      await this.baseRepository.findCivilStatusById(request.civilStatusId);
+    if (request.civilStatus) {
+      await this.baseRepository.findCivilStatusById(request.civilStatus);
     }
-    if (request.documentTypeId) {
-      await this.baseRepository.findDocumentTypeById(request.documentTypeId);
+    if (request.documentType) {
+      await this.baseRepository.findDocumentTypeById(request.documentType);
     }
-    if (request.rolId) {
-      await this.baseRepository.findRolById(request.rolId);
+    if (request.rol) {
+      await this.baseRepository.findRolById(request.rol);
     }
     if (request.password) {
       throw new HttpException('Password cannot be updated', 400);
     }
 
-    return await this.usersRepository.update(request, userDb);
+    const response = await this.usersRepository.update(request, userDb);
+
+    return response;
   }
 
   async updatePassword(request: UserModifyPassword) {
@@ -74,7 +82,7 @@ export class UsersService {
     const user = new User(userDb);
     user.password = encryptPassword;
 
-    return await this.usersRepository.update(user, userDb);
+    /* return await this.usersRepository.update(user, userDb); */
   }
 
   async delete(request: User) {

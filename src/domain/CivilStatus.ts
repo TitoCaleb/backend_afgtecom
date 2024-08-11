@@ -11,7 +11,7 @@ export enum CivilStatusEnum {
 @Entity({ name: 'civil_status' })
 export class CivilStatus {
   @PrimaryGeneratedColumn('uuid')
-  @OneToMany(() => User, (user) => user.civilStatusId)
+  @OneToMany(() => User, (user) => user.civilStatus)
   id: string;
 
   @Column({ type: 'varchar', length: 100, name: 'name', unique: true })

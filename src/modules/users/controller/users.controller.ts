@@ -90,7 +90,7 @@ export class UsersController {
       });
       const response = await this.usersService.update(new User(request));
       res.status(HttpStatus.OK);
-      return response.getApiData();
+      return response;
     } catch (e: any) {
       return ApiResponseError(e, res);
     }

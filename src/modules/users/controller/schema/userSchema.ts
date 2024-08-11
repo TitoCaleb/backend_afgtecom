@@ -1,3 +1,6 @@
+import { CivilStatus } from 'src/domain/CivilStatus';
+import { DocumentType } from 'src/domain/DocumentType';
+import { Rol } from 'src/domain/Rol';
 import { z } from 'zod';
 
 export const createUserSchema = z
@@ -8,16 +11,22 @@ export const createUserSchema = z
     motherLastName: z.string(),
     phone: z.string().regex(/^\+\d{4,}$/, 'Invalid field mobile'),
     address: z.string(),
-    documentTypeId: z.string(),
+    documentType: z.string(),
     documentNumber: z.string(),
     birthdate: z.coerce.date(),
-    civilStatusId: z.string(),
-    rolId: z.string(),
+    civilStatus: z.string(),
+    rol: z.string(),
     email: z.string().email(),
     password: z.string(),
     status: z.boolean(),
   })
-  .strict();
+  .strict()
+  .transform((data) => ({
+    ...data,
+    documentType: new DocumentType({ id: data.documentType }),
+    civilStatus: new CivilStatus({ id: data.civilStatus }),
+    rol: new Rol({ id: data.rol }),
+  }));
 
 export const updateUserSchema = z
   .object({
@@ -31,15 +40,27 @@ export const updateUserSchema = z
       .regex(/^\+\d{4,}$/, 'Invalid field mobile')
       .optional(),
     address: z.string().optional(),
-    documentTypeId: z.string().optional(),
+    documentType: z.string().optional(),
     documentNumber: z.string().optional(),
     birthdate: z.coerce.date().optional(),
-    civilStatusId: z.string().optional(),
-    rolId: z.string().optional(),
+    civilStatus: z.string().optional(),
+    rol: z.string().optional(),
     email: z.string().email().optional(),
     status: z.boolean().optional(),
   })
-  .strict();
+  .strict()
+  .transform((data) => ({
+    ...data,
+    ...(data.documentType && {
+      documentType: new DocumentType({ id: data.documentType }),
+    }),
+    ...(data.civilStatus && {
+      civilStatus: new CivilStatus({ id: data.civilStatus }),
+    }),
+    ...(data.rol && {
+      rol: new Rol({ id: data.rol }),
+    }),
+  }));
 
 export const updateUserPasswordSchema = z
   .object({

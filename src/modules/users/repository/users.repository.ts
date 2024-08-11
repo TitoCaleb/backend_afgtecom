@@ -1,6 +1,6 @@
 import { HttpException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindManyOptions, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 import { User } from 'src/domain/User';
 
 export class UsersRepositoryImpl {
@@ -13,9 +13,10 @@ export class UsersRepositoryImpl {
     return response;
   }
 
-  async findById(request: User): Promise<User> {
-    const response = await this.userRepository.findOneBy({
-      id: request.id,
+  async findById(request: User, options?: FindOneOptions<User>): Promise<User> {
+    const response = await this.userRepository.findOne({
+      where: { id: request.id },
+      ...options,
     });
 
     if (!response) {
@@ -57,7 +58,7 @@ export class UsersRepositoryImpl {
   }
 
   async update(request: User, userDb: User) {
-    this.userRepository.merge(userDb, request);
+    Object.assign(userDb, request);
     const response = await this.userRepository.save(userDb);
     return response;
   }
