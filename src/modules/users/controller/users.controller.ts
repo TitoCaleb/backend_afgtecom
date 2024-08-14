@@ -71,7 +71,7 @@ export class UsersController {
       const request = await createUserSchema.parseAsync(user);
       const response = await this.usersService.create(new User(request));
       res.status(HttpStatus.CREATED);
-      return response.getApiData();
+      return response.getApiWithPassword();
     } catch (e: any) {
       return ApiResponseError(e, res);
     }
@@ -90,7 +90,7 @@ export class UsersController {
       });
       const response = await this.usersService.update(new User(request));
       res.status(HttpStatus.OK);
-      return response;
+      return response.getApiData();
     } catch (e: any) {
       return ApiResponseError(e, res);
     }

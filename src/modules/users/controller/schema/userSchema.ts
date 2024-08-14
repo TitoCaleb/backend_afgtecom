@@ -1,6 +1,9 @@
 import { CivilStatus } from 'src/domain/CivilStatus';
 import { DocumentType } from 'src/domain/DocumentType';
 import { Rol } from 'src/domain/Rol';
+import { Department } from 'src/domain/Ubigeo/Department';
+import { District } from 'src/domain/Ubigeo/District';
+import { Province } from 'src/domain/Ubigeo/Province';
 import { z } from 'zod';
 
 export const createUserSchema = z
@@ -16,8 +19,10 @@ export const createUserSchema = z
     birthdate: z.coerce.date(),
     civilStatus: z.string(),
     rol: z.string(),
+    district: z.string(),
+    province: z.string(),
+    department: z.string(),
     email: z.string().email(),
-    password: z.string(),
     status: z.boolean(),
   })
   .strict()
@@ -26,6 +31,9 @@ export const createUserSchema = z
     documentType: new DocumentType({ id: data.documentType }),
     civilStatus: new CivilStatus({ id: data.civilStatus }),
     rol: new Rol({ id: data.rol }),
+    district: new District({ id: data.district }),
+    province: new Province({ id: data.province }),
+    department: new Department({ id: data.department }),
   }));
 
 export const updateUserSchema = z
@@ -43,6 +51,9 @@ export const updateUserSchema = z
     documentType: z.string().optional(),
     documentNumber: z.string().optional(),
     birthdate: z.coerce.date().optional(),
+    district: z.string().optional(),
+    province: z.string().optional(),
+    department: z.string().optional(),
     civilStatus: z.string().optional(),
     rol: z.string().optional(),
     email: z.string().email().optional(),
@@ -59,6 +70,15 @@ export const updateUserSchema = z
     }),
     ...(data.rol && {
       rol: new Rol({ id: data.rol }),
+    }),
+    ...(data.district && {
+      district: new District({ id: data.district }),
+    }),
+    ...(data.province && {
+      province: new Province({ id: data.province }),
+    }),
+    ...(data.department && {
+      department: new Department({ id: data.department }),
     }),
   }));
 

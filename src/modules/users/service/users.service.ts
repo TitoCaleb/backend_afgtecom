@@ -2,7 +2,11 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { UsersRepositoryImpl } from '../repository/users.repository';
 import { BaseRepositoryImpl } from 'src/modules/base/repository/base.repository';
 import { User, UserModifyPassword, UserStatus } from 'src/domain/User';
+import { generate } from 'generate-password';
 import * as bcrypt from 'bcrypt';
+import { District } from 'src/domain/Ubigeo/District';
+import { Province } from 'src/domain/Ubigeo/Province';
+import { Department } from 'src/domain/Ubigeo/Department';
 
 @Injectable()
 export class UsersService {
@@ -27,7 +31,14 @@ export class UsersService {
 
   async findAll() {
     const response = await this.usersRepository.findAll({
-      relations: ['documentType', 'civilStatus', 'rol'],
+      relations: [
+        'documentType',
+        'civilStatus',
+        'rol',
+        'district',
+        'province',
+        'department',
+      ],
     });
 
     return response;
@@ -41,27 +52,82 @@ export class UsersService {
     await this.baseRepository.findDocumentTypeById(request.documentType);
     await this.baseRepository.findCivilStatusById(request.civilStatus);
     await this.baseRepository.findRolById(request.rol);
-    const encryptPassword = await this.encryptPassword(request.password);
+    await this.baseRepository.findDistrictById(request.district);
+    await this.baseRepository.findProvinceById(request.province);
+    await this.baseRepository.findDepartmentById(request.department);
+    await this.baseRepository.validateUbigeo(
+      new District({
+        id: request.district.id,
+        province: request.province,
+        department: request.department,
+      }),
+    );
 
-    request.password = encryptPassword;
+    const password = generate({
+      length: 20,
+      numbers: true,
+      symbols: true,
+      uppercase: true,
+    });
 
-    return await this.usersRepository.create(request);
+    const encryptPassword = await this.encryptPassword(password);
+    const newUser = new User({ ...request, password: encryptPassword });
+    const { id } = await this.usersRepository.create(newUser);
+    const response = await this.usersRepository.findById(new User({ id }), {
+      relations: [
+        'documentType',
+        'civilStatus',
+        'rol',
+        'district',
+        'province',
+        'department',
+      ],
+    });
+
+    response.password = password;
+    return response;
   }
 
   async update(request: User) {
     const userDb = await this.usersRepository.findById(request, {
-      relations: ['documentType', 'civilStatus', 'rol'],
+      relations: [
+        'documentType',
+        'civilStatus',
+        'rol',
+        'district',
+        'province',
+        'department',
+      ],
     });
+    const { civilStatus, documentType, rol, district, province, department } =
+      request;
 
-    if (request.civilStatus) {
-      await this.baseRepository.findCivilStatusById(request.civilStatus);
+    if (civilStatus) {
+      await this.baseRepository.findCivilStatusById(civilStatus);
     }
-    if (request.documentType) {
-      await this.baseRepository.findDocumentTypeById(request.documentType);
+    if (documentType) {
+      await this.baseRepository.findDocumentTypeById(documentType);
     }
-    if (request.rol) {
-      await this.baseRepository.findRolById(request.rol);
+    if (rol) {
+      await this.baseRepository.findRolById(rol);
     }
+    if (district || province || department) {
+      const districtId = district?.id ?? userDb.district?.id;
+      const provinceId = province?.id ?? userDb.province?.id;
+      const departmentId = department?.id ?? userDb.department?.id;
+
+      // Validar solo si se tiene la información mínima necesaria
+      if (districtId || provinceId || departmentId) {
+        await this.baseRepository.validateUbigeo(
+          new District({
+            id: districtId,
+            province: new Province({ id: provinceId }),
+            department: new Department({ id: departmentId }),
+          }),
+        );
+      }
+    }
+
     if (request.password) {
       throw new HttpException('Password cannot be updated', 400);
     }
@@ -82,7 +148,7 @@ export class UsersService {
     const user = new User(userDb);
     user.password = encryptPassword;
 
-    /* return await this.usersRepository.update(user, userDb); */
+    return await this.usersRepository.update(user, userDb);
   }
 
   async delete(request: User) {

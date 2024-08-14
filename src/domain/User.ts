@@ -9,6 +9,9 @@ import { DocumentType } from './DocumentType';
 import { CivilStatus } from './CivilStatus';
 import { Rol } from './Rol';
 import { Token } from './Token';
+import { District } from './Ubigeo/District';
+import { Department } from './Ubigeo/Department';
+import { Province } from './Ubigeo/Province';
 
 export enum UserStatus {
   ACTIVE = 'ACTIVE',
@@ -60,6 +63,15 @@ export class User {
   @ManyToOne(() => Rol, (rol) => rol.id)
   rol: Rol;
 
+  @ManyToOne(() => Department, (department) => department.id)
+  department: Department;
+
+  @ManyToOne(() => Province, (province) => province.id)
+  province: Province;
+
+  @ManyToOne(() => District, (district) => district.id)
+  district: District;
+
   @Column({ type: 'varchar', length: 100, name: 'email', unique: true })
   email: string;
 
@@ -88,13 +100,23 @@ export class User {
       motherLastName: this.motherLastName,
       phone: this.phone,
       address: this.address,
-      documentType: this.documentType?.acronym,
-      documentNumber: this.documentNumber,
+      district: this.district,
+      province: this.province,
+      department: this.department,
       birthdate: this.birthdate,
-      civilStatus: this.civilStatus?.name,
-      rol: this.rol?.name,
+      documentType: this.documentType,
+      documentNumber: this.documentNumber,
+      civilStatus: this.civilStatus,
+      rol: this.rol,
       email: this.email,
       status: this.getStatus(),
+    };
+  }
+
+  getApiWithPassword() {
+    return {
+      ...this.getApiData(),
+      password: this.password,
     };
   }
 

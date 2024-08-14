@@ -39,15 +39,70 @@ export class BaseRepositoryImpl {
   }
 
   async findProvinceByDepartmentId(department: Department) {
-    return await this.provinceRepository.findBy({
-      department: { id: department.id },
+    const response = await this.provinceRepository.find({
+      where: {
+        department: { id: department.id },
+      },
+      relations: ['department'],
     });
+    return response;
   }
 
   async findDistrictByProvinceId(province: Province) {
-    return await this.districtRepository.findBy({
-      province: { id: province.id },
+    const response = await this.districtRepository.find({
+      where: { province: { id: province.id } },
+      relations: ['province', 'department'],
     });
+    return response;
+  }
+
+  async validateUbigeo(district: District) {
+    const response = await this.districtRepository.findOne({
+      where: {
+        id: district.id,
+        province: { id: district.province.id },
+        department: { id: district.department.id },
+      },
+    });
+
+    if (!response) {
+      throw new NotFoundException('Ubigeo not found');
+    }
+
+    return response;
+  }
+
+  async findDepartmentById(request: Department) {
+    const response = await this.departmentRepository.findOneBy({
+      id: request.id,
+    });
+
+    if (!response) {
+      throw new NotFoundException('Department not found');
+    }
+    return response;
+  }
+
+  async findProvinceById(request: Province) {
+    const response = await this.provinceRepository.findOneBy({
+      id: request.id,
+    });
+
+    if (!response) {
+      throw new NotFoundException('Province not found');
+    }
+    return response;
+  }
+
+  async findDistrictById(request: District) {
+    const response = await this.districtRepository.findOneBy({
+      id: request.id,
+    });
+
+    if (!response) {
+      throw new NotFoundException('District not found');
+    }
+    return response;
   }
 
   async findDocumentTypeById(request: DocumentType) {

@@ -35,7 +35,7 @@ export class Line {
     return {
       id: this.id,
       name: this.name,
-      brand: this.brand?.id,
+      brand: this.brand,
     };
   }
 }

@@ -67,7 +67,7 @@ export class BaseController {
         new Department({ id: departmentId }),
       );
       return {
-        data: response,
+        data: response.map((province) => province.getApiData()),
       };
     } catch (e: any) {
       return ApiResponseError(e, res);

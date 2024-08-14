@@ -1,10 +1,12 @@
-import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 import { Department } from './Department';
 import { Province } from './Province';
+import { User } from '../User';
 
 @Entity('ubigeo_peru_district')
 export class District {
   @PrimaryColumn()
+  @OneToMany(() => User, (user) => user.district)
   id: string;
 
   @Column({ type: 'varchar', length: 100 })
