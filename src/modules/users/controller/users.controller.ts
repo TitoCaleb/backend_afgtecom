@@ -33,13 +33,17 @@ export class UsersController {
     @Query() { limit = 10, offset = 0 }: Query,
   ) {
     try {
-      const response = await this.usersService.findAll();
+      const { response, total } = await this.usersService.findAll({
+        limit: Number(limit),
+        offset: Number(offset),
+      });
       return {
         data: response.map((user) => user.getApiData()),
         pagination: {
           limit,
           offset,
         },
+        total,
       };
     } catch (e: any) {
       res.status(HttpStatus.NOT_FOUND);

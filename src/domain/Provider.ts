@@ -43,6 +43,12 @@ export class Provider {
   @JoinTable()
   bankAccounts: BankAccount[];
 
+  //TODO: Agregar linea de credito y plazo de pago
+  /* 
+    - linea de credito -> monto
+    - plazo de pago -> dias 
+  */
+
   constructor(data: Partial<Provider>) {
     if (data) {
       Object.assign(this, data);

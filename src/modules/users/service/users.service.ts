@@ -8,6 +8,11 @@ import { District } from 'src/domain/Ubigeo/District';
 import { Province } from 'src/domain/Ubigeo/Province';
 import { Department } from 'src/domain/Ubigeo/Department';
 
+interface Pagination {
+  limit: number;
+  offset: number;
+}
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -29,7 +34,8 @@ export class UsersService {
     return isMatch;
   }
 
-  async findAll() {
+  async findAll(pagination?: Pagination) {
+    const total = await this.usersRepository.count();
     const response = await this.usersRepository.findAll({
       relations: [
         'documentType',
@@ -39,9 +45,14 @@ export class UsersService {
         'province',
         'department',
       ],
+      skip: pagination?.offset,
+      take: pagination?.limit,
     });
 
-    return response;
+    return {
+      response,
+      total,
+    };
   }
 
   async findById(user: User) {

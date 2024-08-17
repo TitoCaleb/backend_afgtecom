@@ -8,6 +8,11 @@ export class UsersRepositoryImpl {
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
+  async count(options?: FindManyOptions<User>): Promise<number> {
+    const response = await this.userRepository.count(options);
+    return response;
+  }
+
   async findAll(options?: FindManyOptions<User>): Promise<User[]> {
     const response = await this.userRepository.find(options);
     return response;
