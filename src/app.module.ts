@@ -1,19 +1,17 @@
 import config from './config/config';
-import { Module } from '@nestjs/common';
-
-import { SecurityModule } from './modules/security/security.module';
-import { DatabaseModule } from './database/database.module';
-import { ConfigModule } from '@nestjs/config';
-import { BaseModule } from './modules/base/base.module';
-import { UsersModule } from './modules/users/users.module';
-import { BrandsModule } from './modules/brands/brands.module';
-import { LinesModule } from './modules/lines/lines.module';
-import { ProvidersModule } from './modules/providers-employees/providers.module';
-import { BusinessSectorModule } from './modules/business-sector/business-sector.module';
-import { BanksModule } from './modules/banks/banks.module';
-import { CategoriesModule } from './modules/categories/categories.module';
-
 import enviroments from './config/enviroments';
+import { BanksModule } from './modules/banks/banks.module';
+import { BaseModule } from './modules/base/base.module';
+import { BrandsModule } from './modules/brands/brands.module';
+import { BusinessSectorModule } from './modules/business-sector/business-sector.module';
+import { CategoriesModule } from './modules/categories/categories.module';
+import { ConfigModule } from '@nestjs/config';
+import { DatabaseModule } from './database/database.module';
+import { LinesModule } from './modules/lines/lines.module';
+import { Module } from '@nestjs/common';
+import { ProvidersModule } from './modules/providers-employees/providers.module';
+import { SecurityModule } from './modules/security/security.module';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [

@@ -36,18 +36,19 @@ export class Provider {
   @JoinTable()
   employees: Employee[];
 
-  @OneToMany(() => BusinessSector, (businessSector) => businessSector.id)
+  @OneToMany(() => BusinessSector, (businessSector) => businessSector.provider)
+  @JoinTable()
   businessSector: BusinessSector[];
 
   @OneToMany(() => BankAccount, (bankAccount) => bankAccount.provider)
   @JoinTable()
   bankAccounts: BankAccount[];
 
-  //TODO: Agregar linea de credito y plazo de pago
-  /* 
-    - linea de credito -> monto
-    - plazo de pago -> dias 
-  */
+  @Column({ type: 'varchar', length: 50 })
+  creditLine: string;
+
+  @Column({ type: 'varchar', length: 50 })
+  paymentTerm: string;
 
   constructor(data: Partial<Provider>) {
     if (data) {
@@ -65,7 +66,10 @@ export class Provider {
       country: this.country,
       address: this.address,
       employees: this.employees,
+      businessSector: this.businessSector,
       bankAccounts: this.bankAccounts,
+      creditLine: this.creditLine,
+      paymentTerm: this.paymentTerm,
     };
   }
 }

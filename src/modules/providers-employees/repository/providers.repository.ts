@@ -19,7 +19,7 @@ export class ProvidersRepositoryImpl {
   async findById(request: Provider): Promise<Provider> {
     const response = await this.providerRepository.findOne({
       where: { id: request.id },
-      relations: ['bankAccounts', 'bankAccounts.bank'],
+      relations: ['bankAccounts', 'bankAccounts.bank', 'businessSector'],
     });
 
     if (!response) {
@@ -35,7 +35,7 @@ export class ProvidersRepositoryImpl {
   }
 
   async update(request: Provider, providerDb: Provider) {
-    this.providerRepository.merge(providerDb, request);
+    Object.assign(providerDb, request);
     const response = await this.providerRepository.save(providerDb);
     return response;
   }
