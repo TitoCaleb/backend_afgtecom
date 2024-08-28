@@ -5,6 +5,8 @@ import { BankAccount } from 'src/domain/BankAccount';
 import { BanksRepositoryImpl } from 'src/modules/banks/repository/banks.repository';
 import { BusinessSectorRepositoryImpl } from 'src/modules/business-sector/repository/business-sector.repository';
 import { BusinessSector } from 'src/domain/BusinessSector';
+import { ProviderSector } from 'src/domain/ProviderSector';
+import { ProviderSectorRepositoryImpl } from '../repository/providerSector.repository';
 
 @Injectable()
 export class ProvidersService {
@@ -12,6 +14,7 @@ export class ProvidersService {
     private providersRepository: ProvidersRepositoryImpl,
     private banksRepository: BanksRepositoryImpl,
     private businessSectorRepository: BusinessSectorRepositoryImpl,
+    private providerSectorRepository: ProviderSectorRepositoryImpl,
   ) {}
 
   async findAll() {
@@ -35,14 +38,30 @@ export class ProvidersService {
       }),
     );
 
-    return await this.providersRepository.create(request);
+    const provider = await this.providersRepository.create(request);
+
+    if (request.businessSector.length) {
+      await Promise.all(
+        request.businessSector.map(async (businessSector) => {
+          return await this.providerSectorRepository.createProviderSector(
+            new ProviderSector({
+              provider: provider,
+              businessSector,
+            }),
+          );
+        }),
+      );
+    }
+
+    provider.businessSector = request.businessSector;
+    return provider;
   }
 
   async update(request: Provider) {
     const providerDb = await this.providersRepository.findById(request);
 
     const requestBusinessSector = new Set(
-      request.businessSector.map((businessSector) => businessSector.id),
+      request.providerSectors.map((businessSector) => businessSector.id),
     );
 
     await Promise.all(

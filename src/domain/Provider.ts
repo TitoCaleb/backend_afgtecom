@@ -6,8 +6,9 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Employee } from './Employee';
-import { BusinessSector } from './BusinessSector';
 import { BankAccount } from './BankAccount';
+import { ProviderSector } from './ProviderSector';
+import { BusinessSector } from './BusinessSector';
 
 @Entity({ name: 'provider' })
 export class Provider {
@@ -36,9 +37,8 @@ export class Provider {
   @JoinTable()
   employees: Employee[];
 
-  @OneToMany(() => BusinessSector, (businessSector) => businessSector.provider)
-  @JoinTable()
-  businessSector: BusinessSector[];
+  @OneToMany(() => ProviderSector, (providerSector) => providerSector.provider)
+  providerSectors: ProviderSector[];
 
   @OneToMany(() => BankAccount, (bankAccount) => bankAccount.provider)
   @JoinTable()
@@ -49,6 +49,8 @@ export class Provider {
 
   @Column({ type: 'varchar', length: 50 })
   paymentTerm: string;
+
+  businessSector: BusinessSector[];
 
   constructor(data: Partial<Provider>) {
     if (data) {
@@ -70,6 +72,7 @@ export class Provider {
       bankAccounts: this.bankAccounts,
       creditLine: this.creditLine,
       paymentTerm: this.paymentTerm,
+      providerSectors: this.providerSectors,
     };
   }
 }

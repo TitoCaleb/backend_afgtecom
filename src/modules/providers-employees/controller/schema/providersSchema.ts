@@ -6,8 +6,8 @@ import { z } from 'zod';
 export const createProviderSchema = z
   .object({
     name: z.string().min(3).max(100),
-    phone: z.string().regex(/^\+\d{4,}$/, 'Invalid field mobile'),
-    documentNumber: z.string().length(12),
+    phone: z.string().length(7),
+    documentNumber: z.string().length(11),
     email: z.string().email(),
     country: z.string().min(3).max(100),
     address: z.string().min(3).max(100),

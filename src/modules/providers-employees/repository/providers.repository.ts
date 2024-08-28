@@ -19,7 +19,12 @@ export class ProvidersRepositoryImpl {
   async findById(request: Provider): Promise<Provider> {
     const response = await this.providerRepository.findOne({
       where: { id: request.id },
-      relations: ['bankAccounts', 'bankAccounts.bank', 'businessSector'],
+      relations: [
+        'bankAccounts',
+        'bankAccounts.bank',
+        'providerSectors',
+        'providerSectors.businessSector',
+      ],
     });
 
     if (!response) {

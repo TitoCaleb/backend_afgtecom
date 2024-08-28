@@ -27,7 +27,7 @@ export class UsersService {
   private async matchPassword(request: string, password: string) {
     const isMatch = await bcrypt.compare(password, request);
     if (!isMatch) {
-      throw new HttpException('Bad credentials', 401, {
+      throw new HttpException('Password incorrect', 400, {
         description: 'Invalid credentials',
       });
     }

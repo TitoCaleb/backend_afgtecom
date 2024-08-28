@@ -16,6 +16,8 @@ import { ProvidersController } from './controller/providers.controller';
 import { ProvidersRepositoryImpl } from './repository/providers.repository';
 import { ProvidersService } from './service/providers.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ProviderSector } from 'src/domain/ProviderSector';
+import { ProviderSectorRepositoryImpl } from './repository/providerSector.repository';
 
 @Module({
   imports: [
@@ -25,6 +27,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       Bank,
       BankAccount,
       BusinessSector,
+      ProviderSector,
     ]),
   ],
   controllers: [
@@ -40,6 +43,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     BanksRepositoryImpl,
     BankAccountService,
     BankAccountRepositoryImpl,
+    ProviderSectorRepositoryImpl,
     BusinessSectorRepositoryImpl,
   ],
 })

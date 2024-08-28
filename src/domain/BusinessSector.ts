@@ -1,23 +1,26 @@
 import {
   Column,
   Entity,
-  ManyToOne,
   PrimaryGeneratedColumn,
   Index,
+  OneToMany,
 } from 'typeorm';
-import { Provider } from './Provider';
+import { ProviderSector } from './ProviderSector';
 
 @Entity({ name: 'business_sector' })
-@Index(['name', 'provider'])
 export class BusinessSector {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ type: 'varchar', length: 100 })
+  @Index({ unique: true })
   name: string;
 
-  @ManyToOne(() => Provider, (provider) => provider.businessSector)
-  provider: Provider;
+  @OneToMany(
+    () => ProviderSector,
+    (providerSector) => providerSector.businessSector,
+  )
+  providerSectors: ProviderSector[];
 
   constructor(data: Partial<BusinessSector>) {
     if (data) {
@@ -29,6 +32,7 @@ export class BusinessSector {
     return {
       id: this.id,
       name: this.name,
+      providerSectors: this.providerSectors,
     };
   }
 }
