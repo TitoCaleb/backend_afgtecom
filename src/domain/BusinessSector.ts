@@ -19,8 +19,17 @@ export class BusinessSector {
   @OneToMany(
     () => ProviderSector,
     (providerSector) => providerSector.businessSector,
+    {
+      onDelete: 'SET NULL',
+    },
   )
   providerSectors: ProviderSector[];
+
+  @Column({ type: 'timestamp', name: 'created_at' })
+  createdAt: Date;
+
+  @Column({ type: 'timestamp', name: 'update_at' })
+  updatedAt: Date;
 
   constructor(data: Partial<BusinessSector>) {
     if (data) {
@@ -33,6 +42,8 @@ export class BusinessSector {
       id: this.id,
       name: this.name,
       providerSectors: this.providerSectors,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
     };
   }
 }

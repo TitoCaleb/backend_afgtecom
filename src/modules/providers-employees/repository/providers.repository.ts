@@ -24,6 +24,7 @@ export class ProvidersRepositoryImpl {
         'bankAccounts.bank',
         'providerSectors',
         'providerSectors.businessSector',
+        'employees',
       ],
     });
 
@@ -47,34 +48,6 @@ export class ProvidersRepositoryImpl {
 
   async delete(request: Provider) {
     await this.providerRepository.delete(request.id);
-    return request;
-  }
-
-  async findBankAccountById(request: BankAccount): Promise<BankAccount> {
-    const response = await this.bankAccountRepository.findOneBy({
-      id: request.id,
-    });
-
-    if (!response) {
-      throw new NotFoundException('Bank Account not found');
-    }
-
-    return response;
-  }
-
-  async createBankAccount(request: BankAccount) {
-    const response = await this.bankAccountRepository.save(request);
-    return response;
-  }
-
-  async updateBankAccount(request: BankAccount, bankAccountDb: BankAccount) {
-    this.bankAccountRepository.merge(bankAccountDb, request);
-    const response = await this.bankAccountRepository.save(bankAccountDb);
-    return response;
-  }
-
-  async deleteBankAccount(request: BankAccount) {
-    await this.bankAccountRepository.delete(request.id);
     return request;
   }
 }

@@ -7,6 +7,8 @@ import { BusinessSectorRepositoryImpl } from 'src/modules/business-sector/reposi
 import { BusinessSector } from 'src/domain/BusinessSector';
 import { ProviderSector } from 'src/domain/ProviderSector';
 import { ProviderSectorRepositoryImpl } from '../repository/providerSector.repository';
+import { EmployeesRepositoryImpl } from '../repository/employees.repository';
+import { BankAccountRepositoryImpl } from '../repository/bankAccount.repository';
 
 @Injectable()
 export class ProvidersService {
@@ -15,6 +17,8 @@ export class ProvidersService {
     private banksRepository: BanksRepositoryImpl,
     private businessSectorRepository: BusinessSectorRepositoryImpl,
     private providerSectorRepository: ProviderSectorRepositoryImpl,
+    private employeesRepository: EmployeesRepositoryImpl,
+    private bankAccountsRepository: BankAccountRepositoryImpl,
   ) {}
 
   async findAll() {
@@ -77,6 +81,31 @@ export class ProvidersService {
 
   async delete(request: Provider) {
     const providerDb = await this.providersRepository.findById(request);
+
+    if (providerDb.employees.length) {
+      Promise.all(
+        providerDb.employees.map((employee) => {
+          this.employeesRepository.delete(employee);
+        }),
+      );
+    }
+
+    if (providerDb.bankAccounts.length) {
+      Promise.all(
+        providerDb.bankAccounts.map((bankAccount) => {
+          this.bankAccountsRepository.delete(bankAccount);
+        }),
+      );
+    }
+
+    if (providerDb.providerSectors.length) {
+      Promise.all(
+        providerDb.providerSectors.map((providerSector) => {
+          this.providerSectorRepository.delete(providerSector);
+        }),
+      );
+    }
+
     return await this.providersRepository.delete(providerDb);
   }
 
@@ -95,7 +124,7 @@ export class ProvidersService {
       throw new Error('Bank Account already exists');
     }
 
-    const response = await this.providersRepository.createBankAccount(request);
+    const response = await this.bankAccountsRepository.create(request);
 
     return response;
   }

@@ -1,4 +1,10 @@
-import { Entity, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm';
 import { Provider } from './Provider';
 import { BusinessSector } from './BusinessSector';
 
@@ -14,8 +20,17 @@ export class ProviderSector {
   @ManyToOne(
     () => BusinessSector,
     (businessSector) => businessSector.providerSectors,
+    {
+      onDelete: 'SET NULL',
+    },
   )
   businessSector: BusinessSector;
+
+  @Column({ type: 'timestamp', name: 'created_at' })
+  createdAt: Date;
+
+  @Column({ type: 'timestamp', name: 'update_at' })
+  updatedAt: Date;
 
   constructor(data: Partial<ProviderSector>) {
     if (data) {
@@ -28,6 +43,8 @@ export class ProviderSector {
       id: this.id,
       provider: this.provider,
       businessSector: this.businessSector,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
     };
   }
 }

@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinTable,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Employee } from './Employee';
 import { BankAccount } from './BankAccount';
 import { ProviderSector } from './ProviderSector';
@@ -34,14 +28,12 @@ export class Provider {
   address: string;
 
   @OneToMany(() => Employee, (employee) => employee.provider)
-  @JoinTable()
   employees: Employee[];
 
   @OneToMany(() => ProviderSector, (providerSector) => providerSector.provider)
   providerSectors: ProviderSector[];
 
   @OneToMany(() => BankAccount, (bankAccount) => bankAccount.provider)
-  @JoinTable()
   bankAccounts: BankAccount[];
 
   @Column({ type: 'varchar', length: 50 })
@@ -49,6 +41,12 @@ export class Provider {
 
   @Column({ type: 'varchar', length: 50 })
   paymentTerm: string;
+
+  @Column({ type: 'timestamp', name: 'created_at' })
+  createdAt: Date;
+
+  @Column({ type: 'timestamp', name: 'update_at' })
+  updatedAt: Date;
 
   businessSector: BusinessSector[];
 
@@ -73,6 +71,8 @@ export class Provider {
       creditLine: this.creditLine,
       paymentTerm: this.paymentTerm,
       providerSectors: this.providerSectors,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
     };
   }
 }

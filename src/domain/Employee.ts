@@ -36,6 +36,12 @@ export class Employee {
   @ManyToOne(() => Provider, (provider) => provider.employees)
   provider: Provider;
 
+  @Column({ type: 'timestamp', name: 'created_at' })
+  createdAt: Date;
+
+  @Column({ type: 'timestamp', name: 'update_at' })
+  updatedAt: Date;
+
   constructor(data: Partial<Employee>) {
     if (data) {
       Object.assign(this, data);
@@ -55,6 +61,8 @@ export class Employee {
       position: this.position,
       comments: this.comments,
       provider: this.provider,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
     };
   }
 }

@@ -37,6 +37,8 @@ export class Brand {
       id: this.id,
       name: this.name,
       status: this.getStatus(),
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
     };
   }
 

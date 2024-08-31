@@ -26,6 +26,12 @@ export class BankAccount {
   @ManyToOne(() => Provider, (provider) => provider.bankAccounts)
   provider: Provider;
 
+  @Column({ type: 'timestamp', name: 'created_at' })
+  createdAt: Date;
+
+  @Column({ type: 'timestamp', name: 'update_at' })
+  updatedAt: Date;
+
   constructor(data: Partial<BankAccount>) {
     if (data) {
       Object.assign(this, data);
@@ -39,6 +45,8 @@ export class BankAccount {
       solesAccountNumber: this.solesAccountNumber,
       bank: this.bank,
       provider: this.provider,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
     };
   }
 }

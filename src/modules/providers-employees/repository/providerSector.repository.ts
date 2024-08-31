@@ -12,4 +12,9 @@ export class ProviderSectorRepositoryImpl {
     const response = await this.providerSectorRepository.save(request);
     return response;
   }
+
+  async delete(request: ProviderSector) {
+    await this.providerSectorRepository.delete(request.id);
+    return request;
+  }
 }

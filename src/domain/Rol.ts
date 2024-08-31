@@ -16,9 +16,24 @@ export class Rol {
   @Column({ type: 'varchar', length: 100, name: 'name' })
   name: RolName;
 
+  @Column({ type: 'timestamp', name: 'created_at' })
+  createdAt: Date;
+
+  @Column({ type: 'timestamp', name: 'update_at' })
+  updatedAt: Date;
+
   constructor(data: Partial<Rol>) {
     if (data) {
       Object.assign(this, data);
     }
+  }
+
+  getApiData() {
+    return {
+      id: this.id,
+      name: this.name,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+    };
   }
 }

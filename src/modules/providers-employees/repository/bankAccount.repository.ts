@@ -35,18 +35,18 @@ export class BankAccountRepositoryImpl {
     return response;
   }
 
-  async createBankAccount(request: BankAccount) {
+  async create(request: BankAccount) {
     const response = await this.bankAccountRepository.save(request);
     return response;
   }
 
-  async updateBankAccount(request: BankAccount, bankAccountDb: BankAccount) {
+  async update(request: BankAccount, bankAccountDb: BankAccount) {
     this.bankAccountRepository.merge(bankAccountDb, request);
     const response = await this.bankAccountRepository.save(bankAccountDb);
     return response;
   }
 
-  async deleteBankAccount(request: BankAccount) {
+  async delete(request: BankAccount) {
     await this.bankAccountRepository.delete(request.id);
     return request;
   }

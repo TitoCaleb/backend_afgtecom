@@ -12,6 +12,12 @@ export class Bank {
   @OneToMany(() => BankAccount, (bankAccount) => bankAccount.bank)
   bankAccounts: BankAccount[];
 
+  @Column({ type: 'timestamp', name: 'created_at' })
+  createdAt: Date;
+
+  @Column({ type: 'timestamp', name: 'update_at' })
+  updatedAt: Date;
+
   constructor(data: Partial<Bank>) {
     if (data) {
       Object.assign(this, data);
@@ -22,6 +28,8 @@ export class Bank {
     return {
       id: this.id,
       name: this.name,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
     };
   }
 }

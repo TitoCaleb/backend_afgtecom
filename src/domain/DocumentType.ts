@@ -16,9 +16,26 @@ export class DocumentType {
   @Column({ type: 'int', name: 'size' })
   size: number;
 
+  @Column({ type: 'timestamp', name: 'created_at' })
+  createdAt: Date;
+
+  @Column({ type: 'timestamp', name: 'update_at' })
+  updatedAt: Date;
+
   constructor(data: Partial<DocumentType>) {
     if (data) {
       Object.assign(this, data);
     }
+  }
+
+  getApiData() {
+    return {
+      id: this.id,
+      name: this.name,
+      acronym: this.acronym,
+      size: this.size,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+    };
   }
 }

@@ -85,6 +85,12 @@ export class User {
   @OneToOne(() => Token, (token) => token.id)
   tokenId: string;
 
+  @Column({ type: 'timestamp', name: 'created_at' })
+  createdAt: Date;
+
+  @Column({ type: 'timestamp', name: 'update_at' })
+  updatedAt: Date;
+
   constructor(data: Partial<User>) {
     if (data) {
       Object.assign(this, data);
@@ -110,6 +116,8 @@ export class User {
       rol: this.rol,
       email: this.email,
       status: this.getStatus(),
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
     };
   }
 

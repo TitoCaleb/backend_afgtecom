@@ -16,14 +16,14 @@ export class Line {
   @Column({ type: 'varchar', length: 255, name: 'name' })
   name: string;
 
+  @ManyToOne(() => Brand, (brand) => brand.lines)
+  brand: Brand;
+
   @Column({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;
 
   @Column({ type: 'timestamp', name: 'update_at' })
   updatedAt: Date;
-
-  @ManyToOne(() => Brand, (brand) => brand.lines)
-  brand: Brand;
 
   constructor(data?: Partial<Line>) {
     if (data) {
@@ -36,6 +36,8 @@ export class Line {
       id: this.id,
       name: this.name,
       brand: this.brand,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
     };
   }
 }
