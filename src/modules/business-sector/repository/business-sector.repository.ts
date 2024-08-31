@@ -1,7 +1,6 @@
-import { NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BusinessSector } from 'src/domain/BusinessSector';
-import { FindManyOptions, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 
 export class BusinessSectorRepositoryImpl {
   constructor(
@@ -16,15 +15,10 @@ export class BusinessSectorRepositoryImpl {
     return response;
   }
 
-  async findById(request: BusinessSector): Promise<BusinessSector> {
-    const response = await this.businessSectorRepository.findOneBy({
-      id: request.id,
-    });
-
-    if (!response) {
-      throw new NotFoundException('Sector not found');
-    }
-
+  async findOne(
+    options: FindOneOptions<BusinessSector>,
+  ): Promise<BusinessSector> {
+    const response = await this.businessSectorRepository.findOne(options);
     return response;
   }
 

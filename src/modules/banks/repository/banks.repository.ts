@@ -15,7 +15,6 @@ export class BanksRepositoryImpl {
 
   async findOne(options: FindOneOptions<Bank>) {
     const response = await this.bankRepository.findOne(options);
-
     return response;
   }
 

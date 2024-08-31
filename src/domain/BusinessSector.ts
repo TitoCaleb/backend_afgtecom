@@ -6,6 +6,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { ProviderSector } from './ProviderSector';
+import { Status } from 'src/utils/enums';
 
 @Entity({ name: 'business_sector' })
 export class BusinessSector {
@@ -28,6 +29,9 @@ export class BusinessSector {
   @Column({ type: 'timestamp', name: 'update_at' })
   updatedAt: Date;
 
+  @Column({ type: 'enum', name: 'status', enum: Status })
+  status: string;
+
   constructor(data: Partial<BusinessSector>) {
     if (data) {
       Object.assign(this, data);
@@ -41,6 +45,7 @@ export class BusinessSector {
       providerSectors: this.providerSectors,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
+      status: this.status,
     };
   }
 }
