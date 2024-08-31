@@ -27,7 +27,7 @@ export class LinesService {
 
   async update(line: Line) {
     const lineDb = await this.lineRepository.findById(line);
-    line.updatedAt = new Date();
+    lineDb.updatedAt = new Date();
     return await this.lineRepository.update(line, lineDb);
   }
 

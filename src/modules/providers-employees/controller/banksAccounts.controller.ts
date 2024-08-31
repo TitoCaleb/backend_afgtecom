@@ -9,6 +9,7 @@ import {
   Post,
   Put,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import {
   createBankAccountSchema,
@@ -18,7 +19,9 @@ import { Response } from 'express';
 import { ApiResponseError } from 'src/errors/handleErrors';
 import { BankAccountService } from '../service/bankAccount.service';
 import { Provider } from 'src/domain/Provider';
+import { TokenGuard } from 'src/modules/security/guards';
 
+@UseGuards(TokenGuard)
 @Controller('bank-accounts')
 export class BanksAccountController {
   constructor(private bankAccountService: BankAccountService) {}

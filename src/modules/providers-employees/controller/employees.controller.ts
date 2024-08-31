@@ -8,6 +8,7 @@ import {
   Post,
   Put,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { ApiResponseError } from 'src/errors/handleErrors';
@@ -19,7 +20,9 @@ import {
 } from './schema/employeeSchema';
 import { Employee } from 'src/domain/Employee';
 import { EmployeeService } from '../service/employees.service';
+import { TokenGuard } from 'src/modules/security/guards';
 
+@UseGuards(TokenGuard)
 @Controller('providers')
 export class EmployeesController {
   constructor(private providerService: EmployeeService) {}

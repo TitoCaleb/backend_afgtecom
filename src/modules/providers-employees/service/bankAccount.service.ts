@@ -28,8 +28,7 @@ export class BankAccountService {
       throw new BadRequestException('Bank Account already exists');
     }
 
-    const response =
-      await this.bankAccountRepository.createBankAccount(request);
+    const response = await this.bankAccountRepository.create(request);
     return response;
   }
 
@@ -39,8 +38,8 @@ export class BankAccountService {
     if (!bankAccountDb) {
       throw new BadRequestException('Bank Account not found');
     }
-
-    const response = await this.bankAccountRepository.updateBankAccount(
+    bankAccountDb.updatedAt = new Date();
+    const response = await this.bankAccountRepository.update(
       request,
       bankAccountDb,
     );
@@ -54,8 +53,7 @@ export class BankAccountService {
       throw new BadRequestException('Bank Account not found');
     }
 
-    const response =
-      await this.bankAccountRepository.deleteBankAccount(request);
+    const response = await this.bankAccountRepository.delete(request);
     return response;
   }
 }

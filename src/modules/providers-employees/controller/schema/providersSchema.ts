@@ -1,5 +1,6 @@
 import { Bank } from 'src/domain/Banks';
 import { BusinessSector } from 'src/domain/BusinessSector';
+import { PaymentTerm } from 'src/domain/PaymentTerm';
 import { Provider } from 'src/domain/Provider';
 import { z } from 'zod';
 
@@ -12,13 +13,14 @@ export const createProviderSchema = z
     country: z.string().min(3).max(100),
     address: z.string().min(3).max(100),
     creditLine: z.string().min(3).max(50),
-    paymentTerm: z.string().min(3).max(50),
+    paymentTerm: z.string().uuid(),
     businessSector: z.array(z.string().uuid()),
   })
   .strict()
   .transform((data) => ({
     ...data,
     businessSector: data.businessSector.map((id) => new BusinessSector({ id })),
+    paymentTerm: new PaymentTerm({ id: data.paymentTerm }),
   }));
 
 export const updateProviderSchema = z
@@ -34,7 +36,7 @@ export const updateProviderSchema = z
     country: z.string().min(3).max(100).optional(),
     address: z.string().min(3).max(100).optional(),
     creditLine: z.string().min(3).max(50).optional(),
-    paymentTerm: z.string().min(3).max(50).optional(),
+    paymentTerm: z.string().uuid().optional(),
     businessSector: z.array(z.string().uuid()),
   })
   .strict()
@@ -44,6 +46,9 @@ export const updateProviderSchema = z
       businessSector: data.businessSector.map(
         (id) => new BusinessSector({ id }),
       ),
+    }),
+    ...(data.paymentTerm && {
+      paymentTerm: new PaymentTerm({ id: data.paymentTerm }),
     }),
   }));
 

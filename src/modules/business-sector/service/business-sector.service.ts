@@ -20,7 +20,7 @@ export class BusinessSectorService {
 
   async update(sector: BusinessSector) {
     const sectorDb = await this.businessSectorRepository.findById(sector);
-
+    sectorDb.updatedAt = new Date();
     return await this.businessSectorRepository.update(sector, sectorDb);
   }
 

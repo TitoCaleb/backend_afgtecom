@@ -20,6 +20,7 @@ export class BanksService {
 
   async update(bank: Bank) {
     const bankDb = await this.banksRepository.findById(bank);
+    bankDb.updatedAt = new Date();
     return await this.banksRepository.update(bank, bankDb);
   }
 

@@ -39,6 +39,7 @@ export class EmployeeService {
   async updateEmployeeFromProvider(request: Employee) {
     await this.checkIfProviderExists(new Provider({ id: request.provider.id }));
     const employeeDb = await this.employeesRepository.findById(request);
+    employeeDb.updatedAt = new Date();
     const response = await this.employeesRepository.update(request, employeeDb);
     return response;
   }

@@ -20,7 +20,7 @@ export class BrandsService {
 
   async update(brand: Brand) {
     const brandDb = await this.brandsRepository.findById(brand);
-    brand.updatedAt = new Date();
+    brandDb.updatedAt = new Date();
     return await this.brandsRepository.update(brand, brandDb);
   }
 

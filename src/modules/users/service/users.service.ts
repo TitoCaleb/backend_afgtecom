@@ -142,7 +142,7 @@ export class UsersService {
     if (request.password) {
       throw new HttpException('Password cannot be updated', 400);
     }
-
+    userDb.updatedAt = new Date();
     const response = await this.usersRepository.update(request, userDb);
 
     return response;
@@ -158,7 +158,7 @@ export class UsersService {
     const encryptPassword = await this.encryptPassword(request.newPassword);
     const user = new User(userDb);
     user.password = encryptPassword;
-
+    user.updatedAt = new Date();
     return await this.usersRepository.update(user, userDb);
   }
 

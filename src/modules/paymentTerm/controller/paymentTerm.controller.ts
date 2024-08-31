@@ -11,20 +11,20 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { ProvidersService } from '../service/providers.service';
+import { TokenGuard } from 'src/modules/security/guards';
+import { PaymentTermService } from '../service/paymentTerm.service';
 import { Response } from 'express';
 import { ApiResponseError } from 'src/errors/handleErrors';
-import { Provider } from 'src/domain/Provider';
+import { PaymentTerm } from 'src/domain/PaymentTerm';
 import {
-  createProviderSchema,
-  updateProviderSchema,
-} from './schema/providersSchema';
-import { TokenGuard } from 'src/modules/security/guards';
+  createPaymentTermSchema,
+  updatePaymentTermSchema,
+} from './schema/paymentTermSchema';
 
 @UseGuards(TokenGuard)
-@Controller('providers')
-export class ProvidersController {
-  constructor(private providerService: ProvidersService) {}
+@Controller('payment-term')
+export class PaymentTermController {
+  constructor(private paymentTermService: PaymentTermService) {}
 
   @Get()
   async findAll(
@@ -32,9 +32,9 @@ export class ProvidersController {
     @Query() { limit = 10, offset = 0 }: Query,
   ) {
     try {
-      const response = await this.providerService.findAll();
+      const response = await this.paymentTermService.findAll();
       return {
-        data: response.map((provider) => provider.getApiData()),
+        data: response.map((paymentTerm) => paymentTerm.getApiData()),
         pagination: {
           limit,
           offset,
@@ -46,16 +46,14 @@ export class ProvidersController {
     }
   }
 
-  @Get(':providerId')
+  @Get(':paymentTermId')
   async findById(
     @Res({ passthrough: true }) res: Response,
-    @Param('providerId') providerId: string,
+    @Param('paymentTermId') paymentTermId: string,
   ) {
     try {
-      const response = await this.providerService.findById(
-        new Provider({
-          id: providerId,
-        }),
+      const response = await this.paymentTermService.findById(
+        new PaymentTerm({ id: paymentTermId }),
       );
       return response.getApiData();
     } catch (e: any) {
@@ -66,49 +64,50 @@ export class ProvidersController {
 
   @Post()
   async create(
-    @Body() provider: Provider,
+    @Body() paymentTerm: PaymentTerm,
     @Res({ passthrough: true }) res: Response,
   ) {
     try {
-      const request = await createProviderSchema.parseAsync(provider);
-      const response = await this.providerService.create(new Provider(request));
+      const request = await createPaymentTermSchema.parseAsync(paymentTerm);
+      const response = await this.paymentTermService.create(
+        new PaymentTerm(request),
+      );
       res.status(HttpStatus.CREATED);
       return response.getApiData();
     } catch (e: any) {
-      res.status(HttpStatus.NOT_FOUND);
       return ApiResponseError(e, res);
     }
   }
 
-  @Put(':providerId')
+  @Put(':paymentTermId')
   async update(
     @Res({ passthrough: true }) res: Response,
-    @Param('providerId') providerId: string,
-    @Body() provider: Provider,
+    @Param('paymentTermId') paymentTermId: string,
+    @Body() paymentTerm: PaymentTerm,
   ) {
     try {
-      const request = await updateProviderSchema.parseAsync({
-        id: providerId,
-        ...provider,
+      const request = await updatePaymentTermSchema.parseAsync({
+        id: paymentTermId,
+        ...paymentTerm,
       });
-      const response = await this.providerService.update(new Provider(request));
-      res.status(HttpStatus.OK);
+      const response = await this.paymentTermService.update(
+        new PaymentTerm(request),
+      );
       return response.getApiData();
     } catch (e: any) {
       return ApiResponseError(e, res);
     }
   }
 
-  @Delete(':providerId')
+  @Delete(':paymentTermId')
   async delete(
     @Res({ passthrough: true }) res: Response,
-    @Param('providerId') providerId: string,
+    @Param('paymentTermId') paymentTermId: string,
   ) {
     try {
-      const response = await this.providerService.delete(
-        new Provider({ id: providerId }),
+      const response = await this.paymentTermService.delete(
+        new PaymentTerm({ id: paymentTermId }),
       );
-      res.status(HttpStatus.OK);
       return response.getApiData();
     } catch (e: any) {
       return ApiResponseError(e, res);

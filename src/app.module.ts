@@ -12,6 +12,7 @@ import { Module } from '@nestjs/common';
 import { ProvidersModule } from './modules/providers-employees/providers.module';
 import { SecurityModule } from './modules/security/security.module';
 import { UsersModule } from './modules/users/users.module';
+import { PaymentTermModule } from './modules/paymentTerm/paymentTerm.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { UsersModule } from './modules/users/users.module';
     BusinessSectorModule,
     BanksModule,
     CategoriesModule,
+    PaymentTermModule,
   ],
 })
 export class AppModule {}

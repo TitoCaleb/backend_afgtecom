@@ -20,6 +20,7 @@ export class CategoriesService {
 
   async update(category: Category) {
     const categoryDb = await this.categoryRepository.findById(category);
+    categoryDb.updatedAt = new Date();
     return await this.categoryRepository.update(category, categoryDb);
   }
 

@@ -76,6 +76,8 @@ export class ProvidersService {
       }),
     );
 
+    providerDb.updatedAt = new Date();
+
     return await this.providersRepository.update(request, providerDb);
   }
 

@@ -1,8 +1,15 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Employee } from './Employee';
 import { BankAccount } from './BankAccount';
 import { ProviderSector } from './ProviderSector';
 import { BusinessSector } from './BusinessSector';
+import { PaymentTerm } from './PaymentTerm';
 
 @Entity({ name: 'provider' })
 export class Provider {
@@ -39,8 +46,8 @@ export class Provider {
   @Column({ type: 'varchar', length: 50 })
   creditLine: string;
 
-  @Column({ type: 'varchar', length: 50 })
-  paymentTerm: string;
+  @ManyToOne(() => PaymentTerm, (paymentTerm) => paymentTerm.id)
+  paymentTerm: PaymentTerm;
 
   @Column({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;

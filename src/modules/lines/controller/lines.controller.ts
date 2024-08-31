@@ -76,9 +76,9 @@ export class LinesController {
   }
 
   @Post()
-  async create(@Body() user: Line, @Res({ passthrough: true }) res: Response) {
+  async create(@Body() line: Line, @Res({ passthrough: true }) res: Response) {
     try {
-      const request = await createLineSchema.parseAsync(user);
+      const request = await createLineSchema.parseAsync(line);
       const response = await this.linesService.create(new Line(request));
       res.status(HttpStatus.CREATED);
       return response.getApiData();
