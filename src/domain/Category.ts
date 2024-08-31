@@ -1,3 +1,4 @@
+import { Status } from 'src/global';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'category' })
@@ -14,6 +15,9 @@ export class Category {
   @Column({ type: 'timestamp', name: 'update_at' })
   updatedAt: Date;
 
+  @Column({ type: 'varchar', length: 50, name: 'status', enum: Status })
+  status: string;
+
   constructor(data?: Partial<Category>) {
     if (data) {
       Object.assign(this, data);
@@ -26,6 +30,7 @@ export class Category {
       name: this.name,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
+      status: this.status,
     };
   }
 }

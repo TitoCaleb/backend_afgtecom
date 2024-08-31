@@ -19,9 +19,6 @@ export class BusinessSector {
   @OneToMany(
     () => ProviderSector,
     (providerSector) => providerSector.businessSector,
-    {
-      onDelete: 'SET NULL',
-    },
   )
   providerSectors: ProviderSector[];
 

@@ -12,11 +12,7 @@ import { Token } from './Token';
 import { District } from './Ubigeo/District';
 import { Department } from './Ubigeo/Department';
 import { Province } from './Ubigeo/Province';
-
-export enum UserStatus {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
-}
+import { Status } from 'src/global';
 
 export interface UserModifyPassword {
   id?: string;
@@ -78,8 +74,8 @@ export class User {
   @Column({ type: 'varchar', length: 255, name: 'password' })
   password: string;
 
-  @Column({ type: 'boolean', name: 'status' })
-  status: boolean;
+  @Column({ type: 'varchar', length: 50, name: 'status', enum: Status })
+  status: string;
 
   @Column({ type: 'varchar', length: 100, name: 'token_id', nullable: true })
   @OneToOne(() => Token, (token) => token.id)
@@ -115,7 +111,7 @@ export class User {
       civilStatus: this.civilStatus,
       rol: this.rol,
       email: this.email,
-      status: this.getStatus(),
+      status: this.status,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     };
@@ -126,12 +122,5 @@ export class User {
       ...this.getApiData(),
       password: this.password,
     };
-  }
-
-  getStatus() {
-    if (this.status) {
-      return UserStatus.ACTIVE;
-    }
-    return UserStatus.INACTIVE;
   }
 }

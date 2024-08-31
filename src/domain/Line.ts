@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Brand } from './Brand';
+import { Status } from 'src/global';
 
 @Entity({ name: 'line' })
 @Index(['brand', 'name'], { unique: true })
@@ -25,6 +26,9 @@ export class Line {
   @Column({ type: 'timestamp', name: 'update_at' })
   updatedAt: Date;
 
+  @Column({ type: 'varchar', length: 50, name: 'status', enum: Status })
+  status: string;
+
   constructor(data?: Partial<Line>) {
     if (data) {
       Object.assign(this, data);
@@ -36,6 +40,7 @@ export class Line {
       id: this.id,
       name: this.name,
       brand: this.brand,
+      status: this.status,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     };

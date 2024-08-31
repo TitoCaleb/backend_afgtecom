@@ -1,5 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { BankAccount } from './BankAccount';
+import { Status } from 'src/global';
 
 @Entity({ name: 'bank' })
 export class Bank {
@@ -18,6 +19,9 @@ export class Bank {
   @Column({ type: 'timestamp', name: 'update_at' })
   updatedAt: Date;
 
+  @Column({ type: 'varchar', length: 50, name: 'status', enum: Status })
+  status: string;
+
   constructor(data: Partial<Bank>) {
     if (data) {
       Object.assign(this, data);
@@ -30,6 +34,7 @@ export class Bank {
       name: this.name,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
+      status: this.status,
     };
   }
 }

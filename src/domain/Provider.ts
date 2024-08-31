@@ -10,6 +10,7 @@ import { BankAccount } from './BankAccount';
 import { ProviderSector } from './ProviderSector';
 import { BusinessSector } from './BusinessSector';
 import { PaymentTerm } from './PaymentTerm';
+import { Status } from 'src/global';
 
 @Entity({ name: 'provider' })
 export class Provider {
@@ -54,6 +55,9 @@ export class Provider {
 
   @Column({ type: 'timestamp', name: 'update_at' })
   updatedAt: Date;
+
+  @Column({ type: 'varchar', length: 50, name: 'status', enum: Status })
+  status: string;
 
   businessSector: BusinessSector[];
 

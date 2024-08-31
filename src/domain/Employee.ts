@@ -1,5 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Provider } from './Provider';
+import { Status } from 'src/global';
 
 @Entity({ name: 'employee' })
 export class Employee {
@@ -42,6 +43,9 @@ export class Employee {
   @Column({ type: 'timestamp', name: 'update_at' })
   updatedAt: Date;
 
+  @Column({ type: 'varchar', length: 50, name: 'status', enum: Status })
+  status: string;
+
   constructor(data: Partial<Employee>) {
     if (data) {
       Object.assign(this, data);
@@ -63,6 +67,7 @@ export class Employee {
       provider: this.provider,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
+      status: this.status,
     };
   }
 }

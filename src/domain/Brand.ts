@@ -1,10 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Line } from './Line';
-
-export enum BrandStatus {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
-}
+import { Status } from 'src/global';
 
 @Entity({ name: 'brand' })
 export class Brand {
@@ -20,8 +16,8 @@ export class Brand {
   @Column({ type: 'timestamp', name: 'update_at' })
   updatedAt: Date;
 
-  @Column({ type: 'boolean', name: 'status' })
-  status: boolean;
+  @Column({ type: 'varchar', length: 50, name: 'status', enum: Status })
+  status: string;
 
   @OneToMany(() => Line, (line) => line.brand)
   lines: Line[];
@@ -36,16 +32,9 @@ export class Brand {
     return {
       id: this.id,
       name: this.name,
-      status: this.getStatus(),
+      status: this.status,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     };
-  }
-
-  getStatus() {
-    if (this.status) {
-      return BrandStatus.ACTIVE;
-    }
-    return BrandStatus.INACTIVE;
   }
 }

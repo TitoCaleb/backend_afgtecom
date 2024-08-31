@@ -9,7 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
 import { LinesModule } from './modules/lines/lines.module';
 import { Module } from '@nestjs/common';
-import { ProvidersModule } from './modules/providers-employees/providers.module';
+import { ProvidersModule } from './modules/providers/providers.module';
 import { SecurityModule } from './modules/security/security.module';
 import { UsersModule } from './modules/users/users.module';
 import { PaymentTermModule } from './modules/paymentTerm/paymentTerm.module';

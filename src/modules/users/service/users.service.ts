@@ -1,12 +1,13 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { UsersRepositoryImpl } from '../repository/users.repository';
 import { BaseRepositoryImpl } from 'src/modules/base/repository/base.repository';
-import { User, UserModifyPassword, UserStatus } from 'src/domain/User';
+import { User, UserModifyPassword } from 'src/domain/User';
 import { generate } from 'generate-password';
 import * as bcrypt from 'bcrypt';
 import { District } from 'src/domain/Ubigeo/District';
 import { Province } from 'src/domain/Ubigeo/Province';
 import { Department } from 'src/domain/Ubigeo/Department';
+import { Status } from 'src/global';
 
 interface Pagination {
   limit: number;
@@ -32,6 +33,18 @@ export class UsersService {
       });
     }
     return isMatch;
+  }
+
+  private async validateBase(request: User) {
+    await this.baseRepository.findDocumentTypeById(request.documentType);
+    await this.baseRepository.findCivilStatusById(request.civilStatus);
+    await this.baseRepository.findRolById(request.rol);
+  }
+
+  private async validateLocationData(request: User) {
+    await this.baseRepository.findDistrictById(request.district);
+    await this.baseRepository.findProvinceById(request.province);
+    await this.baseRepository.findDepartmentById(request.department);
   }
 
   async findAll(pagination?: Pagination) {
@@ -60,12 +73,8 @@ export class UsersService {
   }
 
   async create(request: User) {
-    await this.baseRepository.findDocumentTypeById(request.documentType);
-    await this.baseRepository.findCivilStatusById(request.civilStatus);
-    await this.baseRepository.findRolById(request.rol);
-    await this.baseRepository.findDistrictById(request.district);
-    await this.baseRepository.findProvinceById(request.province);
-    await this.baseRepository.findDepartmentById(request.department);
+    await this.validateBase(request);
+    await this.validateLocationData(request);
     await this.baseRepository.validateUbigeo(
       new District({
         id: request.district.id,
@@ -127,7 +136,6 @@ export class UsersService {
       const provinceId = province?.id ?? userDb.province?.id;
       const departmentId = department?.id ?? userDb.department?.id;
 
-      // Validar solo si se tiene la información mínima necesaria
       if (districtId || provinceId || departmentId) {
         await this.baseRepository.validateUbigeo(
           new District({
@@ -165,10 +173,14 @@ export class UsersService {
   async delete(request: User) {
     const userDb = await this.usersRepository.findById(request);
 
-    if (userDb.getStatus() === UserStatus.ACTIVE) {
+    if (userDb.status === Status.ACTIVE) {
       throw new HttpException('User cannot be deleted', 400);
     }
 
-    return await this.usersRepository.delete(userDb);
+    const user = new User(userDb);
+    user.updatedAt = new Date();
+    user.status = Status.DELETED;
+
+    return await this.usersRepository.update(user, userDb);
   }
 }
