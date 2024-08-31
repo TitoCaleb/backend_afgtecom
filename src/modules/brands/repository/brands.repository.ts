@@ -1,7 +1,7 @@
-import { NotFoundException } from '@nestjs/common';
+/* import { NotFoundException } from '@nestjs/common'; */
 import { InjectRepository } from '@nestjs/typeorm';
 import { Brand } from 'src/domain/Brand';
-import { FindManyOptions, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 
 export class BrandsRepositoryImpl {
   constructor(
@@ -13,14 +13,8 @@ export class BrandsRepositoryImpl {
     return response;
   }
 
-  async findById(request: Brand): Promise<Brand> {
-    const response = await this.brandRepository.findOneBy({
-      id: request.id,
-    });
-
-    if (!response) {
-      throw new NotFoundException('Brand not found');
-    }
+  async findOne(options: FindOneOptions<Brand>): Promise<Brand> {
+    const response = await this.brandRepository.findOne(options);
 
     return response;
   }

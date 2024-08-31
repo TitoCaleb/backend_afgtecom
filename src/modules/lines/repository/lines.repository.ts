@@ -1,8 +1,6 @@
-import { NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Brand } from 'src/domain/Brand';
 import { Line } from 'src/domain/Line';
-import { FindManyOptions, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 
 export class LinesRepositoryImpl {
   constructor(
@@ -14,22 +12,8 @@ export class LinesRepositoryImpl {
     return response;
   }
 
-  async findById(request: Line): Promise<Line> {
-    const response = await this.lineRepository.findOneBy({
-      id: request.id,
-    });
-
-    if (!response) {
-      throw new NotFoundException('Line not found');
-    }
-
-    return response;
-  }
-
-  async findByBrandId(brand: Brand): Promise<Line[]> {
-    const response = await this.lineRepository.findBy({
-      brand,
-    });
+  async findOne(options: FindOneOptions<Line>): Promise<Line> {
+    const response = await this.lineRepository.findOne(options);
 
     return response;
   }

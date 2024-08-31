@@ -1,7 +1,6 @@
-import { NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from 'src/domain/Category';
-import { FindManyOptions, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 
 export class CategoriesRepositoryImpl {
   constructor(
@@ -13,14 +12,8 @@ export class CategoriesRepositoryImpl {
     return this.categoryRepository.find(options);
   }
 
-  async findById(request: Category): Promise<Category> {
-    const response = await this.categoryRepository.findOneBy({
-      id: request.id,
-    });
-
-    if (!response) {
-      throw new NotFoundException('Category not found');
-    }
+  async findOne(options: FindOneOptions<Category>): Promise<Category> {
+    const response = await this.categoryRepository.findOne(options);
 
     return response;
   }

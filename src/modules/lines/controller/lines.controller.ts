@@ -69,7 +69,13 @@ export class LinesController {
       const response = await this.linesService.findByBrandId(
         new Brand({ id: brandId }),
       );
-      return response.map((line) => line.getApiData());
+      return {
+        data: response.map((line) => line.getApiData()),
+        /* pagination: {
+          limit,
+          offset,
+        }, */
+      };
     } catch (e: any) {
       return ApiResponseError(e, res);
     }

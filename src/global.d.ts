@@ -18,9 +18,3 @@ interface ApiResponseError {
 }
 
 type ResponseController<T> = ResponseData<T> | ApiResponseError | Response<T>;
-
-export enum Status {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
-  DELETED = 'DELETED',
-}

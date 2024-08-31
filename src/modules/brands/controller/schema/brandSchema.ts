@@ -9,7 +9,7 @@ export const createBrandSchema = z
   .transform((data) => {
     return {
       ...data,
-      status: true,
+      status: 'ACTIVE',
     };
   });
 
@@ -17,6 +17,6 @@ export const updateBrandSchema = z
   .object({
     id: z.string().uuid(),
     name: z.string().min(3).max(255).optional(),
-    status: z.boolean().optional(),
+    status: z.enum(['ACTIVE', 'INACTIVE', 'DELETED']).optional(),
   })
   .strict();

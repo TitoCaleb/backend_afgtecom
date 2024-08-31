@@ -1,4 +1,4 @@
-import { Status } from 'src/global';
+import { Status } from 'src/utils/enums';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'category' })
@@ -15,7 +15,7 @@ export class Category {
   @Column({ type: 'timestamp', name: 'update_at' })
   updatedAt: Date;
 
-  @Column({ type: 'varchar', length: 50, name: 'status', enum: Status })
+  @Column({ type: 'enum', name: 'status', enum: Status })
   status: string;
 
   constructor(data?: Partial<Category>) {

@@ -1,7 +1,6 @@
-import { NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaymentTerm } from 'src/domain/PaymentTerm';
-import { FindManyOptions, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 
 export class PaymentTermRepositoryImpl {
   constructor(
@@ -16,14 +15,8 @@ export class PaymentTermRepositoryImpl {
     return response;
   }
 
-  async findById(request: PaymentTerm): Promise<PaymentTerm> {
-    const response = await this.paymentTermRepository.findOneBy({
-      id: request.id,
-    });
-
-    if (!response) {
-      throw new NotFoundException('PaymentTerm not found');
-    }
+  async findOne(options: FindOneOptions<PaymentTerm>): Promise<PaymentTerm> {
+    const response = await this.paymentTermRepository.findOne(options);
 
     return response;
   }

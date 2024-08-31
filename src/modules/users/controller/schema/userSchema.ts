@@ -23,7 +23,6 @@ export const createUserSchema = z
     province: z.string(),
     department: z.string(),
     email: z.string().email(),
-    status: z.boolean(),
   })
   .strict()
   .transform((data) => ({
@@ -34,6 +33,7 @@ export const createUserSchema = z
     district: new District({ id: data.district }),
     province: new Province({ id: data.province }),
     department: new Department({ id: data.department }),
+    status: 'ACTIVE',
   }));
 
 export const updateUserSchema = z
@@ -57,7 +57,7 @@ export const updateUserSchema = z
     civilStatus: z.string().optional(),
     rol: z.string().optional(),
     email: z.string().email().optional(),
-    status: z.boolean().optional(),
+    status: z.string().optional(),
   })
   .strict()
   .transform((data) => ({

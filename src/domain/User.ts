@@ -12,7 +12,7 @@ import { Token } from './Token';
 import { District } from './Ubigeo/District';
 import { Department } from './Ubigeo/Department';
 import { Province } from './Ubigeo/Province';
-import { Status } from 'src/global';
+import { Status } from 'src/utils/enums';
 
 export interface UserModifyPassword {
   id?: string;
@@ -74,7 +74,7 @@ export class User {
   @Column({ type: 'varchar', length: 255, name: 'password' })
   password: string;
 
-  @Column({ type: 'varchar', length: 50, name: 'status', enum: Status })
+  @Column({ type: 'enum', name: 'status', enum: Status })
   status: string;
 
   @Column({ type: 'varchar', length: 100, name: 'token_id', nullable: true })

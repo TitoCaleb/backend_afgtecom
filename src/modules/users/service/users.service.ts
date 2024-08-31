@@ -7,7 +7,7 @@ import * as bcrypt from 'bcrypt';
 import { District } from 'src/domain/Ubigeo/District';
 import { Province } from 'src/domain/Ubigeo/Province';
 import { Department } from 'src/domain/Ubigeo/Department';
-import { Status } from 'src/global';
+import { Status } from 'src/utils/enums';
 
 interface Pagination {
   limit: number;

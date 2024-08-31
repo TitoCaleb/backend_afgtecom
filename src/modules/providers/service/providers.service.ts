@@ -116,7 +116,9 @@ export class ProvidersService {
       request.provider,
     );
 
-    await this.banksRepository.findById(request.bank);
+    await this.banksRepository.findOne({
+      where: { id: request.bank.id },
+    });
 
     if (
       providerDb.bankAccounts.some(

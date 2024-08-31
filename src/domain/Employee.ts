@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Provider } from './Provider';
-import { Status } from 'src/global';
+import { Status } from 'src/utils/enums';
 
 @Entity({ name: 'employee' })
 export class Employee {
@@ -43,7 +43,7 @@ export class Employee {
   @Column({ type: 'timestamp', name: 'update_at' })
   updatedAt: Date;
 
-  @Column({ type: 'varchar', length: 50, name: 'status', enum: Status })
+  @Column({ type: 'enum', name: 'status', enum: Status })
   status: string;
 
   constructor(data: Partial<Employee>) {

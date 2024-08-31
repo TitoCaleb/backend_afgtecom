@@ -4,9 +4,16 @@ export const createPaymentTermSchema = z
   .object({
     condition: z.string().min(1).max(255),
   })
-  .strict();
+  .strict()
+  .transform((data) => ({
+    ...data,
+    status: 'ACTIVE',
+  }));
 
-export const updatePaymentTermSchema = z.object({
-  id: z.string().uuid(),
-  condition: z.string().min(1).max(255),
-});
+export const updatePaymentTermSchema = z
+  .object({
+    id: z.string().uuid(),
+    condition: z.string().min(1).max(255),
+    status: z.enum(['ACTIVE', 'INACTIVE', 'DELETED']).optional(),
+  })
+  .strict();

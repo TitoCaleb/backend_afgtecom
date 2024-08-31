@@ -1,4 +1,5 @@
 import { Brand } from 'src/domain/Brand';
+import { Status } from 'src/utils/enums';
 import { z } from 'zod';
 
 export const createLineSchema = z
@@ -11,6 +12,7 @@ export const createLineSchema = z
     return {
       ...data,
       brand: new Brand({ id: data.brand }),
+      status: Status.ACTIVE,
     };
   });
 
@@ -19,6 +21,7 @@ export const updateBrandSchema = z
     id: z.string().uuid(),
     name: z.string().min(3).max(255).optional(),
     brand: z.string().uuid().optional(),
+    status: z.enum([Status.ACTIVE, Status.INACTIVE, Status.DELETED]).optional(),
   })
   .strict()
   .transform((data) => {

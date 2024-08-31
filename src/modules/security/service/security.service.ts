@@ -4,13 +4,14 @@ import { Client } from 'src/domain/Client';
 import { Device } from 'src/domain/Device';
 import { SecurityRepositoryImpl } from '../repository/security.repository';
 import { Token } from 'src/domain/Token';
-import { User, UserStatus } from 'src/domain/User';
+import { User } from 'src/domain/User';
 import { UsersRepositoryImpl } from 'src/modules/users/repository/users.repository';
 import {
   HttpException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { Status } from 'src/utils/enums';
 
 @Injectable()
 export class SecurityService {
@@ -52,7 +53,7 @@ export class SecurityService {
 
   async validateUser(user: User): Promise<User> {
     const userDb = await this.userRepository.findByEmail(user);
-    if (userDb.getStatus() === UserStatus.INACTIVE) {
+    if (userDb.status === Status.INACTIVE) {
       throw new UnauthorizedException('User is inactive');
     }
     await this.decryptPassword(userDb.password, user.password);

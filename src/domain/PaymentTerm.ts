@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Provider } from './Provider';
-import { Status } from 'src/global';
+import { Status } from 'src/utils/enums';
 
 @Entity({ name: 'payment_term' })
 export class PaymentTerm {
@@ -19,7 +19,7 @@ export class PaymentTerm {
   @OneToMany(() => Provider, (provider) => provider.paymentTerm)
   providers: Provider[];
 
-  @Column({ type: 'varchar', length: 50, name: 'status', enum: Status })
+  @Column({ type: 'enum', name: 'status', enum: Status })
   status: string;
 
   constructor(data?: Partial<PaymentTerm>) {

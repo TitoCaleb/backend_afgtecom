@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Brand } from './Brand';
-import { Status } from 'src/global';
+import { Status } from 'src/utils/enums';
 
 @Entity({ name: 'line' })
 @Index(['brand', 'name'], { unique: true })
@@ -26,7 +26,7 @@ export class Line {
   @Column({ type: 'timestamp', name: 'update_at' })
   updatedAt: Date;
 
-  @Column({ type: 'varchar', length: 50, name: 'status', enum: Status })
+  @Column({ type: 'enum', name: 'status', enum: Status })
   status: string;
 
   constructor(data?: Partial<Line>) {
