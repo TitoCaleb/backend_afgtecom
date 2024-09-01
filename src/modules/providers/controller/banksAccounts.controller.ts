@@ -45,7 +45,7 @@ export class BanksAccountController {
   }
 
   @Post(':providerId/provider')
-  async createBankAccount(
+  async create(
     @Res({ passthrough: true }) res: Response,
     @Body() bankAccount: BankAccount,
     @Param('providerId') providerId: string,
@@ -66,7 +66,7 @@ export class BanksAccountController {
   }
 
   @Put(':bankAccountId')
-  async updateBankAccount(
+  async update(
     @Res({ passthrough: true }) res: Response,
     @Body() bankAccount: BankAccount,
     @Param('bankAccountId') bankAccountId: string,
@@ -87,7 +87,7 @@ export class BanksAccountController {
   }
 
   @Delete(':bankAccountId')
-  async deleteBankAccount(
+  async delete(
     @Res({ passthrough: true }) res: Response,
     @Param('bankAccountId') bankAccountId: string,
   ) {

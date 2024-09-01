@@ -55,7 +55,9 @@ export class PaymentTermController {
       const response = await this.paymentTermService.findById(
         new PaymentTerm({ id: paymentTermId }),
       );
-      return response.getApiData();
+      return {
+        data: response.getApiData(),
+      };
     } catch (e: any) {
       res.status(HttpStatus.NOT_FOUND);
       return ApiResponseError(e, res);

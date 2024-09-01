@@ -49,7 +49,9 @@ export class CategoriesController {
           id: categoryId,
         }),
       );
-      return response.getApiData();
+      return {
+        data: response.getApiData(),
+      };
     } catch (e: any) {
       res.status(HttpStatus.NOT_FOUND);
       return ApiResponseError(e, res);

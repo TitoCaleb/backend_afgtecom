@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ProvidersRepositoryImpl } from '../repository/providers.repository';
 import { Provider } from 'src/domain/Provider';
-import { BankAccount } from 'src/domain/BankAccount';
 import { BanksRepositoryImpl } from 'src/modules/banks/repository/banks.repository';
 import { BusinessSectorRepositoryImpl } from 'src/modules/business-sector/repository/business-sector.repository';
-import { BusinessSector } from 'src/domain/BusinessSector';
 import { ProviderSector } from 'src/domain/ProviderSector';
 import { ProviderSectorRepositoryImpl } from '../repository/providerSector.repository';
 import { EmployeesRepositoryImpl } from '../repository/employees.repository';
@@ -36,9 +34,11 @@ export class ProvidersService {
 
     await Promise.all(
       Array.from(requestBusinessSector).map(async (id) => {
-        await this.businessSectorRepository.findById(
-          new BusinessSector({ id }),
-        );
+        await this.businessSectorRepository.findOne({
+          where: {
+            id,
+          },
+        });
       }),
     );
 
@@ -70,9 +70,11 @@ export class ProvidersService {
 
     await Promise.all(
       Array.from(requestBusinessSector).map(async (id) => {
-        await this.businessSectorRepository.findById(
-          new BusinessSector({ id }),
-        );
+        await this.businessSectorRepository.findOne({
+          where: {
+            id,
+          },
+        });
       }),
     );
 
@@ -109,27 +111,5 @@ export class ProvidersService {
     }
 
     return await this.providersRepository.delete(providerDb);
-  }
-
-  async createBankAccount(request: BankAccount) {
-    const providerDb = await this.providersRepository.findById(
-      request.provider,
-    );
-
-    await this.banksRepository.findOne({
-      where: { id: request.bank.id },
-    });
-
-    if (
-      providerDb.bankAccounts.some(
-        (banksAccount) => banksAccount.bank.id === request.bank.id,
-      )
-    ) {
-      throw new Error('Bank Account already exists');
-    }
-
-    const response = await this.bankAccountsRepository.create(request);
-
-    return response;
   }
 }

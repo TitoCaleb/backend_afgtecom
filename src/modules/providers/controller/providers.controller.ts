@@ -57,7 +57,9 @@ export class ProvidersController {
           id: providerId,
         }),
       );
-      return response.getApiData();
+      return {
+        data: response.getApiData(),
+      };
     } catch (e: any) {
       res.status(HttpStatus.NOT_FOUND);
       return ApiResponseError(e, res);

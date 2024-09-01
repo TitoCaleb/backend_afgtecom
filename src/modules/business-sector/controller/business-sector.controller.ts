@@ -49,7 +49,9 @@ export class BusinessSectorController {
           id: sectorId,
         }),
       );
-      return response.getApiData();
+      return {
+        data: response.getApiData(),
+      };
     } catch (e: any) {
       res.status(HttpStatus.NOT_FOUND);
       return ApiResponseError(e, res);
