@@ -30,7 +30,7 @@ export class CategoriesService {
 
   async create(category: Category) {
     const existingCategory = await this.categoryRepository.findOne({
-      where: { id: category.id },
+      where: { name: category.name, status: Status.DELETED },
     });
 
     if (existingCategory) {

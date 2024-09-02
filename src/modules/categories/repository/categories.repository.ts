@@ -23,9 +23,9 @@ export class CategoriesRepositoryImpl {
     return response;
   }
 
-  async update(request: Category, dbCategory: Category): Promise<Category> {
-    this.categoryRepository.merge(dbCategory, request);
-    const response = await this.categoryRepository.save(dbCategory);
+  async update(request: Category, categoryDb: Category): Promise<Category> {
+    this.categoryRepository.merge(categoryDb, request);
+    const response = await this.categoryRepository.save(categoryDb);
     return response;
   }
 

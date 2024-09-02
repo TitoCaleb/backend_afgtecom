@@ -32,9 +32,9 @@ export class Brand {
     return {
       id: this.id,
       name: this.name,
-      status: this.status,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
+      status: this.status,
     };
   }
 }

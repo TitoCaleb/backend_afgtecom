@@ -30,7 +30,7 @@ export class BusinessSectorService {
 
   async create(sector: BusinessSector) {
     const existingSector = await this.businessSectorRepository.findOne({
-      where: { id: sector.id },
+      where: { name: sector.name, status: Status.DELETED },
     });
 
     if (existingSector) {

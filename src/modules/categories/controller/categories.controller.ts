@@ -84,6 +84,7 @@ export class CategoriesController {
         id: categoryId,
         ...category,
       });
+      console.log('Aqui 3');
       const response = await this.cateogryService.update(new Category(request));
       return response.getApiData();
     } catch (e: any) {

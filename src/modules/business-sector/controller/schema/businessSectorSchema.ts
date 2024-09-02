@@ -15,7 +15,7 @@ export const createBusinessSectorSchema = z
 export const updateBusinessSectorSchema = z
   .object({
     id: z.string().uuid(),
-    name: z.string().min(3).max(255),
+    name: z.string().min(3).max(255).optional(),
     status: z.enum(['ACTIVE', 'INACTIVE', 'DELETED']).optional(),
   })
   .strict();

@@ -30,7 +30,7 @@ export class BanksService {
 
   async create(bank: Bank) {
     const existingBank = await this.banksRepository.findOne({
-      where: { id: bank.id },
+      where: { name: bank.name, status: Status.DELETED },
     });
 
     if (existingBank) {
