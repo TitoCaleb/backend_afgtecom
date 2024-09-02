@@ -13,7 +13,7 @@ export const createPaymentTermSchema = z
 export const updatePaymentTermSchema = z
   .object({
     id: z.string().uuid(),
-    condition: z.string().min(1).max(255),
+    condition: z.string().min(1).max(255).optional(),
     status: z.enum(['ACTIVE', 'INACTIVE', 'DELETED']).optional(),
   })
   .strict();

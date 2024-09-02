@@ -30,7 +30,7 @@ export class PaymentTermService {
 
   async create(paymentTerm: PaymentTerm) {
     const existingPaymentTerm = await this.paymentTermRepository.findOne({
-      where: { id: paymentTerm.id },
+      where: { condition: paymentTerm.condition, status: Status.DELETED },
     });
 
     if (existingPaymentTerm) {

@@ -31,7 +31,7 @@ export class PaymentTerm {
   getApiData() {
     return {
       id: this.id,
-      name: this.condition,
+      condition: this.condition,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       status: this.status,
