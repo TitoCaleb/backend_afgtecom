@@ -1,13 +1,14 @@
 import {
   Column,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Employee } from './Employee';
 import { BankAccount } from './BankAccount';
-import { ProviderSector } from './ProviderSector';
 import { BusinessSector } from './BusinessSector';
 import { PaymentTerm } from './PaymentTerm';
 import { Status } from 'src/utils/enums';
@@ -38,9 +39,6 @@ export class Provider {
   @OneToMany(() => Employee, (employee) => employee.provider)
   employees: Employee[];
 
-  @OneToMany(() => ProviderSector, (providerSector) => providerSector.provider)
-  providerSectors: ProviderSector[];
-
   @OneToMany(() => BankAccount, (bankAccount) => bankAccount.provider)
   bankAccounts: BankAccount[];
 
@@ -59,6 +57,19 @@ export class Provider {
   @Column({ type: 'enum', name: 'status', enum: Status })
   status: string;
 
+  @ManyToMany(
+    () => BusinessSector,
+    (businessSector) => businessSector.providers,
+  )
+  @JoinTable({
+    name: 'provider_businessSector',
+    joinColumn: {
+      name: 'provider_id',
+    },
+    inverseJoinColumn: {
+      name: 'business_sector_id',
+    },
+  })
   businessSector: BusinessSector[];
 
   constructor(data: Partial<Provider>) {
@@ -77,13 +88,11 @@ export class Provider {
       country: this.country,
       address: this.address,
       employees: this.employees,
-      businessSector: this.businessSector,
       bankAccounts: this.bankAccounts,
       creditLine: this.creditLine,
       paymentTerm: this.paymentTerm,
-      providerSectors: this.providerSectors,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
+      businessSector: this.businessSector,
+      status: this.status,
     };
   }
 }

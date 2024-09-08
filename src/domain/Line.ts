@@ -41,8 +41,6 @@ export class Line {
       name: this.name,
       brand: this.brand,
       status: this.status,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
     };
   }
 }

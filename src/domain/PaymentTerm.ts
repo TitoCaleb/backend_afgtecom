@@ -32,8 +32,6 @@ export class PaymentTerm {
     return {
       id: this.id,
       condition: this.condition,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
       status: this.status,
     };
   }

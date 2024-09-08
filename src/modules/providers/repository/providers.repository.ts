@@ -2,18 +2,16 @@ import { FindManyOptions, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Provider } from 'src/domain/Provider';
 import { NotFoundException } from '@nestjs/common';
-import { BankAccount } from 'src/domain/BankAccount';
 
 export class ProvidersRepositoryImpl {
   constructor(
     @InjectRepository(Provider)
     private providerRepository: Repository<Provider>,
-    @InjectRepository(BankAccount)
-    private bankAccountRepository: Repository<BankAccount>,
   ) {}
 
   async findAll(options?: FindManyOptions<Provider>): Promise<Provider[]> {
-    return this.providerRepository.find(options);
+    const response = await this.providerRepository.find(options);
+    return response;
   }
 
   async findById(request: Provider): Promise<Provider> {
@@ -22,9 +20,9 @@ export class ProvidersRepositoryImpl {
       relations: [
         'bankAccounts',
         'bankAccounts.bank',
-        'providerSectors',
-        'providerSectors.businessSector',
         'employees',
+        'paymentTerm',
+        'businessSector',
       ],
     });
 

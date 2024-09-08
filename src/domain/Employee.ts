@@ -65,8 +65,6 @@ export class Employee {
       position: this.position,
       comments: this.comments,
       provider: this.provider,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
       status: this.status,
     };
   }

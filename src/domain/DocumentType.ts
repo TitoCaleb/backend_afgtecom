@@ -34,8 +34,6 @@ export class DocumentType {
       name: this.name,
       acronym: this.acronym,
       size: this.size,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
     };
   }
 }

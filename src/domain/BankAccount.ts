@@ -44,9 +44,7 @@ export class BankAccount {
       dolarAccountNumber: this.dolarAccountNumber,
       solesAccountNumber: this.solesAccountNumber,
       bank: this.bank,
-      provider: this.provider,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
+      provider: this.provider.getApiData(),
     };
   }
 }

@@ -112,8 +112,6 @@ export class User {
       rol: this.rol,
       email: this.email,
       status: this.status,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
     };
   }
 

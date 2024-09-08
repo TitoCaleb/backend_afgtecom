@@ -3,10 +3,10 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Index,
-  OneToMany,
+  ManyToMany,
 } from 'typeorm';
-import { ProviderSector } from './ProviderSector';
 import { Status } from 'src/utils/enums';
+import { Provider } from './Provider';
 
 @Entity({ name: 'business_sector' })
 export class BusinessSector {
@@ -17,11 +17,8 @@ export class BusinessSector {
   @Index({ unique: true })
   name: string;
 
-  @OneToMany(
-    () => ProviderSector,
-    (providerSector) => providerSector.businessSector,
-  )
-  providerSectors: ProviderSector[];
+  @ManyToMany(() => Provider, (provider) => provider.businessSector)
+  providers: Provider[];
 
   @Column({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;
@@ -42,9 +39,7 @@ export class BusinessSector {
     return {
       id: this.id,
       name: this.name,
-      providerSectors: this.providerSectors,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
+      providers: this.providers,
       status: this.status,
     };
   }

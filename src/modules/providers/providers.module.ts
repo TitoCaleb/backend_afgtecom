@@ -16,13 +16,12 @@ import { ProvidersController } from './controller/providers.controller';
 import { ProvidersRepositoryImpl } from './repository/providers.repository';
 import { ProvidersService } from './service/providers.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProviderSector } from 'src/domain/ProviderSector';
-import { ProviderSectorRepositoryImpl } from './repository/providerSector.repository';
 import { PaymentTerm } from 'src/domain/PaymentTerm';
 import { SecurityRepositoryImpl } from '../security/repository/security.repository';
 import { Device } from 'src/domain/Device';
 import { Client } from 'src/domain/Client';
 import { Token } from 'src/domain/Token';
+import { PaymentTermRepositoryImpl } from '../paymentTerm/repository/paymentTerm.repository';
 
 @Module({
   imports: [
@@ -32,7 +31,6 @@ import { Token } from 'src/domain/Token';
       Bank,
       BankAccount,
       BusinessSector,
-      ProviderSector,
       PaymentTerm,
       Device,
       Client,
@@ -52,9 +50,9 @@ import { Token } from 'src/domain/Token';
     BanksRepositoryImpl,
     BankAccountService,
     BankAccountRepositoryImpl,
-    ProviderSectorRepositoryImpl,
     BusinessSectorRepositoryImpl,
     SecurityRepositoryImpl,
+    PaymentTermRepositoryImpl,
   ],
 })
 export class ProvidersModule {}

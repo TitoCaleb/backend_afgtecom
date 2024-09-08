@@ -1,26 +1,23 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { ProvidersRepositoryImpl } from '../repository/providers.repository';
 import { Provider } from 'src/domain/Provider';
-import { BanksRepositoryImpl } from 'src/modules/banks/repository/banks.repository';
+import { PaymentTermRepositoryImpl } from 'src/modules/paymentTerm/repository/paymentTerm.repository';
+import { Status } from 'src/utils/enums';
 import { BusinessSectorRepositoryImpl } from 'src/modules/business-sector/repository/business-sector.repository';
-import { ProviderSector } from 'src/domain/ProviderSector';
-import { ProviderSectorRepositoryImpl } from '../repository/providerSector.repository';
-import { EmployeesRepositoryImpl } from '../repository/employees.repository';
-import { BankAccountRepositoryImpl } from '../repository/bankAccount.repository';
 
 @Injectable()
 export class ProvidersService {
   constructor(
     private providersRepository: ProvidersRepositoryImpl,
-    private banksRepository: BanksRepositoryImpl,
+    private paymentTermRepository: PaymentTermRepositoryImpl,
     private businessSectorRepository: BusinessSectorRepositoryImpl,
-    private providerSectorRepository: ProviderSectorRepositoryImpl,
-    private employeesRepository: EmployeesRepositoryImpl,
-    private bankAccountsRepository: BankAccountRepositoryImpl,
   ) {}
 
   async findAll() {
-    return await this.providersRepository.findAll();
+    const response = await this.providersRepository.findAll({
+      where: { status: Status.ACTIVE },
+    });
+    return response;
   }
 
   async findById(request: Provider) {
@@ -28,55 +25,39 @@ export class ProvidersService {
   }
 
   async create(request: Provider) {
-    const requestBusinessSector = new Set(
-      request.businessSector.map((businessSector) => businessSector.id),
-    );
+    await this.paymentTermRepository.findOne({
+      where: { id: request.paymentTerm.id },
+    });
 
-    await Promise.all(
-      Array.from(requestBusinessSector).map(async (id) => {
-        await this.businessSectorRepository.findOne({
-          where: {
-            id,
-          },
-        });
-      }),
-    );
+    if (request.businessSector.length) {
+      const businessSector = await Promise.all(
+        request.businessSector.map(async (businessSector) => {
+          return await this.businessSectorRepository.findOne({
+            where: { id: businessSector.id },
+          });
+        }),
+      );
+      request.businessSector = businessSector;
+    }
 
     const provider = await this.providersRepository.create(request);
 
-    if (request.businessSector.length) {
-      await Promise.all(
-        request.businessSector.map(async (businessSector) => {
-          return await this.providerSectorRepository.createProviderSector(
-            new ProviderSector({
-              provider: provider,
-              businessSector,
-            }),
-          );
-        }),
-      );
-    }
-
-    provider.businessSector = request.businessSector;
     return provider;
   }
 
   async update(request: Provider) {
     const providerDb = await this.providersRepository.findById(request);
 
-    const requestBusinessSector = new Set(
-      request.providerSectors.map((businessSector) => businessSector.id),
-    );
-
-    await Promise.all(
-      Array.from(requestBusinessSector).map(async (id) => {
-        await this.businessSectorRepository.findOne({
-          where: {
-            id,
-          },
-        });
-      }),
-    );
+    if (request.businessSector && request.businessSector.length > 1) {
+      const businessSector = await Promise.all(
+        request.businessSector.map(async (businessSector) => {
+          return await this.businessSectorRepository.findOne({
+            where: { id: businessSector.id },
+          });
+        }),
+      );
+      request.businessSector = businessSector;
+    }
 
     providerDb.updatedAt = new Date();
 
@@ -86,30 +67,14 @@ export class ProvidersService {
   async delete(request: Provider) {
     const providerDb = await this.providersRepository.findById(request);
 
-    if (providerDb.employees.length) {
-      Promise.all(
-        providerDb.employees.map((employee) => {
-          this.employeesRepository.delete(employee);
-        }),
-      );
+    if (providerDb.status === Status.ACTIVE) {
+      throw new HttpException('Provider cannot be deleted', 400);
     }
 
-    if (providerDb.bankAccounts.length) {
-      Promise.all(
-        providerDb.bankAccounts.map((bankAccount) => {
-          this.bankAccountsRepository.delete(bankAccount);
-        }),
-      );
-    }
+    const provider = new Provider(providerDb);
+    provider.updatedAt = new Date();
+    provider.status = Status.DELETED;
 
-    if (providerDb.providerSectors.length) {
-      Promise.all(
-        providerDb.providerSectors.map((providerSector) => {
-          this.providerSectorRepository.delete(providerSector);
-        }),
-      );
-    }
-
-    return await this.providersRepository.delete(providerDb);
+    return await this.providersRepository.update(provider, providerDb);
   }
 }
