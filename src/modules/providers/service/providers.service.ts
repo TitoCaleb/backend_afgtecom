@@ -48,7 +48,7 @@ export class ProvidersService {
   async update(request: Provider) {
     const providerDb = await this.providersRepository.findById(request);
 
-    if (request.businessSector && request.businessSector.length > 1) {
+    if (request.businessSector && request.businessSector.length > 0) {
       const businessSector = await Promise.all(
         request.businessSector.map(async (businessSector) => {
           return await this.businessSectorRepository.findOne({
