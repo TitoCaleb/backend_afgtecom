@@ -58,8 +58,9 @@ export const updateProviderSchema = z
 
 export const createBankAccountSchema = z
   .object({
-    dolarAccountNumber: z.string().min(3).max(100).optional(),
-    solesAccountNumber: z.string().min(3).max(100).optional(),
+    accountNumber: z.string().min(3).max(100),
+    CCI: z.string().min(3).max(100).optional(),
+    type: z.enum(['SAVING', 'CURRENT']),
     provider: z.string().uuid(),
     bank: z.string().uuid(),
   })
@@ -70,17 +71,11 @@ export const createBankAccountSchema = z
     bank: new Bank({ id: data.bank }),
   }));
 
-export const createBusinessSectorSchema = z
-  .object({
-    name: z.string().min(3).max(100),
-    businessSector: z.string().uuid(),
-  })
-  .strict();
-
 export const updateBankAccountSchema = z
   .object({
     id: z.string().uuid(),
-    dolarAccountNumber: z.string().min(3).max(100).optional(),
-    solesAccountNumber: z.string().min(3).max(100).optional(),
+    accountNumber: z.string().min(3).max(100).optional(),
+    CCI: z.string().min(3).max(100).optional(),
+    type: z.enum(['SAVING', 'CURRENT']).optional(),
   })
   .strict();

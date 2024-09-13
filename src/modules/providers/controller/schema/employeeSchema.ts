@@ -7,11 +7,13 @@ export const createEmployeeSchema = z
     middleName: z.string().min(3).max(100).optional(),
     lastName: z.string().min(3).max(100),
     motherLastName: z.string().min(3).max(100).optional(),
-    phone: z.string().regex(/^\+\d{4,}$/, 'Invalid field mobile'),
-    cellphone: z.string().regex(/^\+\d{4,}$/, 'Invalid field mobile'),
-    email: z.string().email(),
-    position: z.string().min(3).max(100),
-    comments: z.string().min(3).max(450),
+    cellphone: z
+      .string()
+      .regex(/^\+\d{4,}$/, 'Invalid field mobile')
+      .optional(),
+    email: z.string().email().optional(),
+    position: z.string().min(3).max(100).optional(),
+    comments: z.string().min(3).max(450).optional(),
     provider: z.string().uuid(),
   })
   .strict()
@@ -48,5 +50,6 @@ export const updateEmployeeSchema = z
     email: z.string().email().optional(),
     position: z.string().min(3).max(100).optional(),
     comments: z.string().min(3).max(450).optional(),
+    status: z.enum(['ACTIVE', 'INACTIVE', 'DELETED']).optional(),
   })
   .strict();

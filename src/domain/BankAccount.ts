@@ -8,16 +8,24 @@ import {
 import { Bank } from './Banks';
 import { Provider } from './Provider';
 
+export enum BankAccountType {
+  SAVING = 'SAVING',
+  CURRENT = 'CURRENT',
+}
+
 @Entity({ name: 'bank_account' })
 export class BankAccount {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ type: 'varchar', length: 100 })
-  dolarAccountNumber: string;
+  accountNumber: string;
 
   @Column({ type: 'varchar', length: 100 })
-  solesAccountNumber: string;
+  CCI: string;
+
+  @Column({ type: 'enum', enum: BankAccountType })
+  type: string;
 
   @ManyToOne(() => Bank, (bank) => bank.bankAccounts)
   @JoinColumn()
@@ -41,10 +49,11 @@ export class BankAccount {
   getApiData() {
     return {
       id: this.id,
-      dolarAccountNumber: this.dolarAccountNumber,
-      solesAccountNumber: this.solesAccountNumber,
+      accountNumber: this.accountNumber,
+      CCI: this.CCI,
+      type: this.type,
       bank: this.bank,
-      provider: this.provider.getApiData(),
+      provider: this.provider,
     };
   }
 }

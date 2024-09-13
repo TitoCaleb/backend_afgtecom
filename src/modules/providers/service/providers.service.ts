@@ -16,6 +16,7 @@ export class ProvidersService {
   async findAll() {
     const response = await this.providersRepository.findAll({
       where: { status: Status.ACTIVE },
+      relations: ['businessSector'],
     });
     return response;
   }
