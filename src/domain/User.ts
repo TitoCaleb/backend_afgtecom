@@ -20,6 +20,12 @@ export interface UserModifyPassword {
   newPassword?: string;
 }
 
+export interface QueryUser extends Query {
+  name?: string;
+  documentNumber?: string;
+  email?: string;
+}
+
 @Entity({ name: 'user' })
 export class User {
   @PrimaryGeneratedColumn('uuid')

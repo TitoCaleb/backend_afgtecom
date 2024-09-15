@@ -1,3 +1,9 @@
+import { ApiResponseError } from 'src/errors/handleErrors';
+import { Like } from 'typeorm';
+import { Provider, QueryProvider } from 'src/domain/Provider';
+import { ProvidersService } from '../service/providers.service';
+import { Response } from 'express';
+import { TokenGuard } from 'src/modules/security/guards';
 import {
   Body,
   Controller,
@@ -11,34 +17,45 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { ProvidersService } from '../service/providers.service';
-import { Response } from 'express';
-import { ApiResponseError } from 'src/errors/handleErrors';
-import { Provider } from 'src/domain/Provider';
 import {
   createProviderSchema,
   updateProviderSchema,
 } from './schema/providersSchema';
-import { TokenGuard } from 'src/modules/security/guards';
 
 @UseGuards(TokenGuard)
 @Controller('providers')
 export class ProvidersController {
   constructor(private providerService: ProvidersService) {}
 
+  private dynamicQuery(query: QueryProvider) {
+    const where: any = {};
+    if (query.name) {
+      where.name = Like(`%${query.name}%`);
+    }
+    if (query.documentNumber) {
+      where.documentNumber = Like(`%${query.documentNumber}%`);
+    }
+    return where;
+  }
+
   @Get()
   async findAll(
     @Res({ passthrough: true }) res: Response,
-    @Query() { limit = 10, offset = 0 }: Query,
+    @Query() { limit = 10, offset = 0, documentNumber, name }: QueryProvider,
   ) {
     try {
-      const response = await this.providerService.findAll();
+      const { response, total } = await this.providerService.findAll(
+        this.dynamicQuery({ documentNumber, name }),
+        limit,
+        offset,
+      );
       return {
         data: response.map((provider) => provider.getApiData()),
         pagination: {
           limit,
           offset,
         },
+        total,
       };
     } catch (e: any) {
       res.status(HttpStatus.NOT_FOUND);

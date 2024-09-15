@@ -1,10 +1,10 @@
-import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
-import { ProvidersRepositoryImpl } from '../repository/providers.repository';
-import { Provider } from 'src/domain/Provider';
-import { PaymentTermRepositoryImpl } from 'src/modules/paymentTerm/repository/paymentTerm.repository';
-import { Status } from 'src/utils/enums';
-import { BusinessSectorRepositoryImpl } from 'src/modules/business-sector/repository/business-sector.repository';
 import { BaseRepositoryImpl } from 'src/modules/base/repository/base.repository';
+import { BusinessSectorRepositoryImpl } from 'src/modules/business-sector/repository/business-sector.repository';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import { PaymentTermRepositoryImpl } from 'src/modules/paymentTerm/repository/paymentTerm.repository';
+import { Provider, QueryProvider } from 'src/domain/Provider';
+import { ProvidersRepositoryImpl } from '../repository/providers.repository';
+import { Status } from 'src/utils/enums';
 
 @Injectable()
 export class ProvidersService {
@@ -15,12 +15,21 @@ export class ProvidersService {
     private baseRepository: BaseRepositoryImpl,
   ) {}
 
-  async findAll() {
-    const response = await this.providersRepository.findAll({
-      where: { status: Status.ACTIVE },
-      relations: ['businessSector'],
+  async findAll(dynamicQuery: QueryProvider, limit: number, offset: number) {
+    const total = await this.providersRepository.count({
+      where: { status: Status.ACTIVE, ...dynamicQuery },
     });
-    return response;
+    const response = await this.providersRepository.findAll({
+      where: { status: Status.ACTIVE, ...dynamicQuery },
+      relations: ['businessSector'],
+      take: Number(limit),
+      skip: Number(offset),
+    });
+
+    return {
+      response,
+      total,
+    };
   }
 
   async findById(request: Provider) {

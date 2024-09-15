@@ -14,6 +14,11 @@ import { PaymentTerm } from './PaymentTerm';
 import { Status } from 'src/utils/enums';
 import { Country } from './Ubigeo/Country';
 
+export interface QueryProvider extends Query {
+  name?: string;
+  documentNumber?: string;
+}
+
 @Entity({ name: 'provider' })
 export class Provider {
   @PrimaryGeneratedColumn('uuid')

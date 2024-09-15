@@ -1,18 +1,13 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { UsersRepositoryImpl } from '../repository/users.repository';
 import { BaseRepositoryImpl } from 'src/modules/base/repository/base.repository';
-import { User, UserModifyPassword } from 'src/domain/User';
+import { QueryUser, User, UserModifyPassword } from 'src/domain/User';
 import { generate } from 'generate-password';
 import * as bcrypt from 'bcrypt';
 import { District } from 'src/domain/Ubigeo/District';
 import { Province } from 'src/domain/Ubigeo/Province';
 import { Department } from 'src/domain/Ubigeo/Department';
 import { Status } from 'src/utils/enums';
-
-interface Pagination {
-  limit: number;
-  offset: number;
-}
 
 @Injectable()
 export class UsersService {
@@ -47,8 +42,10 @@ export class UsersService {
     await this.baseRepository.findDepartmentById(request.department);
   }
 
-  async findAll(pagination?: Pagination) {
-    const total = await this.usersRepository.count();
+  async findAll(dynamicQuery: QueryUser, limit: number, offset: number) {
+    const total = await this.usersRepository.count({
+      where: { status: Status.ACTIVE, ...dynamicQuery },
+    });
     const response = await this.usersRepository.findAll({
       relations: [
         'documentType',
@@ -58,8 +55,9 @@ export class UsersService {
         'province',
         'department',
       ],
-      skip: pagination?.offset,
-      take: pagination?.limit,
+      where: { status: Status.ACTIVE, ...dynamicQuery },
+      take: Number(limit),
+      skip: Number(offset),
     });
 
     return {

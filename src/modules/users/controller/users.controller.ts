@@ -19,24 +19,40 @@ import {
   updateUserPasswordSchema,
   updateUserSchema,
 } from './schema/userSchema';
-import { User } from 'src/domain/User';
+import { QueryUser, User } from 'src/domain/User';
 import { TokenGuard } from '../../security/guards';
+import { Like } from 'typeorm';
 
 @UseGuards(TokenGuard)
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
+  private dynamicQuery(query: QueryUser) {
+    const where: any = {};
+    if (query.name) {
+      where.name = Like(`%${query.name}%`);
+    }
+    if (query.documentNumber) {
+      where.documentNumber = Like(`%${query.documentNumber}%`);
+    }
+    if (query.email) {
+      where.email = Like(`%${query.email}%`);
+    }
+    return where;
+  }
+
   @Get()
   async findAll(
     @Res({ passthrough: true }) res: Response,
-    @Query() { limit = 10, offset = 0 }: Query,
+    @Query() { limit = 10, offset = 0, documentNumber, email, name }: QueryUser,
   ) {
     try {
-      const { response, total } = await this.usersService.findAll({
-        limit: Number(limit),
-        offset: Number(offset),
-      });
+      const { response, total } = await this.usersService.findAll(
+        this.dynamicQuery({ name, documentNumber, email }),
+        limit,
+        offset,
+      );
       return {
         data: response.map((user) => user.getApiData()),
         pagination: {

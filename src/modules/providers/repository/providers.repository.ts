@@ -9,6 +9,11 @@ export class ProvidersRepositoryImpl {
     private providerRepository: Repository<Provider>,
   ) {}
 
+  async count(options?: FindManyOptions<Provider>): Promise<number> {
+    const response = await this.providerRepository.count(options);
+    return response;
+  }
+
   async findAll(options?: FindManyOptions<Provider>): Promise<Provider[]> {
     const response = await this.providerRepository.find(options);
     return response;
