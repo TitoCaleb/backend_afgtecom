@@ -19,6 +19,10 @@ export class BaseService {
     return await this.baseRepository.findAllRol();
   }
 
+  async findAllCountry() {
+    return await this.baseRepository.findAllCountry();
+  }
+
   async findAllDepartment() {
     return await this.baseRepository.findAllDepartment();
   }

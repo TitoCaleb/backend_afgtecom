@@ -23,6 +23,7 @@ export class ProvidersRepositoryImpl {
         'employees',
         'paymentTerm',
         'businessSector',
+        'country',
       ],
     });
 

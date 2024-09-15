@@ -2,6 +2,7 @@ import { Bank } from 'src/domain/Banks';
 import { BusinessSector } from 'src/domain/BusinessSector';
 import { PaymentTerm } from 'src/domain/PaymentTerm';
 import { Provider } from 'src/domain/Provider';
+import { Country } from 'src/domain/Ubigeo/Country';
 import { z } from 'zod';
 
 export enum Action {
@@ -15,7 +16,7 @@ export const createProviderSchema = z
     phone: z.string().length(7),
     documentNumber: z.string().length(11),
     email: z.string().email(),
-    country: z.string().min(3).max(100),
+    country: z.string(),
     address: z.string().min(3).max(100),
     creditLine: z.string().min(3).max(50),
     paymentTerm: z.string().uuid(),
@@ -26,6 +27,7 @@ export const createProviderSchema = z
     ...data,
     businessSector: data.businessSector.map((id) => new BusinessSector({ id })),
     paymentTerm: new PaymentTerm({ id: data.paymentTerm }),
+    country: new Country({ id: data.country }),
   }));
 
 export const updateProviderSchema = z
@@ -35,7 +37,7 @@ export const updateProviderSchema = z
     phone: z.string().length(7).optional(),
     documentNumber: z.string().length(11).optional(),
     email: z.string().email().optional(),
-    country: z.string().min(3).max(100).optional(),
+    country: z.string().optional(),
     address: z.string().min(3).max(100).optional(),
     creditLine: z.string().min(3).max(50).optional(),
     paymentTerm: z.string().uuid().optional(),
@@ -54,6 +56,7 @@ export const updateProviderSchema = z
     ...(data.paymentTerm && {
       paymentTerm: new PaymentTerm({ id: data.paymentTerm }),
     }),
+    ...(data.country && { country: new Country({ id: data.country }) }),
   }));
 
 export const createBankAccountSchema = z

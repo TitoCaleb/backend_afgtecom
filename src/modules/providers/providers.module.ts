@@ -22,6 +22,14 @@ import { Device } from 'src/domain/Device';
 import { Client } from 'src/domain/Client';
 import { Token } from 'src/domain/Token';
 import { PaymentTermRepositoryImpl } from '../paymentTerm/repository/paymentTerm.repository';
+import { BaseRepositoryImpl } from '../base/repository/base.repository';
+import { DocumentType } from 'src/domain/DocumentType';
+import { CivilStatus } from 'src/domain/CivilStatus';
+import { Rol } from 'src/domain/Rol';
+import { Country } from 'src/domain/Ubigeo/Country';
+import { Department } from 'src/domain/Ubigeo/Department';
+import { Province } from 'src/domain/Ubigeo/Province';
+import { District } from 'src/domain/Ubigeo/District';
 
 @Module({
   imports: [
@@ -35,6 +43,13 @@ import { PaymentTermRepositoryImpl } from '../paymentTerm/repository/paymentTerm
       Device,
       Client,
       Token,
+      DocumentType,
+      CivilStatus,
+      Rol,
+      Country,
+      Department,
+      Province,
+      District,
     ]),
   ],
   controllers: [
@@ -53,6 +68,7 @@ import { PaymentTermRepositoryImpl } from '../paymentTerm/repository/paymentTerm
     BusinessSectorRepositoryImpl,
     SecurityRepositoryImpl,
     PaymentTermRepositoryImpl,
+    BaseRepositoryImpl,
   ],
 })
 export class ProvidersModule {}

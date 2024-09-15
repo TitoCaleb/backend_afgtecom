@@ -15,6 +15,7 @@ import { Token } from 'src/domain/Token';
 import { Department } from 'src/domain/Ubigeo/Department';
 import { Province } from 'src/domain/Ubigeo/Province';
 import { District } from 'src/domain/Ubigeo/District';
+import { Country } from 'src/domain/Ubigeo/Country';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { District } from 'src/domain/Ubigeo/District';
       Department,
       Province,
       District,
+      Country,
     ]),
   ],
   providers: [

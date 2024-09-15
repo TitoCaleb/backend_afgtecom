@@ -45,6 +45,18 @@ export class BaseController {
     }
   }
 
+  @Get('countries')
+  async findAllCountry(@Res({ passthrough: true }) res: Response) {
+    try {
+      const response = await this.baseService.findAllCountry();
+      return {
+        data: response,
+      };
+    } catch (e: any) {
+      return ApiResponseError(e, res);
+    }
+  }
+
   @Get('ubigeo/department')
   async findAllDepartment(@Res({ passthrough: true }) res: Response) {
     try {

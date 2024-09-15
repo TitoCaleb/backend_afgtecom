@@ -7,6 +7,7 @@ import { NotFoundException } from '@nestjs/common';
 import { Province } from 'src/domain/Ubigeo/Province';
 import { Repository } from 'typeorm';
 import { Rol } from 'src/domain/Rol';
+import { Country } from 'src/domain/Ubigeo/Country';
 
 export class BaseRepositoryImpl {
   constructor(
@@ -22,6 +23,8 @@ export class BaseRepositoryImpl {
     private readonly provinceRepository: Repository<Province>,
     @InjectRepository(District)
     private readonly districtRepository: Repository<District>,
+    @InjectRepository(Country)
+    private readonly countryRepository: Repository<Country>,
   ) {}
 
   async findAllDocumentType() {
@@ -32,6 +35,21 @@ export class BaseRepositoryImpl {
   }
   async findAllRol() {
     return await this.rolRepository.find();
+  }
+
+  async findAllCountry() {
+    return await this.countryRepository.find();
+  }
+
+  async findCountryById(request: Country) {
+    const response = await this.countryRepository.findOneBy({
+      id: request.id,
+    });
+
+    if (!response) {
+      throw new NotFoundException('Country not found');
+    }
+    return response;
   }
 
   async findAllDepartment() {

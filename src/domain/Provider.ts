@@ -12,6 +12,7 @@ import { BankAccount } from './BankAccount';
 import { BusinessSector } from './BusinessSector';
 import { PaymentTerm } from './PaymentTerm';
 import { Status } from 'src/utils/enums';
+import { Country } from './Ubigeo/Country';
 
 @Entity({ name: 'provider' })
 export class Provider {
@@ -30,8 +31,8 @@ export class Provider {
   @Column({ type: 'varchar', length: 100 })
   email: string;
 
-  @Column({ type: 'varchar', length: 100 })
-  country: string;
+  @ManyToOne(() => Country, (country) => country.id)
+  country: Country;
 
   @Column({ type: 'varchar', length: 100 })
   address: string;

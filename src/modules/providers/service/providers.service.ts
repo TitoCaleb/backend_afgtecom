@@ -1,9 +1,10 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { ProvidersRepositoryImpl } from '../repository/providers.repository';
 import { Provider } from 'src/domain/Provider';
 import { PaymentTermRepositoryImpl } from 'src/modules/paymentTerm/repository/paymentTerm.repository';
 import { Status } from 'src/utils/enums';
 import { BusinessSectorRepositoryImpl } from 'src/modules/business-sector/repository/business-sector.repository';
+import { BaseRepositoryImpl } from 'src/modules/base/repository/base.repository';
 
 @Injectable()
 export class ProvidersService {
@@ -11,6 +12,7 @@ export class ProvidersService {
     private providersRepository: ProvidersRepositoryImpl,
     private paymentTermRepository: PaymentTermRepositoryImpl,
     private businessSectorRepository: BusinessSectorRepositoryImpl,
+    private baseRepository: BaseRepositoryImpl,
   ) {}
 
   async findAll() {
@@ -26,6 +28,8 @@ export class ProvidersService {
   }
 
   async create(request: Provider) {
+    await this.baseRepository.findCountryById(request.country);
+
     await this.paymentTermRepository.findOne({
       where: { id: request.paymentTerm.id },
     });
@@ -48,6 +52,20 @@ export class ProvidersService {
 
   async update(request: Provider) {
     const providerDb = await this.providersRepository.findById(request);
+
+    if (request.paymentTerm) {
+      const paymentTerm = await this.paymentTermRepository.findOne({
+        where: { id: request.paymentTerm.id },
+      });
+
+      if (!paymentTerm) {
+        throw new NotFoundException('Payment term not found');
+      }
+    }
+
+    if (request.country) {
+      await this.baseRepository.findCountryById(request.country);
+    }
 
     if (request.businessSector && request.businessSector.length > 0) {
       const businessSector = await Promise.all(
