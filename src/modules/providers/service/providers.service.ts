@@ -15,20 +15,25 @@ export class ProvidersService {
     private baseRepository: BaseRepositoryImpl,
   ) {}
 
-  async findAll(dynamicQuery: QueryProvider, limit: number, offset: number) {
+  async findAll({ limit = 10, offset = 0, ...dynamicQuery }: QueryProvider) {
+    const pagination = {
+      limit: Number(limit),
+      offset: Number(offset),
+    };
     const total = await this.providersRepository.count({
       where: { status: Status.ACTIVE, ...dynamicQuery },
     });
     const response = await this.providersRepository.findAll({
       where: { status: Status.ACTIVE, ...dynamicQuery },
       relations: ['businessSector'],
-      take: Number(limit),
-      skip: Number(offset),
+      take: pagination.limit,
+      skip: pagination.offset,
     });
 
     return {
       response,
       total,
+      pagination,
     };
   }
 

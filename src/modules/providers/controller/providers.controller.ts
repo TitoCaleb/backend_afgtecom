@@ -35,26 +35,33 @@ export class ProvidersController {
     if (query.documentNumber) {
       where.documentNumber = Like(`%${query.documentNumber}%`);
     }
+    if (query.limit) {
+      where.limit = query.limit;
+    }
+    if (query.offset) {
+      where.offset = query.offset;
+    }
     return where;
   }
 
   @Get()
   async findAll(
     @Res({ passthrough: true }) res: Response,
-    @Query() { limit = 10, offset = 0, documentNumber, name }: QueryProvider,
+    @Query() { limit, offset, documentNumber, name }: QueryProvider,
   ) {
     try {
-      const { response, total } = await this.providerService.findAll(
-        this.dynamicQuery({ documentNumber, name }),
-        limit,
-        offset,
-      );
+      const { response, total, pagination } =
+        await this.providerService.findAll(
+          this.dynamicQuery({
+            documentNumber,
+            name,
+            limit,
+            offset,
+          }),
+        );
       return {
         data: response.map((provider) => provider.getApiData()),
-        pagination: {
-          limit,
-          offset,
-        },
+        pagination,
         total,
       };
     } catch (e: any) {
@@ -94,7 +101,7 @@ export class ProvidersController {
       res.status(HttpStatus.CREATED);
       return response.getApiData();
     } catch (e: any) {
-      res.status(HttpStatus.NOT_FOUND);
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR);
       return ApiResponseError(e, res);
     }
   }
@@ -114,6 +121,7 @@ export class ProvidersController {
       res.status(HttpStatus.OK);
       return response.getApiData();
     } catch (e: any) {
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR);
       return ApiResponseError(e, res);
     }
   }
@@ -130,6 +138,7 @@ export class ProvidersController {
       res.status(HttpStatus.OK);
       return response.getApiData();
     } catch (e: any) {
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR);
       return ApiResponseError(e, res);
     }
   }
