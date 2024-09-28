@@ -1,7 +1,7 @@
 import { BankAccount } from 'src/domain/BankAccount';
 import { BankAccountRepositoryImpl } from '../repository/bankAccount.repository';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { ProvidersRepositoryImpl } from '../repository/providers.repository';
+import { ProvidersRepositoryImpl } from '../../providers/repository/providers.repository';
 import { Provider } from 'src/domain/Provider';
 
 @Injectable()

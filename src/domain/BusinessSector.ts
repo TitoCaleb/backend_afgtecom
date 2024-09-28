@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { Status } from 'src/utils/enums';
 import { Provider } from './Provider';
+import { Customer } from './Customer';
 
 @Entity({ name: 'business_sector' })
 export class BusinessSector {
@@ -19,6 +20,9 @@ export class BusinessSector {
 
   @ManyToMany(() => Provider, (provider) => provider.businessSector)
   providers: Provider[];
+
+  @ManyToMany(() => Customer, (customer) => customer.businessSector)
+  customers: Customer[];
 
   @Column({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;

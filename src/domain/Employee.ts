@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Provider } from './Provider';
 import { Status } from 'src/utils/enums';
+import { Customer } from './Customer';
 
 @Entity({ name: 'employee' })
 export class Employee {
@@ -37,6 +38,9 @@ export class Employee {
   @ManyToOne(() => Provider, (provider) => provider.employees)
   provider: Provider;
 
+  @ManyToOne(() => Customer, (provider) => provider.employees)
+  customer: Customer;
+
   @Column({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;
 
@@ -65,6 +69,7 @@ export class Employee {
       position: this.position,
       comments: this.comments,
       provider: this.provider,
+      customer: this.customer,
       status: this.status,
     };
   }

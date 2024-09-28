@@ -12,7 +12,7 @@ export const createUserSchema = z
     middleName: z.string().optional(),
     lastName: z.string(),
     motherLastName: z.string(),
-    phone: z.string().regex(/^\+\d{4,}$/, 'Invalid field mobile'),
+    phone: z.string().regex(/^\+51[9]\d{8}$/, 'Invalid field mobile'),
     address: z.string(),
     documentType: z.string(),
     documentNumber: z.string(),

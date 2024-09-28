@@ -1,13 +1,15 @@
 import { BusinessSector } from 'src/domain/BusinessSector';
+import { CustomerType } from 'src/domain/Customer';
 import { PaymentTerm } from 'src/domain/PaymentTerm';
 import { Country } from 'src/domain/Ubigeo/Country';
 import { z } from 'zod';
 
-export const createProviderSchema = z
+export const createCustomerSchema = z
   .object({
+    type: z.enum([CustomerType.INDIVIDUAL, CustomerType.BUSINESS]),
     name: z.string().min(3).max(100),
-    phone: z.string().length(7),
-    documentNumber: z.string().length(11),
+    documentNumber: z.string(), // falta validar si es un DNI o RUC
+    phone: z.string().regex(/^\+51[9]\d{8}$/, 'Invalid field mobile'),
     email: z.string().email(),
     country: z.string(),
     address: z.string().min(3).max(100),
@@ -23,18 +25,18 @@ export const createProviderSchema = z
     country: new Country({ id: data.country }),
   }));
 
-export const updateProviderSchema = z
+export const updateCustomerSchema = z
   .object({
-    id: z.string().uuid(),
-    name: z.string().min(3).max(100).optional(),
-    phone: z.string().length(7).optional(),
-    documentNumber: z.string().length(11).optional(),
-    email: z.string().email().optional(),
-    country: z.string().optional(),
-    address: z.string().min(3).max(100).optional(),
-    creditLine: z.string().min(3).max(50).optional(),
-    paymentTerm: z.string().uuid().optional(),
-    businessSector: z.array(z.string().uuid()).optional(),
+    type: z.enum([CustomerType.INDIVIDUAL, CustomerType.BUSINESS]),
+    name: z.string().min(3).max(100),
+    documentNumber: z.string(), // falta validar si es un DNI o RUC
+    phone: z.string().regex(/^\+51[9]\d{8}$/, 'Invalid field mobile'),
+    email: z.string().email(),
+    country: z.string(),
+    address: z.string().min(3).max(100),
+    creditLine: z.string().min(3).max(50),
+    paymentTerm: z.string().uuid(),
+    businessSector: z.array(z.string().uuid()).min(1),
     status: z.enum(['ACTIVE', 'INACTIVE', 'DELETED']).optional(),
   })
   .strict()

@@ -13,6 +13,9 @@ import { ProvidersModule } from './modules/providers/providers.module';
 import { SecurityModule } from './modules/security/security.module';
 import { UsersModule } from './modules/users/users.module';
 import { PaymentTermModule } from './modules/paymentTerm/paymentTerm.module';
+import { CustomersModule } from './modules/customers/customers.module';
+import { EmployeesModule } from './modules/employees/employees.module';
+import { BankAccountsModule } from './modules/bankAccounts/bankAccounts.module';
 
 @Module({
   imports: [
@@ -32,6 +35,9 @@ import { PaymentTermModule } from './modules/paymentTerm/paymentTerm.module';
     BanksModule,
     CategoriesModule,
     PaymentTermModule,
+    CustomersModule,
+    EmployeesModule,
+    BankAccountsModule,
   ],
 })
 export class AppModule {}
