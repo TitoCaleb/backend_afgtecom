@@ -23,11 +23,11 @@ import { EmployeeService } from '../service/employees.service';
 import { TokenGuard } from 'src/modules/security/guards';
 
 @UseGuards(TokenGuard)
-@Controller('providers')
+@Controller('employees')
 export class EmployeesController {
   constructor(private providerService: EmployeeService) {}
 
-  @Get(':providerId/employees')
+  @Get(':providerId/providers')
   async findEmployeesByProvider(
     @Res({ passthrough: true }) res: Response,
     @Param('providerId') providerId: string,
@@ -46,7 +46,7 @@ export class EmployeesController {
     }
   }
 
-  @Post(':providerId/employees')
+  @Post(':providerId/providers')
   async addEmployeeToProvider(
     @Res({ passthrough: true }) res: Response,
     @Param('providerId') providerId: string,
@@ -67,27 +67,7 @@ export class EmployeesController {
     }
   }
 
-  @Delete(':providerId/employees/:employeeId')
-  async removeEmployeeFromProvider(
-    @Res({ passthrough: true }) res: Response,
-    @Param('providerId') providerId: string,
-    @Param('employeeId') employeeId: string,
-  ) {
-    try {
-      const request = await deleteEmployeeSchema.parseAsync({
-        id: employeeId,
-        provider: providerId,
-      });
-      const response = await this.providerService.removeEmployeeFromProvider(
-        new Employee(request),
-      );
-      res.status(HttpStatus.OK);
-      return response.getApiData();
-    } catch (e: any) {
-      return ApiResponseError(e, res);
-    }
-  }
-  @Put(':providerId/employees/:employeeId')
+  @Put(':employeeId/providers/:providerId')
   async updateEmployeeFromProvider(
     @Res({ passthrough: true }) res: Response,
     @Param('providerId') providerId: string,
@@ -104,6 +84,27 @@ export class EmployeesController {
           ...request,
           provider: new Provider({ id: providerId }),
         }),
+      );
+      res.status(HttpStatus.OK);
+      return response.getApiData();
+    } catch (e: any) {
+      return ApiResponseError(e, res);
+    }
+  }
+
+  @Delete(':employeeId/providers/:providerId')
+  async removeEmployeeFromProvider(
+    @Res({ passthrough: true }) res: Response,
+    @Param('providerId') providerId: string,
+    @Param('employeeId') employeeId: string,
+  ) {
+    try {
+      const request = await deleteEmployeeSchema.parseAsync({
+        id: employeeId,
+        provider: providerId,
+      });
+      const response = await this.providerService.removeEmployeeFromProvider(
+        new Employee(request),
       );
       res.status(HttpStatus.OK);
       return response.getApiData();

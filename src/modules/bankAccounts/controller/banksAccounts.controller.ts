@@ -11,15 +11,16 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import {
-  createBankAccountSchema,
-  updateBankAccountSchema,
-} from './schema/providersSchema';
+
 import { Response } from 'express';
 import { ApiResponseError } from 'src/errors/handleErrors';
 import { BankAccountService } from '../service/bankAccount.service';
 import { Provider } from 'src/domain/Provider';
 import { TokenGuard } from 'src/modules/security/guards';
+import {
+  createBankAccountSchema,
+  updateBankAccountSchema,
+} from './schema/banksAccountSchema';
 
 @UseGuards(TokenGuard)
 @Controller('bank-accounts')

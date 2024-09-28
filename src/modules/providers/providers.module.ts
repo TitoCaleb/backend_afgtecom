@@ -1,15 +1,13 @@
 import { Bank } from 'src/domain/Banks';
 import { BankAccount } from 'src/domain/BankAccount';
-import { BankAccountRepositoryImpl } from './repository/bankAccount.repository';
-import { BankAccountService } from './service/bankAccount.service';
-import { BanksAccountController } from './controller/banksAccounts.controller';
+import { BankAccountRepositoryImpl } from '../bankAccounts/repository/bankAccount.repository';
+import { BankAccountService } from '../bankAccounts/service/bankAccount.service';
 import { BanksRepositoryImpl } from '../banks/repository/banks.repository';
 import { BusinessSector } from 'src/domain/BusinessSector';
 import { BusinessSectorRepositoryImpl } from '../business-sector/repository/business-sector.repository';
 import { Employee } from 'src/domain/Employee';
-import { EmployeesController } from './controller/employees.controller';
-import { EmployeeService } from './service/employees.service';
-import { EmployeesRepositoryImpl } from './repository/employees.repository';
+import { EmployeeService } from '../employees/service/employees.service';
+import { EmployeesRepositoryImpl } from '../employees/repository/employees.repository';
 import { Module } from '@nestjs/common';
 import { Provider } from 'src/domain/Provider';
 import { ProvidersController } from './controller/providers.controller';
@@ -30,10 +28,14 @@ import { Country } from 'src/domain/Ubigeo/Country';
 import { Department } from 'src/domain/Ubigeo/Department';
 import { Province } from 'src/domain/Ubigeo/Province';
 import { District } from 'src/domain/Ubigeo/District';
+import { CustomersService } from '../customers/service/customers.service';
+import { CustomersRepositoryImpl } from '../customers/repository/customers.repository';
+import { Customer } from 'src/domain/Customer';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
+      Customer,
       Employee,
       Provider,
       Bank,
@@ -52,12 +54,10 @@ import { District } from 'src/domain/Ubigeo/District';
       District,
     ]),
   ],
-  controllers: [
-    ProvidersController,
-    EmployeesController,
-    BanksAccountController,
-  ],
+  controllers: [ProvidersController],
   providers: [
+    CustomersService,
+    CustomersRepositoryImpl,
     ProvidersService,
     ProvidersRepositoryImpl,
     EmployeeService,

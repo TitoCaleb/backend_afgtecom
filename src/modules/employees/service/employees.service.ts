@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { EmployeesRepositoryImpl } from '../repository/employees.repository';
-import { ProvidersRepositoryImpl } from '../repository/providers.repository';
+import { ProvidersRepositoryImpl } from '../../providers/repository/providers.repository';
 import { Provider } from 'src/domain/Provider';
 import { Employee } from 'src/domain/Employee';
 
