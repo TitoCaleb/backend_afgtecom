@@ -24,6 +24,7 @@ export class CustomersService {
       where: { status: Status.ACTIVE, ...dynamicQuery },
     });
     const response = await this.customersRepository.findAll({
+      relations: ['businessSector'],
       where: { status: Status.ACTIVE, ...dynamicQuery },
       take: pagination.limit,
       skip: pagination.offset,
