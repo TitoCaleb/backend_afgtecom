@@ -13,7 +13,6 @@ export const createCustomerSchema = z
     email: z.string().email(),
     country: z.string(),
     address: z.string().min(3).max(100),
-    creditLine: z.string().min(3).max(50),
     paymentTerm: z.string().uuid(),
     businessSector: z.array(z.string().uuid()).min(1),
   })
@@ -27,6 +26,7 @@ export const createCustomerSchema = z
 
 export const updateCustomerSchema = z
   .object({
+    id: z.string().uuid(),
     type: z.enum([CustomerType.INDIVIDUAL, CustomerType.BUSINESS]),
     name: z.string().min(3).max(100),
     documentNumber: z.string(), // falta validar si es un DNI o RUC
@@ -34,7 +34,6 @@ export const updateCustomerSchema = z
     email: z.string().email(),
     country: z.string(),
     address: z.string().min(3).max(100),
-    creditLine: z.string().min(3).max(50),
     paymentTerm: z.string().uuid(),
     businessSector: z.array(z.string().uuid()).min(1),
     status: z.enum(['ACTIVE', 'INACTIVE', 'DELETED']).optional(),

@@ -91,13 +91,12 @@ export class Customer {
       type: this.type,
       name: this.name,
       documentNumber: this.documentNumber,
+      address: this.address,
       phone: this.phone,
       email: this.email,
       country: this.country,
       businessSector: this.businessSector,
       paymentTerm: this.paymentTerm,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
       status: this.status,
     };
   }
