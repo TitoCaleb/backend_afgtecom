@@ -1,5 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './User';
+import { BaseDomain } from './BaseDomain';
 
 export enum CivilStatusEnum {
   SINGLE = 'SINGLE',
@@ -9,7 +10,7 @@ export enum CivilStatusEnum {
 }
 
 @Entity({ name: 'civil_status' })
-export class CivilStatus {
+export class CivilStatus extends BaseDomain {
   @PrimaryGeneratedColumn('uuid')
   @OneToMany(() => User, (user) => user.civilStatus)
   id: string;
@@ -17,13 +18,8 @@ export class CivilStatus {
   @Column({ type: 'varchar', length: 100, name: 'name', unique: true })
   name: CivilStatusEnum;
 
-  @Column({ type: 'timestamp', name: 'created_at' })
-  createdAt: Date;
-
-  @Column({ type: 'timestamp', name: 'update_at' })
-  updatedAt: Date;
-
   constructor(data: Partial<CivilStatus>) {
+    super();
     if (data) {
       Object.assign(this, data);
     }

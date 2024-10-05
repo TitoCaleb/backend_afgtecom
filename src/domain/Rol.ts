@@ -1,5 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './User';
+import { BaseDomain } from './BaseDomain';
 
 export enum RolName {
   ADMIN = 'ADMIN',
@@ -8,7 +9,7 @@ export enum RolName {
 }
 
 @Entity({ name: 'rol' })
-export class Rol {
+export class Rol extends BaseDomain {
   @PrimaryGeneratedColumn('uuid')
   @OneToMany(() => User, (user) => user.rol)
   id: string;
@@ -16,13 +17,8 @@ export class Rol {
   @Column({ type: 'varchar', length: 100, name: 'name' })
   name: RolName;
 
-  @Column({ type: 'timestamp', name: 'created_at' })
-  createdAt: Date;
-
-  @Column({ type: 'timestamp', name: 'update_at' })
-  updatedAt: Date;
-
   constructor(data: Partial<Rol>) {
+    super();
     if (data) {
       Object.assign(this, data);
     }

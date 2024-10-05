@@ -1,10 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity } from 'typeorm';
+import { BaseDomain } from './BaseDomain';
 
 @Entity({ name: 'device' })
-export class Device {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class Device extends BaseDomain {
   @Column({ type: 'varchar', length: 100, name: 'device_name' })
   deviceName: string;
 
@@ -12,6 +10,7 @@ export class Device {
   deviceUuid: string;
 
   constructor(data: Partial<Device>) {
+    super();
     if (data) {
       Object.assign(this, data);
     }

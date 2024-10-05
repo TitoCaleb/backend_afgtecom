@@ -19,13 +19,13 @@ import { BankAccountsModule } from './modules/bankAccounts/bankAccounts.module';
 
 @Module({
   imports: [
-    SecurityModule,
-    DatabaseModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: enviroments[process.env.NODE_ENV] || './env/.env',
       load: [config],
     }),
+    SecurityModule,
+    DatabaseModule,
     BaseModule,
     UsersModule,
     BrandsModule,

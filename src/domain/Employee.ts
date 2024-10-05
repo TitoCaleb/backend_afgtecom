@@ -1,13 +1,11 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { Provider } from './Provider';
 import { Status } from 'src/utils/enums';
 import { Customer } from './Customer';
+import { BaseDomain } from './BaseDomain';
 
 @Entity({ name: 'employee' })
-export class Employee {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class Employee extends BaseDomain {
   @Column({ type: 'varchar', length: 100 })
   name: string;
 
@@ -41,16 +39,11 @@ export class Employee {
   @ManyToOne(() => Customer, (provider) => provider.employees)
   customer: Customer;
 
-  @Column({ type: 'timestamp', name: 'created_at' })
-  createdAt: Date;
-
-  @Column({ type: 'timestamp', name: 'update_at' })
-  updatedAt: Date;
-
   @Column({ type: 'enum', name: 'status', enum: Status })
   status: string;
 
   constructor(data: Partial<Employee>) {
+    super();
     if (data) {
       Object.assign(this, data);
     }

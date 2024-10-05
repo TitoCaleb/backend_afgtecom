@@ -1,8 +1,9 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './User';
+import { BaseDomain } from './BaseDomain';
 
 @Entity({ name: 'document_type' })
-export class DocumentType {
+export class DocumentType extends BaseDomain {
   @PrimaryGeneratedColumn('uuid')
   @OneToMany(() => User, (user) => user.documentType)
   id: string;
@@ -16,13 +17,8 @@ export class DocumentType {
   @Column({ type: 'int', name: 'size' })
   size: number;
 
-  @Column({ type: 'timestamp', name: 'created_at' })
-  createdAt: Date;
-
-  @Column({ type: 'timestamp', name: 'update_at' })
-  updatedAt: Date;
-
   constructor(data: Partial<DocumentType>) {
+    super();
     if (data) {
       Object.assign(this, data);
     }

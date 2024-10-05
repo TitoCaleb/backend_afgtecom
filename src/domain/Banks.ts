@@ -1,28 +1,21 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { BankAccount } from './BankAccount';
 import { Status } from 'src/utils/enums';
+import { BaseDomain } from './BaseDomain';
 
 @Entity({ name: 'bank' })
-export class Bank {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class Bank extends BaseDomain {
   @Column({ type: 'varchar', length: 100, unique: true })
   name: string;
 
   @OneToMany(() => BankAccount, (bankAccount) => bankAccount.bank)
   bankAccounts: BankAccount[];
 
-  @Column({ type: 'timestamp', name: 'created_at' })
-  createdAt: Date;
-
-  @Column({ type: 'timestamp', name: 'update_at' })
-  updatedAt: Date;
-
   @Column({ type: 'enum', name: 'status', enum: Status })
   status: string;
 
   constructor(data: Partial<Bank>) {
+    super();
     if (data) {
       Object.assign(this, data);
     }

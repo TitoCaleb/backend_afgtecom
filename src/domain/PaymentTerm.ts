@@ -1,20 +1,12 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { Provider } from './Provider';
 import { Status } from 'src/utils/enums';
+import { BaseDomain } from './BaseDomain';
 
 @Entity({ name: 'payment_term' })
-export class PaymentTerm {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class PaymentTerm extends BaseDomain {
   @Column({ type: 'varchar', length: 255, name: 'condition', unique: true })
   condition: string;
-
-  @Column({ type: 'timestamp', name: 'created_at' })
-  createdAt: Date;
-
-  @Column({ type: 'timestamp', name: 'update_at' })
-  updatedAt: Date;
 
   @OneToMany(() => Provider, (provider) => provider.paymentTerm)
   providers: Provider[];
@@ -23,6 +15,7 @@ export class PaymentTerm {
   status: string;
 
   constructor(data?: Partial<PaymentTerm>) {
+    super();
     if (data) {
       Object.assign(this, data);
     }

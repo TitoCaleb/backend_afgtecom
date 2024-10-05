@@ -5,7 +5,6 @@ import {
   ManyToMany,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Employee } from './Employee';
 import { BankAccount } from './BankAccount';
@@ -13,6 +12,7 @@ import { BusinessSector } from './BusinessSector';
 import { PaymentTerm } from './PaymentTerm';
 import { Status } from 'src/utils/enums';
 import { Country } from './Ubigeo/Country';
+import { BaseDomain } from './BaseDomain';
 
 export interface QueryProvider extends Query {
   name?: string;
@@ -20,10 +20,7 @@ export interface QueryProvider extends Query {
 }
 
 @Entity({ name: 'provider' })
-export class Provider {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class Provider extends BaseDomain {
   @Column({ type: 'varchar', length: 100, unique: true })
   name: string;
 
@@ -54,12 +51,6 @@ export class Provider {
   @ManyToOne(() => PaymentTerm, (paymentTerm) => paymentTerm.id)
   paymentTerm: PaymentTerm;
 
-  @Column({ type: 'timestamp', name: 'created_at' })
-  createdAt: Date;
-
-  @Column({ type: 'timestamp', name: 'update_at' })
-  updatedAt: Date;
-
   @Column({ type: 'enum', name: 'status', enum: Status })
   status: string;
 
@@ -79,6 +70,7 @@ export class Provider {
   businessSector: BusinessSector[];
 
   constructor(data: Partial<Provider>) {
+    super();
     if (data) {
       Object.assign(this, data);
     }

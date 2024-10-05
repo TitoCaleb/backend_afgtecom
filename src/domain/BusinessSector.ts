@@ -1,19 +1,11 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  Index,
-  ManyToMany,
-} from 'typeorm';
+import { Column, Entity, Index, ManyToMany } from 'typeorm';
 import { Status } from 'src/utils/enums';
 import { Provider } from './Provider';
 import { Customer } from './Customer';
+import { BaseDomain } from './BaseDomain';
 
 @Entity({ name: 'business_sector' })
-export class BusinessSector {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class BusinessSector extends BaseDomain {
   @Column({ type: 'varchar', length: 100 })
   @Index({ unique: true })
   name: string;
@@ -24,16 +16,11 @@ export class BusinessSector {
   @ManyToMany(() => Customer, (customer) => customer.businessSector)
   customers: Customer[];
 
-  @Column({ type: 'timestamp', name: 'created_at' })
-  createdAt: Date;
-
-  @Column({ type: 'timestamp', name: 'update_at' })
-  updatedAt: Date;
-
   @Column({ type: 'enum', name: 'status', enum: Status })
   status: string;
 
   constructor(data: Partial<BusinessSector>) {
+    super();
     if (data) {
       Object.assign(this, data);
     }

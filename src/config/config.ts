@@ -18,5 +18,8 @@ export default registerAs('config', () => {
       secret: process.env.JWT_SECRET,
       ENCRYPTION_KEY: process.env.ENCRYPTION_KEY,
     },
+    nest: {
+      port: parseInt(process.env.PORT),
+    },
   };
 });

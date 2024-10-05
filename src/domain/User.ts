@@ -13,6 +13,7 @@ import { District } from './Ubigeo/District';
 import { Department } from './Ubigeo/Department';
 import { Province } from './Ubigeo/Province';
 import { Status } from 'src/utils/enums';
+import { BaseDomain } from './BaseDomain';
 
 export interface UserModifyPassword {
   id?: string;
@@ -27,7 +28,7 @@ export interface QueryUser extends Query {
 }
 
 @Entity({ name: 'user' })
-export class User {
+export class User extends BaseDomain {
   @PrimaryGeneratedColumn('uuid')
   @OneToOne(() => Token, (token) => token.userId)
   id: string;
@@ -87,13 +88,8 @@ export class User {
   @OneToOne(() => Token, (token) => token.id)
   tokenId: string;
 
-  @Column({ type: 'timestamp', name: 'created_at' })
-  createdAt: Date;
-
-  @Column({ type: 'timestamp', name: 'update_at' })
-  updatedAt: Date;
-
   constructor(data: Partial<User>) {
+    super();
     if (data) {
       Object.assign(this, data);
     }

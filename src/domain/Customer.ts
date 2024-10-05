@@ -5,13 +5,13 @@ import {
   ManyToMany,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { BusinessSector } from './BusinessSector';
 import { Status } from 'src/utils/enums';
 import { PaymentTerm } from './PaymentTerm';
 import { Employee } from './Employee';
 import { Country } from './Ubigeo/Country';
+import { BaseDomain } from './BaseDomain';
 
 export enum CustomerType {
   INDIVIDUAL = 'INDIVIDUAL',
@@ -24,10 +24,7 @@ export interface QueryCustomer extends Query {
 }
 
 @Entity({ name: 'customer' })
-export class Customer {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class Customer extends BaseDomain {
   @Column({ type: 'enum', name: 'type', enum: CustomerType })
   type: CustomerType;
 
@@ -70,16 +67,11 @@ export class Customer {
   @ManyToOne(() => PaymentTerm, (paymentTerm) => paymentTerm.id)
   paymentTerm: PaymentTerm;
 
-  @Column({ type: 'timestamp', name: 'created_at' })
-  createdAt: Date;
-
-  @Column({ type: 'timestamp', name: 'update_at' })
-  updatedAt: Date;
-
   @Column({ type: 'enum', name: 'status', enum: Status })
   status: string;
 
   constructor(data: Partial<Customer>) {
+    super();
     if (data) {
       Object.assign(this, data);
     }

@@ -1,12 +1,7 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { Bank } from './Banks';
 import { Provider } from './Provider';
+import { BaseDomain } from 'src/domain/BaseDomain';
 
 export enum BankAccountType {
   SAVING = 'SAVING',
@@ -14,10 +9,7 @@ export enum BankAccountType {
 }
 
 @Entity({ name: 'bank_account' })
-export class BankAccount {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class BankAccount extends BaseDomain {
   @Column({ type: 'varchar', length: 100 })
   accountNumber: string;
 
@@ -34,13 +26,8 @@ export class BankAccount {
   @ManyToOne(() => Provider, (provider) => provider.bankAccounts)
   provider: Provider;
 
-  @Column({ type: 'timestamp', name: 'created_at' })
-  createdAt: Date;
-
-  @Column({ type: 'timestamp', name: 'update_at' })
-  updatedAt: Date;
-
   constructor(data: Partial<BankAccount>) {
+    super();
     if (data) {
       Object.assign(this, data);
     }

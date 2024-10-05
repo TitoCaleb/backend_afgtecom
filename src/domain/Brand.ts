@@ -1,20 +1,12 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { Line } from './Line';
 import { Status } from 'src/utils/enums';
+import { BaseDomain } from './BaseDomain';
 
 @Entity({ name: 'brand' })
-export class Brand {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class Brand extends BaseDomain {
   @Column({ type: 'varchar', length: 255, name: 'name', unique: true })
   name: string;
-
-  @Column({ type: 'timestamp', name: 'created_at' })
-  createdAt: Date;
-
-  @Column({ type: 'timestamp', name: 'update_at' })
-  updatedAt: Date;
 
   @Column({ type: 'enum', name: 'status', enum: Status })
   status: string;
@@ -23,6 +15,7 @@ export class Brand {
   lines: Line[];
 
   constructor(data?: Partial<Brand>) {
+    super();
     if (data) {
       Object.assign(this, data);
     }

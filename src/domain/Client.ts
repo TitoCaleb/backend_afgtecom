@@ -1,7 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseDomain } from './BaseDomain';
 
 @Entity({ name: 'client' })
-export class Client {
+export class Client extends BaseDomain {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -12,6 +13,7 @@ export class Client {
   clientSecret: string;
 
   constructor(data: Partial<Client>) {
+    super();
     if (data) {
       Object.assign(this, data);
     }
