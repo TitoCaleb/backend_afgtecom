@@ -26,10 +26,10 @@ import { Bank } from 'src/domain/Banks';
 import { BankAccount } from 'src/domain/BankAccount';
 import { CivilStatus } from 'src/domain/CivilStatus';
 import { Rol } from 'src/domain/Rol';
-import { Country } from 'src/domain/Ubigeo/Country';
-import { Department } from 'src/domain/Ubigeo/Department';
-import { Province } from 'src/domain/Ubigeo/Province';
-import { District } from 'src/domain/Ubigeo/District';
+import { Country } from 'src/domain/Country';
+import { Department } from 'src/domain/Department';
+import { Province } from 'src/domain/Province';
+import { District } from 'src/domain/District';
 import { Provider } from 'src/domain/Provider';
 
 @Module({

@@ -1,9 +1,9 @@
 import { CivilStatus } from 'src/domain/CivilStatus';
 import { DocumentType } from 'src/domain/DocumentType';
 import { Rol } from 'src/domain/Rol';
-import { Department } from 'src/domain/Ubigeo/Department';
-import { District } from 'src/domain/Ubigeo/District';
-import { Province } from 'src/domain/Ubigeo/Province';
+import { Department } from 'src/domain/Department';
+import { District } from 'src/domain/District';
+import { Province } from 'src/domain/Province';
 import { z } from 'zod';
 
 export const createUserSchema = z

@@ -1,13 +1,13 @@
 import { CivilStatus } from 'src/domain/CivilStatus';
-import { Department } from 'src/domain/Ubigeo/Department';
-import { District } from 'src/domain/Ubigeo/District';
+import { Department } from 'src/domain/Department';
+import { District } from 'src/domain/District';
 import { DocumentType } from 'src/domain/DocumentType';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NotFoundException } from '@nestjs/common';
-import { Province } from 'src/domain/Ubigeo/Province';
+import { Province } from 'src/domain/Province';
 import { Repository } from 'typeorm';
 import { Rol } from 'src/domain/Rol';
-import { Country } from 'src/domain/Ubigeo/Country';
+import { Country } from 'src/domain/Country';
 
 export class BaseRepositoryImpl {
   constructor(

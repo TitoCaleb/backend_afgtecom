@@ -4,9 +4,9 @@ import { BaseRepositoryImpl } from 'src/modules/base/repository/base.repository'
 import { QueryUser, User, UserModifyPassword } from 'src/domain/User';
 import { generate } from 'generate-password';
 import * as bcrypt from 'bcrypt';
-import { District } from 'src/domain/Ubigeo/District';
-import { Province } from 'src/domain/Ubigeo/Province';
-import { Department } from 'src/domain/Ubigeo/Department';
+import { District } from 'src/domain/District';
+import { Province } from 'src/domain/Province';
+import { Department } from 'src/domain/Department';
 import { Status } from 'src/utils/enums';
 
 @Injectable()

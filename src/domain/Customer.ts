@@ -10,7 +10,7 @@ import { BusinessSector } from './BusinessSector';
 import { Status } from 'src/utils/enums';
 import { PaymentTerm } from './PaymentTerm';
 import { Employee } from './Employee';
-import { Country } from './Ubigeo/Country';
+import { Country } from './Country';
 import { BaseDomain } from './BaseDomain';
 
 export enum CustomerType {

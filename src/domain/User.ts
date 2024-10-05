@@ -9,9 +9,9 @@ import { DocumentType } from './DocumentType';
 import { CivilStatus } from './CivilStatus';
 import { Rol } from './Rol';
 import { Token } from './Token';
-import { District } from './Ubigeo/District';
-import { Department } from './Ubigeo/Department';
-import { Province } from './Ubigeo/Province';
+import { District } from './District';
+import { Department } from './Department';
+import { Province } from './Province';
 import { Status } from 'src/utils/enums';
 import { BaseDomain } from './BaseDomain';
 
