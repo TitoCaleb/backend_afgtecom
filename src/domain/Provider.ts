@@ -11,7 +11,7 @@ import { BankAccount } from './BankAccount';
 import { BusinessSector } from './BusinessSector';
 import { PaymentTerm } from './PaymentTerm';
 import { Status } from 'src/utils/enums';
-import { Country } from './Ubigeo/Country';
+import { Country } from './Country';
 import { BaseDomain } from './BaseDomain';
 
 export interface QueryProvider extends Query {

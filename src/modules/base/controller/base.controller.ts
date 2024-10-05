@@ -3,8 +3,8 @@ import { BaseService } from '../service/base.service';
 import { Response } from 'express';
 import { ApiResponseError } from 'src/errors/handleErrors';
 import { TokenGuard } from '../../security/guards';
-import { Department } from 'src/domain/Ubigeo/Department';
-import { Province } from 'src/domain/Ubigeo/Province';
+import { Department } from 'src/domain/Department';
+import { Province } from 'src/domain/Province';
 
 @UseGuards(TokenGuard)
 @Controller('base')

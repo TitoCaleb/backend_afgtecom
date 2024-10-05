@@ -1,6 +1,6 @@
 import { BusinessSector } from 'src/domain/BusinessSector';
 import { PaymentTerm } from 'src/domain/PaymentTerm';
-import { Country } from 'src/domain/Ubigeo/Country';
+import { Country } from 'src/domain/Country';
 import { z } from 'zod';
 
 export const createProviderSchema = z

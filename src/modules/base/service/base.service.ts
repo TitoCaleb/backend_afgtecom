@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BaseRepositoryImpl } from '../repository/base.repository';
-import { Department } from 'src/domain/Ubigeo/Department';
-import { Province } from 'src/domain/Ubigeo/Province';
+import { Department } from 'src/domain/Department';
+import { Province } from 'src/domain/Province';
 
 @Injectable()
 export class BaseService {
