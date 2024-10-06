@@ -36,7 +36,7 @@ export class User extends BaseDomain {
   @Column({ type: 'varchar', length: 100, name: 'name' })
   name: string;
 
-  @Column({ type: 'varchar', length: 100, name: 'middle_name' })
+  @Column({ type: 'varchar', length: 100, name: 'middle_name', default: '' })
   middleName?: string;
 
   @Column({ type: 'varchar', length: 100, name: 'last_name' })

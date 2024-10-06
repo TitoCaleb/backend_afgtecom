@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 import { Department } from './Department';
 import { Province } from './Province';
-import { User } from '../User';
+import { User } from './User';
 
 @Entity('ubigeo_peru_district')
 export class District {
