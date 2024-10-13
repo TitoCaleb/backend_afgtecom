@@ -1,17 +1,15 @@
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './User';
+import { BaseDomain } from './BaseDomain';
 
 @Entity({ name: 'token' })
-export class Token {
+export class Token extends BaseDomain {
   @PrimaryGeneratedColumn('uuid')
   @OneToOne(() => User, (user) => user.tokenId)
   id: string;
 
   @Column({ type: 'varchar', length: 100, name: 'token' })
   token: string;
-
-  @Column({ type: 'timestamp', name: 'created_at' })
-  createdAt: Date;
 
   @Column({ type: 'timestamp', name: 'expired_at' })
   expiredAt: Date;
@@ -33,6 +31,7 @@ export class Token {
   status: boolean;
 
   constructor(data: Partial<Token>) {
+    super();
     if (data) {
       Object.assign(this, data);
     }

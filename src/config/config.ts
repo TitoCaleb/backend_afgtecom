@@ -7,12 +7,11 @@ export default registerAs('config', () => {
       iv: process.env.ENCRYPTION_IV,
     },
     database: {
-      root: process.env.MYSQL_ROOT_PASSWORD,
-      username: process.env.MYSQL_USER,
-      password: process.env.MYSQL_PASSWORD,
-      database: process.env.MYSQL_DATABASE,
-      port: parseInt(process.env.MYSQL_PORT),
-      host: process.env.MYSQL_HOST,
+      username: process.env.POSTGRES_USER,
+      password: process.env.POSTGRES_PASSWORD,
+      database: process.env.POSTGRES_DB,
+      port: parseInt(process.env.POSTGRES_PORT),
+      host: process.env.POSTGRES_HOST,
     },
     jwt: {
       secret: process.env.JWT_SECRET,

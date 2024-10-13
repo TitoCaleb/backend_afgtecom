@@ -1,17 +1,13 @@
-version: '3.3'
-
 services:
-  mariadb:
-    image: mariadb:5.5
-    container_name: mariadb
+  postgres:
+    image: postgres:16
     environment:
-      - MYSQL_ROOT_PASSWORD=123456
-      - MYSQL_USER=TitoCaleb
-      - MYSQL_PASSWORD=Legendary
-      - MYSQL_DATABASE=afgtecomDBDev
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
-      - 3306:3306
+      - ${POSTGRES_PORT}:5432
     volumes:
-      - data_mariadb:/var/lib/mysql
+      - data_postgres:/var/lib/postgres/data
 volumes:
-  data_mariadb:
+  data_postgres:
