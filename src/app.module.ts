@@ -21,7 +21,7 @@ import { BankAccountsModule } from './modules/bankAccounts/bankAccounts.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: enviroments[process.env.NODE_ENV] || './prod/.env',
+      envFilePath: enviroments[process.env.NODE_ENV] || '.env',
       load: [config],
     }),
     SecurityModule,
