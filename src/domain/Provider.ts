@@ -51,8 +51,13 @@ export class Provider extends BaseDomain {
   @ManyToOne(() => PaymentTerm, (paymentTerm) => paymentTerm.id)
   paymentTerm: PaymentTerm;
 
-  @Column({ type: 'enum', name: 'status', enum: Status })
-  status: string;
+  @Column({
+    type: 'enum',
+    name: 'status',
+    enum: Status,
+    default: Status.ACTIVE,
+  })
+  status: Status;
 
   @ManyToMany(
     () => BusinessSector,

@@ -11,8 +11,13 @@ export class Bank extends BaseDomain {
   @OneToMany(() => BankAccount, (bankAccount) => bankAccount.bank)
   bankAccounts: BankAccount[];
 
-  @Column({ type: 'enum', name: 'status', enum: Status })
-  status: string;
+  @Column({
+    type: 'enum',
+    name: 'status',
+    enum: Status,
+    default: Status.ACTIVE,
+  })
+  status: Status;
 
   constructor(data: Partial<Bank>) {
     super();

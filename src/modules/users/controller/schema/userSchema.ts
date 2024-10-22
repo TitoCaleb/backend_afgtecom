@@ -33,7 +33,6 @@ export const createUserSchema = z
     district: new District({ id: data.district }),
     province: new Province({ id: data.province }),
     department: new Department({ id: data.department }),
-    status: 'ACTIVE',
   }));
 
 export const updateUserSchema = z

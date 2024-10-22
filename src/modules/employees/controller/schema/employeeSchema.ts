@@ -1,4 +1,5 @@
 import { Provider } from 'src/domain/Provider';
+import { Status } from 'src/utils/enums';
 import { z } from 'zod';
 
 export const createEmployeeSchema = z
@@ -50,6 +51,6 @@ export const updateEmployeeSchema = z
     email: z.string().email().optional(),
     position: z.string().min(3).max(100).optional(),
     comments: z.string().min(3).max(450).optional(),
-    status: z.enum(['ACTIVE', 'INACTIVE', 'DELETED']).optional(),
+    status: z.enum([Status.ACTIVE, Status.DELETED, Status.INACTIVE]).optional(),
   })
   .strict();

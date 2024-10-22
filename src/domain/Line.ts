@@ -12,8 +12,13 @@ export class Line extends BaseDomain {
   @ManyToOne(() => Brand, (brand) => brand.lines)
   brand: Brand;
 
-  @Column({ type: 'enum', name: 'status', enum: Status })
-  status: string;
+  @Column({
+    type: 'enum',
+    name: 'status',
+    enum: Status,
+    default: Status.ACTIVE,
+  })
+  status: Status;
 
   constructor(data?: Partial<Line>) {
     super();

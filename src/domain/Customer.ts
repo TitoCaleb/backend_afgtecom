@@ -67,8 +67,13 @@ export class Customer extends BaseDomain {
   @ManyToOne(() => PaymentTerm, (paymentTerm) => paymentTerm.id)
   paymentTerm: PaymentTerm;
 
-  @Column({ type: 'enum', name: 'status', enum: Status })
-  status: string;
+  @Column({
+    type: 'enum',
+    name: 'status',
+    enum: Status,
+    default: Status.ACTIVE,
+  })
+  status: Status;
 
   constructor(data: Partial<Customer>) {
     super();

@@ -2,6 +2,7 @@ import { BusinessSector } from 'src/domain/BusinessSector';
 import { PaymentTerm } from 'src/domain/PaymentTerm';
 import { Country } from 'src/domain/Country';
 import { z } from 'zod';
+import { Status } from 'src/utils/enums';
 
 export const createProviderSchema = z
   .object({
@@ -35,7 +36,7 @@ export const updateProviderSchema = z
     creditLine: z.string().min(3).max(50).optional(),
     paymentTerm: z.string().uuid().optional(),
     businessSector: z.array(z.string().uuid()).optional(),
-    status: z.enum(['ACTIVE', 'INACTIVE', 'DELETED']).optional(),
+    status: z.enum([Status.ACTIVE, Status.DELETED, Status.INACTIVE]).optional(),
   })
   .strict()
   .transform((data) => ({

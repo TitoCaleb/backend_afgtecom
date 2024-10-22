@@ -36,7 +36,7 @@ export class User extends BaseDomain {
   @Column({ type: 'varchar', length: 100, name: 'name' })
   name: string;
 
-  @Column({ type: 'varchar', length: 100, name: 'middle_name' })
+  @Column({ type: 'varchar', length: 100, name: 'middle_name', nullable: true })
   middleName?: string;
 
   @Column({ type: 'varchar', length: 100, name: 'last_name' })
@@ -81,7 +81,12 @@ export class User extends BaseDomain {
   @Column({ type: 'varchar', length: 255, name: 'password' })
   password: string;
 
-  @Column({ type: 'enum', name: 'status', enum: Status })
+  @Column({
+    type: 'enum',
+    name: 'status',
+    enum: Status,
+    default: Status.ACTIVE,
+  })
   status: string;
 
   @Column({ type: 'varchar', length: 100, name: 'token_id', nullable: true })
@@ -99,7 +104,7 @@ export class User extends BaseDomain {
     return {
       id: this.id,
       name: this.name,
-      middleName: this.middleName,
+      ...(this.middleName && { middleName: this.middleName }),
       lastName: this.lastName,
       motherLastName: this.motherLastName,
       phone: this.phone,

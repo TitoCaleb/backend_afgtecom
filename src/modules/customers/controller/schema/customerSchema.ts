@@ -3,6 +3,7 @@ import { CustomerType } from 'src/domain/Customer';
 import { PaymentTerm } from 'src/domain/PaymentTerm';
 import { Country } from 'src/domain/Country';
 import { z } from 'zod';
+import { Status } from 'src/utils/enums';
 
 export const createCustomerSchema = z
   .object({
@@ -36,7 +37,7 @@ export const updateCustomerSchema = z
     address: z.string().min(3).max(100),
     paymentTerm: z.string().uuid(),
     businessSector: z.array(z.string().uuid()).min(1),
-    status: z.enum(['ACTIVE', 'INACTIVE', 'DELETED']).optional(),
+    status: z.enum([Status.ACTIVE, Status.DELETED, Status.INACTIVE]).optional(),
   })
   .strict()
   .transform((data) => ({

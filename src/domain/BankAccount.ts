@@ -13,11 +13,11 @@ export class BankAccount extends BaseDomain {
   @Column({ type: 'varchar', length: 100 })
   accountNumber: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 100, nullable: true })
   CCI: string;
 
   @Column({ type: 'enum', enum: BankAccountType })
-  type: string;
+  type: BankAccountType;
 
   @ManyToOne(() => Bank, (bank) => bank.bankAccounts)
   @JoinColumn()

@@ -39,8 +39,13 @@ export class Employee extends BaseDomain {
   @ManyToOne(() => Customer, (provider) => provider.employees)
   customer: Customer;
 
-  @Column({ type: 'enum', name: 'status', enum: Status })
-  status: string;
+  @Column({
+    type: 'enum',
+    name: 'status',
+    enum: Status,
+    default: Status.ACTIVE,
+  })
+  status: Status;
 
   constructor(data: Partial<Employee>) {
     super();

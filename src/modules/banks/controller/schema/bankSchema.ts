@@ -1,3 +1,4 @@
+import { Status } from 'src/utils/enums';
 import { z } from 'zod';
 
 export const createBankSchema = z
@@ -8,7 +9,6 @@ export const createBankSchema = z
   .transform((data) => {
     return {
       ...data,
-      status: 'ACTIVE',
     };
   });
 
@@ -16,6 +16,6 @@ export const updateBankSchema = z
   .object({
     id: z.string(),
     name: z.string().min(3).max(100).optional(),
-    status: z.enum(['ACTIVE', 'INACTIVE', 'DELETED']).optional(),
+    status: z.enum([Status.ACTIVE, Status.DELETED, Status.INACTIVE]).optional(),
   })
   .strict();

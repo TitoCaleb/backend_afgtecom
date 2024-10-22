@@ -8,8 +8,13 @@ export class Brand extends BaseDomain {
   @Column({ type: 'varchar', length: 255, name: 'name', unique: true })
   name: string;
 
-  @Column({ type: 'enum', name: 'status', enum: Status })
-  status: string;
+  @Column({
+    type: 'enum',
+    name: 'status',
+    enum: Status,
+    default: Status.ACTIVE,
+  })
+  status: Status;
 
   @OneToMany(() => Line, (line) => line.brand)
   lines: Line[];

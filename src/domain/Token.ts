@@ -27,7 +27,7 @@ export class Token extends BaseDomain {
   @OneToOne(() => User, (user) => user.id)
   userId: string;
 
-  @Column({ type: 'boolean', name: 'status' })
+  @Column({ type: 'boolean', name: 'status', default: false })
   status: boolean;
 
   constructor(data: Partial<Token>) {
