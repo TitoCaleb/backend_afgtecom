@@ -12,17 +12,17 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { TokenGuard } from 'src/modules/security/guards';
-import { LinesService } from '../service/lines.service';
+import { GroupsService } from '../service/groups.service';
 import { Response } from 'express';
 import { ApiResponseError } from 'src/errors/handleErrors';
-import { Line } from 'src/domain/Line';
-import { createLineSchema, updateBrandSchema } from './schema/lineSchema';
+import { Group } from 'src/domain/Group';
+import { createGroupSchema, updateGroupSchema } from './schema/groupSchema';
 import { Brand } from 'src/domain/Brand';
 
 @UseGuards(TokenGuard)
-@Controller('lines')
-export class LinesController {
-  constructor(private linesService: LinesService) {}
+@Controller('groups')
+export class GroupsController {
+  constructor(private groupService: GroupsService) {}
 
   @Get()
   async findAll(
@@ -30,9 +30,9 @@ export class LinesController {
     @Query() { limit = 10, offset = 0 }: Query,
   ) {
     try {
-      const response = await this.linesService.findAll();
+      const response = await this.groupService.findAll();
       return {
-        data: response.map((line) => line.getApiData()),
+        data: response.map((group) => group.getApiData()),
         pagination: {
           limit,
           offset,
@@ -44,14 +44,14 @@ export class LinesController {
     }
   }
 
-  @Get(':lineId')
+  @Get(':groupId')
   async findById(
     @Res({ passthrough: true }) res: Response,
-    @Param('lineId') lineId: string,
+    @Param('groupId') groupId: string,
   ) {
     try {
-      const response = await this.linesService.findById(
-        new Line({ id: lineId }),
+      const response = await this.groupService.findById(
+        new Group({ id: groupId }),
       );
       return {
         data: response.getApiData(),
@@ -68,11 +68,11 @@ export class LinesController {
     @Param('brandId') brandId: string,
   ) {
     try {
-      const response = await this.linesService.findByBrandId(
+      const response = await this.groupService.findByBrandId(
         new Brand({ id: brandId }),
       );
       return {
-        data: response.map((line) => line.getApiData()),
+        data: response.map((group) => group.getApiData()),
         /* pagination: {
           limit,
           offset,
@@ -84,10 +84,13 @@ export class LinesController {
   }
 
   @Post()
-  async create(@Body() line: Line, @Res({ passthrough: true }) res: Response) {
+  async create(
+    @Body() group: Group,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     try {
-      const request = await createLineSchema.parseAsync(line);
-      const response = await this.linesService.create(new Line(request));
+      const request = await createGroupSchema.parseAsync(group);
+      const response = await this.groupService.create(new Group(request));
       res.status(HttpStatus.CREATED);
       return response.getApiData();
     } catch (e: any) {
@@ -95,31 +98,33 @@ export class LinesController {
     }
   }
 
-  @Put(':lineId')
+  @Put(':groupId')
   async update(
     @Res({ passthrough: true }) res: Response,
-    @Param('lineId') lineId: string,
-    @Body() line: Line,
+    @Param('groupId') groupId: string,
+    @Body() group: Group,
   ) {
     try {
-      const request = await updateBrandSchema.parseAsync({
-        id: lineId,
-        ...line,
+      const request = await updateGroupSchema.parseAsync({
+        id: groupId,
+        ...group,
       });
-      const response = await this.linesService.update(new Line(request));
+      const response = await this.groupService.update(new Group(request));
       return response.getApiData();
     } catch (e: any) {
       return ApiResponseError(e, res);
     }
   }
 
-  @Delete(':lineId')
+  @Delete(':groupId')
   async delete(
     @Res({ passthrough: true }) res: Response,
-    @Param('lineId') lineId: string,
+    @Param('groupId') groupId: string,
   ) {
     try {
-      const response = await this.linesService.delete(new Line({ id: lineId }));
+      const response = await this.groupService.delete(
+        new Group({ id: groupId }),
+      );
       return response.getApiData();
     } catch (e: any) {
       return ApiResponseError(e, res);

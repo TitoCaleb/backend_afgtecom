@@ -1,16 +1,16 @@
-import { Column, Entity, Index, ManyToOne } from 'typeorm';
-import { Brand } from './Brand';
 import { Status } from 'src/utils/enums';
 import { BaseDomain } from './BaseDomain';
+import { Group } from './Group';
+import { Column, Entity, Index, ManyToOne } from 'typeorm';
 
-@Entity({ name: 'line' })
-@Index(['brand', 'name'], { unique: true })
-export class Line extends BaseDomain {
+@Entity({ name: 'subgroup' })
+@Index(['group', 'name'], { unique: true })
+export class Subgroup extends BaseDomain {
   @Column({ type: 'varchar', length: 255, name: 'name' })
   name: string;
 
-  @ManyToOne(() => Brand, (brand) => brand.lines)
-  brand: Brand;
+  @ManyToOne(() => Group, (brand) => brand.subgroups)
+  group: Group;
 
   @Column({
     type: 'enum',
@@ -20,7 +20,7 @@ export class Line extends BaseDomain {
   })
   status: Status;
 
-  constructor(data?: Partial<Line>) {
+  constructor(data?: Partial<Subgroup>) {
     super();
     if (data) {
       Object.assign(this, data);
@@ -31,7 +31,7 @@ export class Line extends BaseDomain {
     return {
       id: this.id,
       name: this.name,
-      brand: this.brand,
+      group: this.group,
       status: this.status,
     };
   }

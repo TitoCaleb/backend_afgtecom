@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany } from 'typeorm';
-import { Line } from './Line';
+import { Group } from './Group';
 import { Status } from 'src/utils/enums';
 import { BaseDomain } from './BaseDomain';
 
@@ -16,8 +16,8 @@ export class Brand extends BaseDomain {
   })
   status: Status;
 
-  @OneToMany(() => Line, (line) => line.brand)
-  lines: Line[];
+  @OneToMany(() => Group, (line) => line.brand)
+  group: Group[];
 
   constructor(data?: Partial<Brand>) {
     super();
