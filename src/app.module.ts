@@ -7,7 +7,7 @@ import { BusinessSectorModule } from './modules/business-sector/business-sector.
 import { CategoriesModule } from './modules/categories/categories.module';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
-import { LinesModule } from './modules/lines/lines.module';
+import { GroupsModule } from './modules/groups/groups.module';
 import { Module } from '@nestjs/common';
 import { ProvidersModule } from './modules/providers/providers.module';
 import { SecurityModule } from './modules/security/security.module';
@@ -16,6 +16,7 @@ import { PaymentTermModule } from './modules/paymentTerm/paymentTerm.module';
 import { CustomersModule } from './modules/customers/customers.module';
 import { EmployeesModule } from './modules/employees/employees.module';
 import { BankAccountsModule } from './modules/bankAccounts/bankAccounts.module';
+import { SubgroupsModule } from './modules/subgroups/subgroups.module';
 
 @Module({
   imports: [
@@ -29,7 +30,7 @@ import { BankAccountsModule } from './modules/bankAccounts/bankAccounts.module';
     BaseModule,
     UsersModule,
     BrandsModule,
-    LinesModule,
+    GroupsModule,
     ProvidersModule,
     BusinessSectorModule,
     BanksModule,
@@ -38,6 +39,7 @@ import { BankAccountsModule } from './modules/bankAccounts/bankAccounts.module';
     CustomersModule,
     EmployeesModule,
     BankAccountsModule,
+    SubgroupsModule,
   ],
 })
 export class AppModule {}

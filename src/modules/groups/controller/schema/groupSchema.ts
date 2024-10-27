@@ -2,7 +2,7 @@ import { Brand } from 'src/domain/Brand';
 import { Status } from 'src/utils/enums';
 import { z } from 'zod';
 
-export const createLineSchema = z
+export const createGroupSchema = z
   .object({
     name: z.string().min(3).max(255),
     brand: z.string().uuid(),
@@ -12,11 +12,10 @@ export const createLineSchema = z
     return {
       ...data,
       brand: new Brand({ id: data.brand }),
-      status: Status.ACTIVE,
     };
   });
 
-export const updateBrandSchema = z
+export const updateGroupSchema = z
   .object({
     id: z.string().uuid(),
     name: z.string().min(3).max(255).optional(),
