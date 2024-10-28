@@ -1,3 +1,4 @@
+import { Customer } from 'src/domain/Customer';
 import { Provider } from 'src/domain/Provider';
 import { Status } from 'src/utils/enums';
 import { z } from 'zod';
@@ -15,22 +16,26 @@ export const createEmployeeSchema = z
     email: z.string().email().optional(),
     position: z.string().min(3).max(100).optional(),
     comments: z.string().min(3).max(450).optional(),
-    provider: z.string().uuid(),
+    provider: z.string().uuid().optional(),
+    customer: z.string().uuid().optional(),
   })
   .strict()
   .transform((data) => ({
     ...data,
-    provider: new Provider({ id: data.provider }),
+    ...(data.provider && { provider: new Provider({ id: data.provider }) }),
+    ...(data.customer && { customer: new Customer({ id: data.customer }) }),
   }));
 
 export const deleteEmployeeSchema = z
   .object({
     id: z.string().uuid(),
-    provider: z.string().uuid(),
+    provider: z.string().uuid().optional(),
+    customer: z.string().uuid().optional(),
   })
   .transform((data) => ({
     ...data,
-    provider: new Provider({ id: data.provider }),
+    ...(data.provider && { provider: new Provider({ id: data.provider }) }),
+    ...(data.customer && { customer: new Customer({ id: data.customer }) }),
   }));
 
 export const updateEmployeeSchema = z

@@ -9,16 +9,16 @@ export class Employee extends BaseDomain {
   @Column({ type: 'varchar', length: 100 })
   name: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 100, nullable: true })
   middleName?: string;
 
   @Column({ type: 'varchar', length: 100 })
   lastName: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 100, nullable: true })
   motherLastName?: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 100, nullable: true })
   phone?: string;
 
   @Column({ type: 'varchar', length: 100 })
@@ -34,10 +34,10 @@ export class Employee extends BaseDomain {
   comments?: string;
 
   @ManyToOne(() => Provider, (provider) => provider.employees)
-  provider: Provider;
+  provider?: Provider;
 
   @ManyToOne(() => Customer, (provider) => provider.employees)
-  customer: Customer;
+  customer?: Customer;
 
   @Column({
     type: 'enum',

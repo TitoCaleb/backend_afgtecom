@@ -10,7 +10,10 @@ export class EmployeesRepositoryImpl {
   ) {}
 
   async findAll(options?: FindManyOptions<Employee>): Promise<Employee[]> {
-    return this.employeeRepository.find(options);
+    const response = await this.employeeRepository.find({
+      ...options,
+    });
+    return response;
   }
 
   async findById(request: Employee): Promise<Employee> {

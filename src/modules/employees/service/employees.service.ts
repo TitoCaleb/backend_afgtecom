@@ -3,13 +3,18 @@ import { EmployeesRepositoryImpl } from '../repository/employees.repository';
 import { ProvidersRepositoryImpl } from '../../providers/repository/providers.repository';
 import { Provider } from 'src/domain/Provider';
 import { Employee } from 'src/domain/Employee';
+import { CustomersRepositoryImpl } from 'src/modules/customers/repository/customers.repository';
+import { Customer } from 'src/domain/Customer';
 
 @Injectable()
 export class EmployeeService {
   constructor(
     private providersRepository: ProvidersRepositoryImpl,
     private employeesRepository: EmployeesRepositoryImpl,
+    private customersRepository: CustomersRepositoryImpl,
   ) {}
+
+  // Proveedores
 
   private async checkIfProviderExists(request: Provider) {
     return await this.providersRepository.findById(request);
@@ -18,7 +23,7 @@ export class EmployeeService {
   async findAllEmployeesFromProvider(request: Provider) {
     const providerDb = await this.checkIfProviderExists(request);
     const employees = await this.employeesRepository.findAll({
-      where: { provider: providerDb },
+      where: { provider: new Provider({ id: providerDb.id }) },
     });
     return employees;
   }
@@ -41,6 +46,41 @@ export class EmployeeService {
     const employeeDb = await this.employeesRepository.findById(request);
     employeeDb.updatedAt = new Date();
     const response = await this.employeesRepository.update(request, employeeDb);
+    return response;
+  }
+
+  // Customers
+
+  private async checkIfCustomerExists(request: Customer) {
+    return await this.customersRepository.findById(request);
+  }
+
+  async findAllEmployeesFromCustomers(request: Customer) {
+    const customerDb = await this.checkIfCustomerExists(request);
+    const employees = await this.employeesRepository.findAll({
+      where: { customer: new Customer({ id: customerDb.id }) },
+    });
+    return employees;
+  }
+
+  async addEmployeeToCustomer(request: Employee) {
+    await this.checkIfCustomerExists(new Customer({ id: request.customer.id }));
+    const response = await this.employeesRepository.create(request);
+    return response;
+  }
+
+  async updateEmployeeFromCustomer(request: Employee) {
+    await this.checkIfCustomerExists(new Customer({ id: request.customer.id }));
+    const employeeDb = await this.employeesRepository.findById(request);
+    employeeDb.updatedAt = new Date();
+    const response = await this.employeesRepository.update(request, employeeDb);
+    return response;
+  }
+
+  async removeEmployeeFromCustomer(request: Employee) {
+    await this.checkIfCustomerExists(new Customer({ id: request.customer.id }));
+    const employeeDb = await this.employeesRepository.findById(request);
+    const response = await this.employeesRepository.delete(employeeDb);
     return response;
   }
 }
