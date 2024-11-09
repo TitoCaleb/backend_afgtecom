@@ -27,6 +27,9 @@ import { Department } from 'src/domain/Department';
 import { Province } from 'src/domain/Province';
 import { District } from 'src/domain/District';
 import { BusinessSector } from 'src/domain/BusinessSector';
+import { PhoneRepositoryImpl } from '../phone/repository/phone.repository';
+import { PhoneService } from '../phone/service/phone.service';
+import { Phone } from 'src/domain/Phone';
 
 @Module({
   imports: [
@@ -47,6 +50,7 @@ import { BusinessSector } from 'src/domain/BusinessSector';
       Province,
       District,
       BusinessSector,
+      Phone,
     ]),
   ],
   controllers: [BanksAccountController],
@@ -61,6 +65,8 @@ import { BusinessSector } from 'src/domain/BusinessSector';
     PaymentTermRepositoryImpl,
     BaseRepositoryImpl,
     BusinessSectorRepositoryImpl,
+    PhoneRepositoryImpl,
+    PhoneService,
   ],
 })
 export class BankAccountsModule {}

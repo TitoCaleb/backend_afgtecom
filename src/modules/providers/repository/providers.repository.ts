@@ -29,6 +29,7 @@ export class ProvidersRepositoryImpl {
         'paymentTerm',
         'businessSector',
         'country',
+        'phone',
       ],
     });
 

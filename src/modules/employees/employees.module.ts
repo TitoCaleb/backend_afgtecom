@@ -28,6 +28,9 @@ import { PaymentTermRepositoryImpl } from '../paymentTerm/repository/paymentTerm
 import { BaseRepositoryImpl } from '../base/repository/base.repository';
 import { BusinessSectorRepositoryImpl } from '../business-sector/repository/business-sector.repository';
 import { SecurityRepositoryImpl } from '../security/repository/security.repository';
+import { Phone } from 'src/domain/Phone';
+import { PhoneRepositoryImpl } from '../phone/repository/phone.repository';
+import { PhoneService } from '../phone/service/phone.service';
 
 @Module({
   imports: [
@@ -49,6 +52,7 @@ import { SecurityRepositoryImpl } from '../security/repository/security.reposito
       Department,
       Province,
       District,
+      Phone,
     ]),
   ],
   controllers: [EmployeesController],
@@ -63,6 +67,8 @@ import { SecurityRepositoryImpl } from '../security/repository/security.reposito
     BaseRepositoryImpl,
     BusinessSectorRepositoryImpl,
     SecurityRepositoryImpl,
+    PhoneRepositoryImpl,
+    PhoneService,
   ],
 })
 export class EmployeesModule {}

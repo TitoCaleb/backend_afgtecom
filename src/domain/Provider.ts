@@ -13,6 +13,7 @@ import { PaymentTerm } from './PaymentTerm';
 import { Status } from 'src/utils/enums';
 import { Country } from './Country';
 import { BaseDomain } from './BaseDomain';
+import { Phone } from './Phone';
 
 export interface QueryProvider extends Query {
   name?: string;
@@ -24,8 +25,8 @@ export class Provider extends BaseDomain {
   @Column({ type: 'varchar', length: 100, unique: true })
   name: string;
 
-  @Column({ type: 'varchar', length: 100 })
-  phone: string;
+  @OneToMany(() => Phone, (phone) => phone.provider)
+  phone: Phone[];
 
   @Column({ type: 'varchar', length: 12, unique: true })
   documentNumber: string;

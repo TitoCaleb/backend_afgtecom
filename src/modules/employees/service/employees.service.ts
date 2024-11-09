@@ -5,6 +5,7 @@ import { Provider } from 'src/domain/Provider';
 import { Employee } from 'src/domain/Employee';
 import { CustomersRepositoryImpl } from 'src/modules/customers/repository/customers.repository';
 import { Customer } from 'src/domain/Customer';
+import { PhoneRepositoryImpl } from 'src/modules/phone/repository/phone.repository';
 
 @Injectable()
 export class EmployeeService {
@@ -12,6 +13,7 @@ export class EmployeeService {
     private providersRepository: ProvidersRepositoryImpl,
     private employeesRepository: EmployeesRepositoryImpl,
     private customersRepository: CustomersRepositoryImpl,
+    private phoneRepository: PhoneRepositoryImpl,
   ) {}
 
   // Proveedores
@@ -30,6 +32,16 @@ export class EmployeeService {
 
   async addEmployeeToProvider(request: Employee) {
     await this.checkIfProviderExists(new Provider({ id: request.provider.id }));
+
+    if (request.phone.length) {
+      const phone = await Promise.all(
+        request.phone.map(async (phone) => {
+          return await this.phoneRepository.create(phone);
+        }),
+      );
+      request.phone = phone;
+    }
+
     const response = await this.employeesRepository.create(request);
     return response;
   }
