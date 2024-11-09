@@ -5,6 +5,7 @@ import { PaymentTermRepositoryImpl } from 'src/modules/paymentTerm/repository/pa
 import { Provider, QueryProvider } from 'src/domain/Provider';
 import { ProvidersRepositoryImpl } from '../repository/providers.repository';
 import { Status } from 'src/utils/enums';
+import { PhoneRepositoryImpl } from 'src/modules/phone/repository/phone.repository';
 
 @Injectable()
 export class ProvidersService {
@@ -13,6 +14,7 @@ export class ProvidersService {
     private paymentTermRepository: PaymentTermRepositoryImpl,
     private businessSectorRepository: BusinessSectorRepositoryImpl,
     private baseRepository: BaseRepositoryImpl,
+    private phoneRepository: PhoneRepositoryImpl,
   ) {}
 
   async findAll({ limit = 10, offset = 0, ...dynamicQuery }: QueryProvider) {
@@ -57,6 +59,15 @@ export class ProvidersService {
         }),
       );
       request.businessSector = businessSector;
+    }
+
+    if (request.phone.length) {
+      const phone = await Promise.all(
+        request.phone.map(async (phone) => {
+          return await this.phoneRepository.create(phone);
+        }),
+      );
+      request.phone = phone;
     }
 
     const provider = await this.providersRepository.create(request);

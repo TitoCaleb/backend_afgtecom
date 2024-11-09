@@ -22,7 +22,13 @@ export class CustomersRepositoryImpl {
   async findById(request: Customer): Promise<Customer> {
     const response = await this.customerRepository.findOne({
       where: { id: request.id },
-      relations: ['employees', 'businessSector', 'paymentTerm', 'country'],
+      relations: [
+        'employees',
+        'businessSector',
+        'paymentTerm',
+        'country',
+        'phone',
+      ],
     });
 
     if (!response) {

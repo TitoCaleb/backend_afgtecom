@@ -29,7 +29,6 @@ export class EmployeesController {
   constructor(private providerService: EmployeeService) {}
 
   // Providers
-
   @Get(':providerId/providers')
   async findEmployeesByProvider(
     @Res({ passthrough: true }) res: Response,

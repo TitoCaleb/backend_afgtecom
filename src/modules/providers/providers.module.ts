@@ -31,6 +31,9 @@ import { District } from 'src/domain/District';
 import { CustomersService } from '../customers/service/customers.service';
 import { CustomersRepositoryImpl } from '../customers/repository/customers.repository';
 import { Customer } from 'src/domain/Customer';
+import { PhoneRepositoryImpl } from '../phone/repository/phone.repository';
+import { PhoneService } from '../phone/service/phone.service';
+import { Phone } from 'src/domain/Phone';
 
 @Module({
   imports: [
@@ -52,6 +55,7 @@ import { Customer } from 'src/domain/Customer';
       Department,
       Province,
       District,
+      Phone,
     ]),
   ],
   controllers: [ProvidersController],
@@ -69,6 +73,8 @@ import { Customer } from 'src/domain/Customer';
     SecurityRepositoryImpl,
     PaymentTermRepositoryImpl,
     BaseRepositoryImpl,
+    PhoneRepositoryImpl,
+    PhoneService,
   ],
 })
 export class ProvidersModule {}

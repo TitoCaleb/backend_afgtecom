@@ -12,6 +12,7 @@ import { PaymentTerm } from './PaymentTerm';
 import { Employee } from './Employee';
 import { Country } from './Country';
 import { BaseDomain } from './BaseDomain';
+import { Phone } from './Phone';
 
 export enum CustomerType {
   INDIVIDUAL = 'INDIVIDUAL',
@@ -37,8 +38,8 @@ export class Customer extends BaseDomain {
   @OneToMany(() => Employee, (employee) => employee.provider)
   employees: Employee[];
 
-  @Column({ type: 'varchar', length: 100 })
-  phone: string;
+  @OneToMany(() => Phone, (phone) => phone.customer)
+  phone: Phone[];
 
   @Column({ type: 'varchar', length: 100 })
   address: string;

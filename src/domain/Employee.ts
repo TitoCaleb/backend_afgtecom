@@ -1,8 +1,9 @@
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { Provider } from './Provider';
 import { Status } from 'src/utils/enums';
 import { Customer } from './Customer';
 import { BaseDomain } from './BaseDomain';
+import { Phone } from './Phone';
 
 @Entity({ name: 'employee' })
 export class Employee extends BaseDomain {
@@ -18,11 +19,8 @@ export class Employee extends BaseDomain {
   @Column({ type: 'varchar', length: 100, nullable: true })
   motherLastName?: string;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
-  phone?: string;
-
-  @Column({ type: 'varchar', length: 100 })
-  cellphone?: string;
+  @OneToMany(() => Phone, (phone) => phone.employee)
+  phone: Phone[];
 
   @Column({ type: 'varchar', length: 100, unique: true })
   email: string;
@@ -62,7 +60,6 @@ export class Employee extends BaseDomain {
       lastName: this.lastName,
       motherLastName: this.motherLastName,
       phone: this.phone,
-      cellphone: this.cellphone,
       email: this.email,
       position: this.position,
       comments: this.comments,
