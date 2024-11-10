@@ -26,6 +26,6 @@ export const updateSubgroupSchema = z
   .transform((data) => {
     return {
       ...data,
-      group: new Group({ id: data.group }),
+      ...(data.group && { group: new Group({ id: data.group }) }),
     };
   });

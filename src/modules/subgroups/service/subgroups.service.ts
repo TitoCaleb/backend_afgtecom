@@ -49,11 +49,11 @@ export class SubgroupsService {
   }
 
   async update(subgroup: Subgroup) {
-    const groupDb = await this.subgroupRepository.findOne({
+    const subgroupDb = await this.subgroupRepository.findOne({
       where: { id: subgroup.id },
     });
-    groupDb.updatedAt = new Date();
-    return await this.subgroupRepository.update(subgroup, groupDb);
+    subgroupDb.updatedAt = new Date();
+    return await this.subgroupRepository.update(subgroup, subgroupDb);
   }
 
   async delete(subgroup: Subgroup) {
@@ -62,7 +62,7 @@ export class SubgroupsService {
     });
 
     if (subgroupDb.status === Status.ACTIVE) {
-      throw new HttpException('Brand cannot be deleted', 400);
+      throw new HttpException('Subgroup cannot be deleted', 400);
     }
 
     const newSubgroup = new Subgroup({
