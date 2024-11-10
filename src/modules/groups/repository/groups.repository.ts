@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Group } from 'src/domain/Group';
 import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
@@ -14,6 +15,10 @@ export class GroupsRepositoryImpl {
 
   async findOne(options: FindOneOptions<Group>): Promise<Group> {
     const response = await this.groupRepository.findOne(options);
+
+    if (!response) {
+      throw new NotFoundException('Group not found');
+    }
 
     return response;
   }

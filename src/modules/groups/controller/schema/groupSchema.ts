@@ -26,6 +26,6 @@ export const updateGroupSchema = z
   .transform((data) => {
     return {
       ...data,
-      brand: new Brand({ id: data.brand }),
+      ...(data.brand && { brand: new Brand({ id: data.brand }) }),
     };
   });

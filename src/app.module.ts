@@ -18,6 +18,7 @@ import { EmployeesModule } from './modules/employees/employees.module';
 import { BankAccountsModule } from './modules/bankAccounts/bankAccounts.module';
 import { SubgroupsModule } from './modules/subgroups/subgroups.module';
 import { PhoneModule } from './modules/phone/phone.module';
+import { ProductsModule } from './modules/products/products.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { PhoneModule } from './modules/phone/phone.module';
     BankAccountsModule,
     SubgroupsModule,
     PhoneModule,
+    ProductsModule,
   ],
 })
 export class AppModule {}
