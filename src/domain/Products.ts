@@ -63,6 +63,10 @@ export class Products extends BaseDomain {
     }
   }
 
+  validateBrandsAndGroup() {
+    return !!this.brand || !!this.group || !!this.subGroup;
+  }
+
   getApiData() {
     return {
       id: this.id,
@@ -76,6 +80,7 @@ export class Products extends BaseDomain {
       factoring: this.factoring,
       pricing: this.pricing,
       observation: this.observation,
+      status: this.status,
     };
   }
 }

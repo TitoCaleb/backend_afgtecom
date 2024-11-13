@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpStatus,
   Param,
@@ -130,6 +131,23 @@ export class ProductsController {
         ...product,
       });
       const response = await this.productsService.update(new Products(request));
+      res.status(HttpStatus.OK);
+      return response.getApiData();
+    } catch (e: any) {
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR);
+      return ApiResponseError(e, res);
+    }
+  }
+
+  @Delete(':productId')
+  async delete(
+    @Res({ passthrough: true }) res: Response,
+    @Param('productId') productId: string,
+  ) {
+    try {
+      const response = await this.productsService.delete(
+        new Products({ id: productId }),
+      );
       res.status(HttpStatus.OK);
       return response.getApiData();
     } catch (e: any) {

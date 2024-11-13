@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { SubgroupsRepositoryImpl } from '../repository/subgroups.repository';
 import { In } from 'typeorm';
 import { Status } from 'src/utils/enums';
@@ -18,10 +18,25 @@ export class SubgroupsService {
     });
   }
 
+  async findAllByGroup(group: Group) {
+    return await this.subgroupRepository.findAll({
+      where: {
+        group: group,
+        status: In([Status.ACTIVE, Status.INACTIVE]),
+      },
+    });
+  }
+
   async findById(subgroup: Subgroup) {
-    return await this.subgroupRepository.findOne({
+    const response = await this.subgroupRepository.findOne({
       where: { id: subgroup.id },
     });
+
+    if (!response) {
+      throw new NotFoundException('Subgroup not found');
+    }
+
+    return response;
   }
 
   async findByGroupId(group: Group) {

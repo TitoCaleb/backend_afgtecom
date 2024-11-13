@@ -44,6 +44,29 @@ export class GroupsController {
     }
   }
 
+  @Get(':brandId/brand')
+  async findAllByBrand(
+    @Res({ passthrough: true }) res: Response,
+    @Query() { limit = 10, offset = 0 }: Query,
+    @Param('brandId') brandId: string,
+  ) {
+    try {
+      const response = await this.groupService.findAllByBrand(
+        new Brand({ id: brandId }),
+      );
+      return {
+        data: response.map((group) => group.getApiData()),
+        pagination: {
+          limit,
+          offset,
+        },
+      };
+    } catch (e: any) {
+      res.status(HttpStatus.NOT_FOUND);
+      return ApiResponseError(e, res);
+    }
+  }
+
   @Get(':groupId')
   async findById(
     @Res({ passthrough: true }) res: Response,

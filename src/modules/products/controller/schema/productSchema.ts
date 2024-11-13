@@ -3,6 +3,7 @@ import { Factoring } from 'src/domain/factoring';
 import { Group } from 'src/domain/Group';
 import { Pricing } from 'src/domain/Pricing';
 import { Subgroup } from 'src/domain/Subgroup';
+import { Status } from 'src/utils/enums';
 import { z } from 'zod';
 
 export const createProductSchema = z
@@ -36,4 +37,22 @@ export const createProductSchema = z
     brand: new Brand({ id: data.brand }),
   }));
 
-export const updateProductSchema = z.object({});
+export const updateProductSchema = z
+  .object({
+    id: z.string().uuid(),
+    code: z.string().min(1).max(100).optional(),
+    description: z.string().min(1).max(100).optional(),
+    serie: z.string().min(1).max(100).optional(),
+    group: z.string().uuid().optional(),
+    subGroup: z.string().uuid().optional(),
+    brand: z.string().uuid().optional(),
+    observation: z.string().optional(),
+    status: z.enum([Status.ACTIVE, Status.DELETED, Status.INACTIVE]).optional(),
+  })
+  .strict()
+  .transform((data) => ({
+    ...data,
+    ...(data.group && { group: new Group({ id: data.group }) }),
+    ...(data.subGroup && { subGroup: new Subgroup({ id: data.subGroup }) }),
+    ...(data.brand && { brand: new Brand({ id: data.brand }) }),
+  }));

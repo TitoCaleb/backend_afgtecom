@@ -47,6 +47,29 @@ export class SubgroupsController {
     }
   }
 
+  @Get(':groupId/group')
+  async findAllByBrand(
+    @Res({ passthrough: true }) res: Response,
+    @Query() { limit = 10, offset = 0 }: Query,
+    @Param('groupId') groupId: string,
+  ) {
+    try {
+      const response = await this.subgroupsService.findAllByGroup(
+        new Group({ id: groupId }),
+      );
+      return {
+        data: response.map((group) => group.getApiData()),
+        pagination: {
+          limit,
+          offset,
+        },
+      };
+    } catch (e: any) {
+      res.status(HttpStatus.NOT_FOUND);
+      return ApiResponseError(e, res);
+    }
+  }
+
   @Get(':subgroupId')
   async findById(
     @Res({ passthrough: true }) res: Response,

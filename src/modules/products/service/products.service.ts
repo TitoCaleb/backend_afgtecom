@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { Status } from 'src/utils/enums';
 import { ProductsRepositoryImpl } from '../repository/products.repository';
 import { Products, QueryProduct } from 'src/domain/Products';
@@ -9,28 +9,49 @@ import { PricingRepositoryImpl } from '../repository/pricing.repository';
 import { FactoringRepositoryImpl } from '../repository/factoring.repository';
 import { Subgroup } from 'src/domain/Subgroup';
 import { Brand } from 'src/domain/Brand';
+import { GroupsRepositoryImpl } from 'src/modules/groups/repository/groups.repository';
 
 @Injectable()
 export class ProductsService {
   constructor(
     private productsRepository: ProductsRepositoryImpl,
     private brandRepository: BrandsRepositoryImpl,
+    private groupRepository: GroupsRepositoryImpl,
     private subGroupRepository: SubgroupsRepositoryImpl,
     private pricingRepository: PricingRepositoryImpl,
     private factoringRepository: FactoringRepositoryImpl,
   ) {}
 
-  async validateBrandAndGroup(request: Products) {
-    await this.brandRepository.findOne({
+  async validateBrandsAndGroup(request: Products) {
+    const brandExists = await this.brandRepository.findOne({
       where: { id: request.brand.id },
     });
 
-    await this.subGroupRepository.findOne({
+    if (!brandExists) {
+      throw new Error('Brand not found');
+    }
+
+    const groupExists = await this.groupRepository.findOne({
       where: {
-        id: request.subGroup.id,
-        group: new Group({ id: request.group.id }),
+        id: request.group.id,
+        brand: { id: request.brand.id },
       },
     });
+
+    if (!groupExists) {
+      throw new Error('Group not found or does not belong to the brand');
+    }
+
+    const subGroupExists = await this.subGroupRepository.findOne({
+      where: {
+        id: request.subGroup.id,
+        group: { id: request.group.id },
+      },
+    });
+
+    if (!subGroupExists) {
+      throw new Error('SubGroup not found or does not belong to the group');
+    }
   }
 
   async findAll({ limit = 10, offset = 0, ...dynamicQuery }: QueryProduct) {
@@ -75,7 +96,7 @@ export class ProductsService {
   }
 
   async create(request: Products) {
-    await this.validateBrandAndGroup(request);
+    await this.validateBrandsAndGroup(request);
 
     const factoring = await this.factoringRepository.create(request.factoring);
 
@@ -91,6 +112,33 @@ export class ProductsService {
   }
 
   async update(request: Products) {
-    return request;
+    const productDb = await this.productsRepository.findOne(request);
+
+    if (request.validateBrandsAndGroup()) {
+      await this.validateBrandsAndGroup(
+        new Products({
+          ...productDb,
+          ...request,
+        }),
+      );
+    }
+
+    productDb.updatedAt = new Date();
+
+    return await this.productsRepository.update(request, productDb);
+  }
+
+  async delete(request: Products) {
+    const productDb = await this.productsRepository.findOne(request);
+
+    if (productDb.status === Status.ACTIVE) {
+      throw new HttpException('Product cannot be deleted', 400);
+    }
+
+    const product = new Products(productDb);
+    product.updatedAt = new Date();
+    product.status = Status.DELETED;
+
+    return await this.productsRepository.update(request, product);
   }
 }

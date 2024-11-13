@@ -1,4 +1,3 @@
-import { NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Subgroup } from 'src/domain/Subgroup';
 import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
@@ -16,10 +15,6 @@ export class SubgroupsRepositoryImpl {
 
   async findOne(options: FindOneOptions<Subgroup>): Promise<Subgroup> {
     const response = await this.subgroupRepository.findOne(options);
-
-    if (!response) {
-      throw new NotFoundException('Subgroup not found');
-    }
 
     return response;
   }

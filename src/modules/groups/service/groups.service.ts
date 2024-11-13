@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { GroupsRepositoryImpl } from '../repository/groups.repository';
 import { Group } from 'src/domain/Group';
 import { Brand } from 'src/domain/Brand';
@@ -18,10 +18,25 @@ export class GroupsService {
     });
   }
 
+  async findAllByBrand(brand: Brand) {
+    return await this.groupRepository.findAll({
+      where: {
+        brand: brand,
+        status: In([Status.ACTIVE, Status.INACTIVE]),
+      },
+    });
+  }
+
   async findById(group: Group) {
-    return await this.groupRepository.findOne({
+    const response = await this.groupRepository.findOne({
       where: { id: group.id },
     });
+
+    if (!response) {
+      throw new NotFoundException('Group not found');
+    }
+
+    return response;
   }
 
   async findByBrandId(brand: Brand) {
