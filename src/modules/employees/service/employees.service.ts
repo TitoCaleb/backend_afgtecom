@@ -26,6 +26,7 @@ export class EmployeeService {
     const providerDb = await this.checkIfProviderExists(request);
     const employees = await this.employeesRepository.findAll({
       where: { provider: new Provider({ id: providerDb.id }) },
+      relations: ['phone'],
     });
     return employees;
   }

@@ -7,9 +7,9 @@ import { z } from 'zod';
 export const createEmployeeSchema = z
   .object({
     name: z.string().min(3).max(100),
-    middleName: z.string().min(3).max(100).optional(),
+    middleName: z.string().optional(),
     lastName: z.string().min(3).max(100),
-    motherLastName: z.string().min(3).max(100).optional(),
+    motherLastName: z.string().optional(),
     phone: z
       .array(
         z
