@@ -29,20 +29,11 @@ export class ProductsController {
 
   private dynamicQuery(query: QueryProduct) {
     const where: any = {};
-    if (query.serie) {
-      where.serie = Like(`%${query.serie}%`);
-    }
     if (query.code) {
       where.code = Like(`%${query.code}%`);
     }
     if (query.brand) {
       where.brand = query.brand;
-    }
-    if (query.group) {
-      where.group = query.group;
-    }
-    if (query.subGroup) {
-      where.subGroup = query.subGroup;
     }
     if (query.limit) {
       where.limit = query.limit;
@@ -57,7 +48,7 @@ export class ProductsController {
   async findAll(
     @Res({ passthrough: true }) res: Response,
     @Query()
-    { limit, offset, code, serie, group, subGroup, brand }: QueryProduct,
+    { limit, offset, code, brand }: QueryProduct,
   ) {
     try {
       const { response, total, pagination } =
@@ -66,9 +57,6 @@ export class ProductsController {
             limit,
             offset,
             code,
-            serie,
-            group,
-            subGroup,
             brand,
           }),
         );

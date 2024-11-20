@@ -9,10 +9,12 @@ import { Status } from 'src/utils/enums';
 
 export interface QueryProduct extends Query {
   code?: string;
-  serie?: string;
-  group?: string;
-  subGroup?: string;
   brand?: string;
+}
+
+export enum Currency {
+  USD = 'USD',
+  PEN = 'PEN',
 }
 
 @Entity({ name: 'products' })
@@ -23,9 +25,6 @@ export class Products extends BaseDomain {
   @Column({ type: 'varchar', length: 100 })
   description: string;
 
-  @Column({ type: 'varchar', length: 100 })
-  serie: string;
-
   @ManyToOne(() => Group, (group) => group.id)
   group: Group;
 
@@ -34,6 +33,9 @@ export class Products extends BaseDomain {
 
   @ManyToOne(() => Brand, (brand) => brand.id)
   brand: Brand;
+
+  @Column({ type: 'enum', enum: Currency })
+  currency: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   cost: number;
@@ -46,6 +48,7 @@ export class Products extends BaseDomain {
   @OneToOne(() => Pricing, (pricing) => pricing.id)
   pricing: Pricing;
 
+  @Column({ type: 'varchar', length: 350, nullable: true })
   observation: string;
 
   @Column({
@@ -72,7 +75,7 @@ export class Products extends BaseDomain {
       id: this.id,
       code: this.code,
       description: this.description,
-      serie: this.serie,
+      currency: this.currency,
       group: this.group,
       subGroup: this.subGroup,
       brand: this.brand,

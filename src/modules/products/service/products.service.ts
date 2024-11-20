@@ -3,11 +3,9 @@ import { Status } from 'src/utils/enums';
 import { ProductsRepositoryImpl } from '../repository/products.repository';
 import { Products, QueryProduct } from 'src/domain/Products';
 import { SubgroupsRepositoryImpl } from 'src/modules/subgroups/repository/subgroups.repository';
-import { Group } from 'src/domain/Group';
 import { BrandsRepositoryImpl } from 'src/modules/brands/repository/brands.repository';
 import { PricingRepositoryImpl } from '../repository/pricing.repository';
 import { FactoringRepositoryImpl } from '../repository/factoring.repository';
-import { Subgroup } from 'src/domain/Subgroup';
 import { Brand } from 'src/domain/Brand';
 import { GroupsRepositoryImpl } from 'src/modules/groups/repository/groups.repository';
 
@@ -63,14 +61,8 @@ export class ProductsService {
     const whereFilter = {
       status: Status.ACTIVE,
       ...dynamicQuery,
-      group: dynamicQuery.group
-        ? new Group({ id: dynamicQuery.group })
-        : undefined,
-      subGroup: dynamicQuery.subGroup
-        ? new Subgroup({ id: dynamicQuery.group })
-        : undefined,
       brand: dynamicQuery.brand
-        ? new Brand({ id: dynamicQuery.group })
+        ? new Brand({ id: dynamicQuery.brand })
         : undefined,
     };
 

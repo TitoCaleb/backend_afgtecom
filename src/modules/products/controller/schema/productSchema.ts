@@ -10,7 +10,7 @@ export const createProductSchema = z
   .object({
     code: z.string().min(1).max(100),
     description: z.string().min(1).max(100),
-    serie: z.string().min(1).max(100),
+    currency: z.enum(['USD', 'PEN']),
     group: z.string().uuid(),
     subGroup: z.string().uuid(),
     brand: z.string().uuid(),
@@ -41,8 +41,8 @@ export const updateProductSchema = z
   .object({
     id: z.string().uuid(),
     code: z.string().min(1).max(100).optional(),
+    currency: z.enum(['USD', 'PEN']).optional(),
     description: z.string().min(1).max(100).optional(),
-    serie: z.string().min(1).max(100).optional(),
     group: z.string().uuid().optional(),
     subGroup: z.string().uuid().optional(),
     brand: z.string().uuid().optional(),
