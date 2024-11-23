@@ -107,9 +107,6 @@ export class ProductsController {
     }
   }
 
-  @Post()
-  async processUpdateFactoringAndPricing() {}
-
   @Put(':productId')
   async update(
     @Res({ passthrough: true }) res: Response,

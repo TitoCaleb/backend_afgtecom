@@ -48,6 +48,21 @@ export const updateProductSchema = z
     brand: z.string().uuid().optional(),
     observation: z.string().optional(),
     status: z.enum([Status.ACTIVE, Status.DELETED, Status.INACTIVE]).optional(),
+    cost: z.number().optional(),
+    factoring: z
+      .object({
+        wholesaler: z.number().positive(),
+        distributor: z.number().positive(),
+        public: z.number().positive(),
+      })
+      .optional(),
+    pricing: z
+      .object({
+        wholesaler: z.number().positive(),
+        distributor: z.number().positive(),
+        public: z.number().positive(),
+      })
+      .optional(),
   })
   .strict()
   .transform((data) => ({
@@ -55,4 +70,6 @@ export const updateProductSchema = z
     ...(data.group && { group: new Group({ id: data.group }) }),
     ...(data.subGroup && { subGroup: new Subgroup({ id: data.subGroup }) }),
     ...(data.brand && { brand: new Brand({ id: data.brand }) }),
+    ...(data.factoring && { factoring: new Factoring(data.factoring) }),
+    ...(data.pricing && { pricing: new Pricing(data.pricing) }),
   }));

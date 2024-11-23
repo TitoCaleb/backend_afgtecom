@@ -115,6 +115,21 @@ export class ProductsService {
       );
     }
 
+    if (request.pricing && request.factoring) {
+      const pricing = await this.pricingRepository.update(
+        productDb.pricing,
+        request.pricing,
+      );
+
+      const factoring = await this.factoringRepository.update(
+        productDb.factoring,
+        request.factoring,
+      );
+
+      productDb.pricing = pricing;
+      productDb.factoring = factoring;
+    }
+
     productDb.updatedAt = new Date();
 
     return await this.productsRepository.update(request, productDb);

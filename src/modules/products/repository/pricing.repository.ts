@@ -18,7 +18,7 @@ export class PricingRepositoryImpl {
   }
 
   async update(request: Pricing, pricingDb: Pricing) {
-    Object.assign(pricingDb, request);
+    Object.assign(request, pricingDb);
     const response = await this.pricingRepository.save(pricingDb);
     return response;
   }

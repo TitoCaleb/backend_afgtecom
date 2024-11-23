@@ -19,7 +19,7 @@ export class FactoringRepositoryImpl {
   }
 
   async update(request: Factoring, factoringDb: Factoring) {
-    Object.assign(factoringDb, request);
+    Object.assign(request, factoringDb);
     const response = await this.factoringDbRepository.save(factoringDb);
     return response;
   }
