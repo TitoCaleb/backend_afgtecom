@@ -47,14 +47,7 @@ export class UsersService {
       where: { status: Status.ACTIVE, ...dynamicQuery },
     });
     const response = await this.usersRepository.findAll({
-      relations: [
-        'documentType',
-        'civilStatus',
-        'rol',
-        'district',
-        'province',
-        'department',
-      ],
+      relations: ['documentType', 'rol'],
       where: { status: Status.ACTIVE, ...dynamicQuery },
       take: Number(limit),
       skip: Number(offset),
@@ -67,7 +60,16 @@ export class UsersService {
   }
 
   async findById(user: User) {
-    return await this.usersRepository.findById(user);
+    return await this.usersRepository.findById(user, {
+      relations: [
+        'documentType',
+        'civilStatus',
+        'rol',
+        'district',
+        'province',
+        'department',
+      ],
+    });
   }
 
   async create(request: User) {
