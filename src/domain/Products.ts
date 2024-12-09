@@ -3,7 +3,7 @@ import { BaseDomain } from './BaseDomain';
 import { Brand } from './Brand';
 import { Group } from './Group';
 import { Subgroup } from './Subgroup';
-import { Factoring } from './factoring';
+import { Factoring } from './Factoring';
 import { Pricing } from './Pricing';
 import { Status } from 'src/utils/enums';
 

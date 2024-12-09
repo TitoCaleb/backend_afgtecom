@@ -1,5 +1,5 @@
 import { Brand } from 'src/domain/Brand';
-import { Factoring } from 'src/domain/factoring';
+import { Factoring } from 'src/domain/Factoring';
 import { Group } from 'src/domain/Group';
 import { Pricing } from 'src/domain/Pricing';
 import { Subgroup } from 'src/domain/Subgroup';

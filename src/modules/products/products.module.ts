@@ -7,7 +7,7 @@ import { Products } from 'src/domain/Products';
 import { Brand } from 'src/domain/Brand';
 import { Group } from 'src/domain/Group';
 import { Subgroup } from 'src/domain/Subgroup';
-import { Factoring } from 'src/domain/factoring';
+import { Factoring } from 'src/domain/Factoring';
 import { Pricing } from 'src/domain/Pricing';
 import { Device } from 'src/domain/Device';
 import { Client } from 'src/domain/Client';
